@@ -1,0 +1,75 @@
+<?php
+
+class AjaxModel extends Model {
+    public function dbQuery( $key, $data = array() ) {
+        switch($key)
+        {
+        case 'admin_agency_academic_agency_category':
+            $sql = 'SELECT `code`, `cname` FROM `academic_global`.`academic_agency_category` WHERE `code` != "" ';
+            $res  = $this->dbSelect($sql);
+            return $res;
+            break;
+        case 'admin_agency_country':
+            $sql = 'SELECT `code`, `cname`, `ename` FROM `academic_global`.`country` WHERE `code` != "" ';
+            $res  = $this->dbSelect($sql);
+            return $res;
+            break;
+        case 'admin_agency_add':
+            $sql = 'INSERT INTO `academic_global`.`academic_agency` (`id`, `code`, `cname`, `aka`, `zipcode`, `address`, `established`, `approval`, `note`, `state`) VALUES (0, :code, :cname, :aka, "", "", "", "", "", 0)';
+            $res = $this->dbUpdate($sql, array(':code'=>$data['code'], ':cname'=>$data['cname'], ':aka'=>$data['aka']));
+            return $this->dbQuery('admin_agency_get');
+            break;
+        case 'admin_agency_del':
+            $sql = 'DELETE FROM `agent` WHERE `agency_id` = :id';
+            $res = $this->dbUpdate($sql, array(':id'=>$data['id']));
+            $sql = 'DELETE FROM `academic_global`.`academic_agency` WHERE `id` = :id';
+            $res = $this->dbUpdate($sql, array(':id'=>$data['id']));
+            return $this->dbQuery('admin_agency_get');
+            break;
+        case 'admin_agency_get':
+            $sql = 'SELECT code FROM `academic_global`.`academic_year` WHERE `state` = 1 ORDER BY `id` DESC LIMIT 1';
+            $res = $this->dbSelect($sql);
+            $db  = 'academic_'. strtolower($res[0]['code']);
+            $sql  = 'SELECT `academic_global`.`academic_agency_category`.`code` AS `category_code`, `academic_global`.`academic_agency_category`.`cname` AS `category_cname`, `academic_global`.`academic_agency`.`id`, `academic_global`.`academic_agency`.`cname`, `academic_global`.`academic_agency`.`aka`, IFNULL(`'. $db .'`.`academic_agency_hr`.`administration`, 0) AS `administration`, IFNULL(`'. $db .'`.`academic_agency_hr`.`subject`, 0) AS `subject`, IFNULL(`'. $db .'`.`academic_agency_hr`.`adjunct`, 0) AS `adjunct`, IFNULL(`'. $db .'`.`academic_agency_hr`.`reserve`,0) AS `reserve`';
+            $sql .= '  FROM `academic_global`.`academic_agency_category` ';
+            $sql .= ' INNER JOIN `academic_global`.`academic_agency` ON `academic_global`.`academic_agency`.`code` = `academic_global`.`academic_agency_category`.`code` ';
+            $sql .= '  LEFT JOIN `'. $db .'`.`academic_agency_hr` on `academic_global`.`academic_agency`.`id` = `'. $db .'`.`academic_agency_hr`.`agency_id`';
+            $res  = $this->dbSelect($sql);
+            return $res;
+            break;
+        case 'admin_agency_mod':
+            $sql = 'UPDATE `academic_global`.`academic_agency` SET `code` = :code, `cname` = :cname, `aka` = :aka WHERE `id` = :id';
+            $res = $this->dbUpdate($sql, array(':id'=>$data['id'], ':code'=>$data['code'], ':cname'=>$data['cname'], ':aka'=>$data['aka']));
+            return $this->dbQuery('admin_agency_get');
+            break;
+        case 'admin_agent_academic_agency':
+            $sql = 'SELECT `id`, `cname` FROM `academic_global`.`academic_agency` WHERE `code` != ""';
+            $res  = $this->dbSelect($sql);
+            return $res;
+            break;
+        case 'admin_agent_add':
+            $sql = 'INSERT INTO `academic_global`.`agent` (`id`, `agency_id`, `user`, `pass`, `email`, `state`) VALUES (0, :agency_id, :user, MD5(:pass), :email, 0)';
+            $res = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':user'=>$data['user'], ':pass'=>$data['pass'], 'email'=>$data['email']));
+            return $this->dbQuery('admin_agent_get');
+            break;
+        case 'admin_agent_del':
+            $sql = 'DELETE FROM `academic_global`.`agent` WHERE `id` = :id AND `agency_id` = :agency_id';
+            $res = $this->dbUpdate($sql, array(':id'=>$data['id'], ':agency_id'=>$data['agency_id']));
+            return $this->dbQuery('admin_agent_get');
+            break;
+        case 'admin_agent_get':
+            $sql  = 'SELECT `academic_global`.`agent`.`id`, `academic_global`.`agent`.`agency_id`, `academic_global`.`agent`.`user`, `academic_global`.`agent`.`email`, `academic_global`.`academic_agency`.`cname` AS `academic_agency_cname` ';
+            $sql .= '  FROM `academic_global`.`agent` ';
+            $sql .= ' INNER JOIN `academic_global`.`academic_agency` ON `academic_global`.`agent`.`agency_id` = `academic_global`.`academic_agency`.`id` ';
+            $res = $this->dbSelect($sql);
+            return $res;
+            break;
+        case 'admin_agent_mod':
+            $sql = 'UPDATE `academic_global`.`agent` SET `email` = :email, `pass` = :pass WHERE `id` = :id AND `agency_id` = :agency_id';
+            $sql = $this->dbUpdate($sql, array(':id'=>$data['id'], ':agency_id'=>$data['agency_id'], ':email'=>$data['email'], 'pass'=>$data['pass']));
+            return $this->dbQuery('admin_agent_get');
+            break;
+
+        }
+    }
+}

@@ -1,0 +1,185 @@
+@charset "utf-8";
+/* kendo + bootstrap hack >>> */
+/* reset everything to the default box model */
+
+*, :before, :after
+{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+/* set a border-box model only to elements that need it */
+
+.form-control, /* if this class is applied to a Kendo UI widget, its layout may change */
+.container,
+.container-fluid,
+.row,
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1,
+.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
+.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4,
+.col-xs-5, .col-sm-5, .col-md-5, .col-lg-5,
+.col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7,
+.col-xs-8, .col-sm-8, .col-md-8, .col-lg-8,
+.col-xs-9, .col-sm-9, .col-md-9, .col-lg-9,
+.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10,
+.col-xs-11, .col-sm-11, .col-md-11, .col-lg-11,
+.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12
+{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+
+.k-edit-form-container
+{
+    width: 500px;
+}
+
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+
+.k-popup-edit-form .k-edit-label
+{
+    width: 20%;
+    text-align: left;
+}
+
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field
+{
+    width: 70%;
+}
+
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip)
+{
+    width: 98%;
+}
+
+/* <<< kendo + bootstrap hack */
+
+body {
+  /*background: #364050;*/
+  min-width: 320px;
+}
+
+#header .row {
+  position: relative;
+}
+
+#header h1 {
+  text-align: center;
+}
+
+#sidebar {
+  padding: 0;
+}
+
+#sidebar #logo {
+  line-height: 1.2;
+  padding: 10px;
+}
+
+@media screen and (min-width: 769px) {
+  #main {
+    margin-left: 14em;
+  }
+}
+
+#main.login {
+  margin: 0 auto;
+}
+
+#main .inner {
+  min-height: 768px;
+}
+
+#main .inner h1 {
+  font-size: 32px;
+}
+
+#main .inner h2 {
+  font-size: 24px;
+}
+
+#main .inner h3 {
+  font-size: 18px;
+}
+
+#main .inner h4 {
+  font-size: 16px;
+}
+
+#main .inner h5 {
+  font-size: 14px;
+}
+
+#main .inner h6 {
+  font-size: 12px;
+}
+
+#main #topbar {
+  z-index: 9999;
+  position: relative;
+}
+
+#main #topbar ul {
+  text-align: right;  
+}
+
+#main #topbar ul li {
+  display: inline-block;
+  padding: 0 12px;
+}
+
+#main #topbar ul li i.fa {
+  font-size: 24px;
+}
+
+/* label color */
+label.warning {
+  color: #c94663;
+}
+
+/* kendo ui */
+/* remover progress image */
+.k-loading-mask .k-loading-image {
+  background-image: none;
+}
+
+.k-textbox-full {
+  width: 100%;
+}
+
+/* per page */
+/* login */
+#form-login {
+  float: none;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+#form-activate i.btn.fa.fa-eye {
+  position: absolute;
+  right: 25px;
+  top: 0;
+}
+
