@@ -21,11 +21,11 @@ class EmailController extends Controller {
                     <input type="hidden" id="session" name="session" class="form-control" value="'. $session .'"/>
                 </div>
                 <div class="form-group col-xs-12">
-                    <input type="password" id="userpass" name="userpass" placeholder="請輸入您的密碼" class="form-control" />
+                    <input type="text" id="userpass" name="userpass" placeholder="請輸入您的密碼" class="form-control" />
                     <i id="icon-userpass" class="btn fa fa-eye"></i>
                 </div>
                 <div class="form-group col-xs-12">
-                    <input type="password" id="checkpass" name="checkpass" placeholder="請再次輸入您的密碼" class="form-control" />
+                    <input type="text" id="checkpass" name="checkpass" placeholder="請再次輸入您的密碼" class="form-control" />
                     <i id="icon-checkpss" class="btn fa fa-eye"></i>
                 </div>
                 <div class="form-group col-xs-12">
