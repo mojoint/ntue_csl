@@ -269,6 +269,13 @@ class AjaxModel extends Model {
             $res = $this->dbUpdate($sql, array(':administration'=>$data['administration'], ':subject'=>$data['subject'], ':adjunct'=>$data['adjunct'], ':reserve'=>$data['reserve'], ':others'=>$data['others'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             return $this->dbQuery('agent_academic_agency_hr', array('agency_id'=>$data['agency_id']));
             break;
+        case 'agent_academic_agency_unlock':
+            $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
+            $sql = 'INSERT INTO `academic_agency_unlock` (`id`, `agency_id`, `era_id`, `quarter`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :minors, :work_days, "", "", :note, 0)';
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
+            return $cnt;
+            break;
         case 'agent_profile_email_mod':
             $sql = 'UPDATE `academic_agency_agent` SET `email` = :email WHERE agency_id = :agency_id AND username = :username';
             return $this->dbUpdate($sql, array(':email'=>$data['email'], ':agency_id'=>$data['agency_id'], ':username'=>$data['username']));

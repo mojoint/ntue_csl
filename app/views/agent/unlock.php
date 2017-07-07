@@ -1,6 +1,6 @@
-<section id="sec-unlock">
+<section id="sec-agency_unlock">
     <div class="container">
-      <div class="div-unlock">
+      <div class="div-agency_unlock">
     <?php if (isset($_SESSION['agent'])) : ?>
         <script type="text/x-kendo-template" id="template-academic_class">
           <div class="createBtnContainer">
@@ -25,16 +25,16 @@
         <script type="text/x-kendo-template" id="template-academic_class-footer">
           <div class="createBtnContainer">
             <label for="editor-academic_class-note">修改理由說明</label>
-            <input type="text" id="editor-academic_agency_class-note" />
-            <label for="editor-academic_agency_class-days">修改天數</label>
-            <input type="text" id="editor-academic_agency_class-days" />
-            <a href="\\#" class="k-button" id="btn-academic_agency_class-unlock"><span class="fa fa-save"></span>&nbsp;確認提出</a>
+            <input type="text" id="editor-academic_class-note" />
+            <label for="editor-academic_class-days">修改天數</label>
+            <input type="text" id="editor-academic_class-work_days" />
+            <a href="\\#" class="k-button" id="btn-academic_class-unlock"><span class="fa fa-save"></span>&nbsp;確認提出</a>
           </div>
           <div class="toolbar"></div>
         </script>
         <div id="grid-academic_class-footer" class="col-xs-12"></div>
         <script>
-          mojo.data.academic_agent_unlock = JSON.parse('<?php echo json_encode($academic_agent_unlock); ?>');
+          mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
           var academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
           var academic_class = JSON.parse('<?php echo json_encode($academic_class); ?>');
           $('#grid-academic_class').kendoGrid({
@@ -48,7 +48,7 @@
             $('#editor-academic_era').append('<option value="' + academic_era[i]['id'] +'">' + academic_era[i]['cname'] + '</option>');
           }
           
-          $('#grid-academic_class-a').kendoGrid({
+          mojo.grid.academic_class_a = $('#grid-academic_class-a').kendoGrid({
             pageable: false,
             columns: [
               { template: "<input type='checkbox' class='checkbox' />", width: '50px' },
@@ -64,7 +64,7 @@
           $('#grid-academic_class-a').data('kendoGrid').hideColumn(3);
           $('#grid-academic_class-a').data('kendoGrid').hideColumn(4);
   
-          $('#grid-academic_class-b').kendoGrid({
+          mojo.grid.academic_class_b = $('#grid-academic_class-b').kendoGrid({
             pageable: false,
             columns: [
               { template: "<input type='checkbox' class='checkbox' />", width: '50px' },
@@ -80,7 +80,7 @@
           $('#grid-academic_class-b').data('kendoGrid').hideColumn(3);
           $('#grid-academic_class-b').data('kendoGrid').hideColumn(4);
   
-          $('#grid-academic_class-c').kendoGrid({
+          mojo.grid.academic_class_c = $('#grid-academic_class-c').kendoGrid({
             pageable: false,
             columns: [
               { template: "<input type='checkbox' class='checkbox' />", width: '50px' },

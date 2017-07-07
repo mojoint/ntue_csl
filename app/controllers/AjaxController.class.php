@@ -172,6 +172,15 @@ class AjaxController extends Controller {
                 break;
             }
             break;
+        case 'academic_agency_unlock':
+            switch( $val ) 
+            {
+            case 'mod':
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_unlock', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'note'=>$_POST['note'], 'work_days'=>$_POST['work_days'], 'minors'=>$_POST['minors']));
+                $json = array("code"=>1, "data"=>$res);
+                break;
+            }
+            break;
         case 'profile':
             switch( $val )
             {
@@ -181,17 +190,11 @@ class AjaxController extends Controller {
 
                     if (isset($_POST['email'])) {
                         $res = (new AjaxModel)->dbQuery('agent_profile_email_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'email'=>$_POST['email']));
-                        
                     }
                     if (isset($_POST['userpass'])) {
                         $res = (new AjaxModel)->dbQuery('agent_profile_userpass_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'userpass'=>$_POST['userpass']));
                     }
                     $json = array("code"=>1, "data"=>$res);
-$json['agency_id'] = $_POST['agency_id'];
-$json['user'] = $_POST['username'];
-$json['pass'] = $_POST['userpass'];
-$json['email'] = $_POST['email'];
-$json['username'] = $username;
                 }
                 break;
             }
