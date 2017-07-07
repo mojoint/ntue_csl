@@ -148,6 +148,14 @@ console.log(res);
                   break;
                 }
                 break;
+              case 'academic_agency_unlock':
+                switch(params)
+                {
+                case 'mod':
+                  window.location = "/agent/unlock/";  
+                  break;
+                }
+                break;
               case 'profile':
                 switch(params) 
                 {
@@ -1672,26 +1680,91 @@ console.log( params );
       mojo.watch_info();
 
     /* unlock */
-    mojo.dialog_agent_unlock = function(key, val, params) {
+    mojo.dialog_agency_unlock = function(key, val, params) {
 
     }
 
-    mojo.watch_agent_unlock = function() {
-      if (mojo.data.academic_agent_unlock.length) {
-        console.log( mojo.data.academic_agent_unlock );
+    mojo.watch_agency_unlock = function() {
+      if (mojo.data.academic_agency_unlock.length) {
+       console.log(mojo.data.academic_agency_unlock); 
+        $('#editor-academic_era').val(mojo.data.academic_agency_unlock[0]['era_id']);
+        $('#editor-academic_era_quarter').val(mojo.data.academic_agency_unlock[0]['quarter']);
+        $('#editor-academic_class-note').val(mojo.data.academic_agency_unlock[0]['note']);
+        $('#editor-academic_class-work_days').val(mojo.data.academic_agency_unlock[0]['work_days']);
 
+        var minors = mojo.data.academic_agency_unlock[0]['minors'].split(',');
+        $('#grid-academic_class-a table tbody tr').each(function(e) {
+          if (minors.indexOf($(this).find('td:eq(1)').html()) != -1) {
+            $(this).addClass('k-state-selected');
+            $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+          }
+        });
+        $('#grid-academic_class-b table tbody tr').each(function(e) {
+          if (minors.indexOf($(this).find('td:eq(1)').html()) != -1) {
+            $(this).addClass('k-state-selected');
+            $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+          }
+        });
+        $('#grid-academic_class-c table tbody tr').each(function(e) {
+          if (minors.indexOf($(this).find('td:eq(1)').html()) != -1) {
+            $(this).addClass('k-state-selected');
+            $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+          }
+        });
       }
 
-      $('#btn-academic_agency_class-unlock').on('click', function(e) {
+      $('#grid-academic_class-a table tbody tr').on('click', function(e) {
+        if ($(this).hasClass('k-state-selected')) {
+          $(this).removeClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', false);
+        } else {
+          $(this).addClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+        }
+      });
+
+      $('#grid-academic_class-b table tbody tr').on('click', function(e) {
+        if ($(this).hasClass('k-state-selected')) {
+          $(this).removeClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', false);
+        } else {
+          $(this).addClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+        }
+      });
+
+      $('#grid-academic_class-c table tbody tr').on('click', function(e) {
+        if ($(this).hasClass('k-state-selected')) {
+          $(this).removeClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', false);
+        } else {
+          $(this).addClass('k-state-selected');
+          $(this).find('td:eq(0) input:checkbox').prop('checked', true);
+        }
+      });
+
+      $('#btn-academic_class-unlock').on('click', function(e) {
         e.preventDefault();
-        mojo.json = {'agency_id': mojo.mojos[2], 'academic_era': $('#editor-academic_era').val(), 'academic_era_quarter': $('#editor-academic_era_quarter').val(), 'note': $('#editor-academic_agency_class-note').val(), 'work_days': $('#academic_agency_class-days').val()};
+        mojo.json = {'agency_id': mojo.mojos[2], 'era_id': $('#editor-academic_era').val(), 'quarter': $('#editor-academic_era_quarter').val(), 'note': $('#editor-academic_class-note').val(), 'work_days': $('#editor-academic_class-work_days').val()};
+        var minors = [];
         $('#grid-academic_class-a table tbody tr').each(function( index ) {
-console.log( $(this).html() );
+          if ($(this).hasClass('k-state-selected'))
+            minors.push($(this).find('td:eq(1)').html());
         });
+        $('#grid-academic_class-b table tbody tr').each(function( index ) {
+          if ($(this).hasClass('k-state-selected'))
+            minors.push($(this).find('td:eq(1)').html());
+        });
+        $('#grid-academic_class-c table tbody tr').each(function( index ) {
+          if ($(this).hasClass('k-state-selected'))
+            minors.push($(this).find('td:eq(1)').html());
+        });
+        mojo.json.minors = minors.join(',');
+        mojo.ajax('agent', 'academic_agency_unlock', 'mod', mojo.json);
       });
     };
 
-    if (mojo.mojo_if('sec-agent_unlock'))
-      mojo.watch_agent_unlock();
+    if (mojo.mojo_if('sec-agency_unlock'))
+      mojo.watch_agency_unlock();
   });
 })(jQuery);

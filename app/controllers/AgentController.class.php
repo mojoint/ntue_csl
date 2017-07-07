@@ -110,7 +110,7 @@ class AgentController extends Controller {
             $this->assign('sidebar', $this->sidebars('unlock'));
             $this->assign('academic_era', (new AgentModel)->dbQuery('academic_era'));
             $this->assign('academic_class', (new AgentModel)->dbQuery('academic_class'));
-            $this->assign('academic_agent_unlock', (new AgentModel)->dbQuery('academic_agency_unlock'));
+            $this->assign('academic_agency_unlock', (new AgentModel)->dbQuery('academic_agency_unlock', array('agency_id'=> $_SESSION['agent']['agency_id'])));
             $this->render();
         } else {
             $this->redirect();
