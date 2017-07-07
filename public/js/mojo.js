@@ -752,10 +752,22 @@ console.log(res);
           { text: '確定', primary: true, action: function(e) {
             mojo.json = { username: mojo.mojos[0], agency_id: mojo.mojos[2] };
             if (mojo.reg.email.test($('#dialog-email').val()))
-              mojo.json.email = $('#dialog-email').val();
+                mojo.json.email = $('#dialog-email').val();
             if (mojo.reg.userpass.test($('#dialog-userpass').val()))
-              mojo.json.userpass = $('#dialog-userpass').val();
-            mojo.ajax('agent', 'profile', 'mod', mojo.json);
+                mojo.json.userpass = $('#dialog-userpass').val();
+            if (mojo.reg.userpass.test($('#dialog-userpass-check').val()))
+                mojo.json.userpasscheck = $('#dialog-userpass-check').val();
+            if(mojo.check_agent()){
+                mojo.ajax('agent', 'profile', 'mod', mojo.json);
+            }else{
+                $('#btn-agent-profile').trigger('click');
+                if(mojo.reg.email.test(mojo.json.email))
+                    $('#dialog-email').val(mojo.json.email);
+                if(mojo.reg.userpass.test(mojo.json.userpass))
+                    $('#dialog-userpass').val(mojo.json.userpass);
+                if(mojo.reg.userpass.test(mojo.json.userpasscheck))
+                    $('#dialog-userpass-check').val(mojo.json.userpasscheck);
+            }
           }},
           { text: '取消'}
         ]
@@ -763,9 +775,19 @@ console.log(res);
       mojo.html = '';
       mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">信箱</label><input type="text" id="dialog-email" placeholder="需要修改的話請填入" /></div>';
       mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">密碼</label><input type="text" id="dialog-userpass" placeholder="需要修改的話請填入" /></div>';
+      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">請再次輸入密碼</label><input type="text" id="dialog-userpass-check" placeholder="需要修改的話請填入" /></div>';
       $('#dialog').data('kendoDialog').content(mojo.html).open().center();
     }
     
+    mojo.check_agent = function() {
+      var pass = true;
+      if ($('#dialog-userpass').val() != $('#dialog-userpass-check').val()) {
+        pass = false;
+        alert('您的密碼兩次輸入的不一樣！');
+      }
+      return pass;
+    }
+
     mojo.watch_agent = function() {
       $('#btn-agent-profile').on('click', function(e) {
         e.preventDefault();
