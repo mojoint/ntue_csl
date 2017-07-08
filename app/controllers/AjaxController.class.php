@@ -57,6 +57,19 @@ class AjaxController extends Controller {
                 break;
             } 
             break;
+        case 'academic_agency_unlock':
+            switch( $val )
+            {
+            case 'yes':
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_yes', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
+                $json = array("code"=>1, "data"=>$res);
+                break;
+            case 'no':
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id']));
+                $json = array("code"=>1, "data"=>$res);
+                break;
+            } 
+            break;
         case 'academic_era':
             switch( $val )
             {

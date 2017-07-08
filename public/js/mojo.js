@@ -80,6 +80,15 @@ console.log(res);
                   break;
                 }
                 break;
+              case 'academic_agency_unlock':
+                switch(params)
+                {
+                case 'yes':
+                case 'no':
+                  window.location = "/admin/unlock/";  
+                  break;
+                }
+                break;
               case 'academic_class':
                 switch(params)
                 {
@@ -586,13 +595,65 @@ console.log(res);
       mojo.watch_maintain(); 
     /* unlock */
     mojo.dialog_admin_unlock = function(key, val, params) {
+      switch(key)
+      {
+      case 'academic_agency_unlock':
+        var m = moment();
+        var online = m.get('year') + '-' + (parseInt(m.get('month')) + 1) + '-' + m.get('date');
+        m.add((parseInt(params.work_days) + 1), 'days');
+        var offline = m.get('year') + '-' + (parseInt(m.get('month')) + 1) + '-' + m.get('date');
+        $('#dialog-academic_agency_unlock').kendoDialog({
+          width: 480,
+          title: "填報期間",
+          content: '',
+          model: true,
+          visible: false,
+          closable: true,
+          actions: [
+            { text: '確定', primary: true, action: function(e) {
+              switch(val) 
+              {
+              case 'yes':
+              case 'no':
+                mojo.json = { 'agency_id': params.agency_id, 'id': params.id, 'online': online, 'offline': offline };
+                break;
+              }
+              mojo.ajax('admin', key, val, mojo.json);
+            }},
+            { text: '取消'}
+          ]
+        });
+
+        switch(val)
+        {
+        case 'yes':
+          mojo.html  = '<div><label>同意 ' + params.cname + ' 申請解鎖</label></div>';
+          mojo.html += '<div><label>期間為 ' + online + ' ~ ' + offline + '</label></div>';
+          break;
+        case 'no':
+          mojo.html  = '<div><label>不同意 ' + params.cname + ' 申請解鎖</label></div>';
+          break;
+        }
+        $('#dialog-academic_agency_unlock').data('kendoDialog').content(mojo.html).open().center();
+        break;
+      }
 
     };
 
     mojo.watch_admin_unlock = function() {
-      $('#btn-academic_agency-add').on('click', function(e) {
+      $('.btn-academic_agency_unlock-yes').on('click', function(e) {
         e.preventDefault();
-        mojo.dialog_admin_unlock('academic_agency', 'add');
+        var tr = $(e.target).closest("tr");
+        var tds = $(tr).find("td");
+console.log( '... yes' );
+        mojo.dialog_admin_unlock('academic_agency_unlock', 'yes', {'agency_id': $(tds[0]).html(), 'id': $(tds[1]).html(), 'cname': $(tds[3]).html(), 'work_days': $(tds[7]).html()});
+      });
+
+      $('.btn-academic_agency_unlock-no').on('click', function(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var tds = $(tr).find("td");
+        mojo.dialog_admin_unlock('academic_agency_unlock', 'no', {'agency_id': $(tds[0]).html(), 'id': $(tds[1]).html(), 'cname': $(tds[3]).html()});
       });
     };
 
@@ -752,22 +813,10 @@ console.log(res);
           { text: '確定', primary: true, action: function(e) {
             mojo.json = { username: mojo.mojos[0], agency_id: mojo.mojos[2] };
             if (mojo.reg.email.test($('#dialog-email').val()))
-                mojo.json.email = $('#dialog-email').val();
+              mojo.json.email = $('#dialog-email').val();
             if (mojo.reg.userpass.test($('#dialog-userpass').val()))
-                mojo.json.userpass = $('#dialog-userpass').val();
-            if (mojo.reg.userpass.test($('#dialog-userpass-check').val()))
-                mojo.json.userpasscheck = $('#dialog-userpass-check').val();
-            if(mojo.check_agent()){
-                mojo.ajax('agent', 'profile', 'mod', mojo.json);
-            }else{
-                $('#btn-agent-profile').trigger('click');
-                if(mojo.reg.email.test(mojo.json.email))
-                    $('#dialog-email').val(mojo.json.email);
-                if(mojo.reg.userpass.test(mojo.json.userpass))
-                    $('#dialog-userpass').val(mojo.json.userpass);
-                if(mojo.reg.userpass.test(mojo.json.userpasscheck))
-                    $('#dialog-userpass-check').val(mojo.json.userpasscheck);
-            }
+              mojo.json.userpass = $('#dialog-userpass').val();
+            mojo.ajax('agent', 'profile', 'mod', mojo.json);
           }},
           { text: '取消'}
         ]
@@ -775,19 +824,9 @@ console.log(res);
       mojo.html = '';
       mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">信箱</label><input type="text" id="dialog-email" placeholder="需要修改的話請填入" /></div>';
       mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">密碼</label><input type="text" id="dialog-userpass" placeholder="需要修改的話請填入" /></div>';
-      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">請再次輸入密碼</label><input type="text" id="dialog-userpass-check" placeholder="需要修改的話請填入" /></div>';
       $('#dialog').data('kendoDialog').content(mojo.html).open().center();
     }
     
-    mojo.check_agent = function() {
-      var pass = true;
-      if ($('#dialog-userpass').val() != $('#dialog-userpass-check').val()) {
-        pass = false;
-        alert('您的密碼兩次輸入的不一樣！');
-      }
-      return pass;
-    }
-
     mojo.watch_agent = function() {
       $('#btn-agent-profile').on('click', function(e) {
         e.preventDefault();

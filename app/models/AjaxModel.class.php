@@ -84,6 +84,16 @@ class AjaxModel extends Model {
             $res = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_agent_get');
             break;
+        case 'admin_academic_agency_unlock_yes':
+            $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
+            $cnt = $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            return $sql;
+            break;
+        case 'admin_academic_agency_unlock_no':
+            $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            return $sql;
+            break;
         case 'admin_academic_era_add':
             $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
             $res = $this->dbSelect($sql);

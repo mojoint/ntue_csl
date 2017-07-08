@@ -27,6 +27,7 @@
   <script src="/public/js/xlsx.full.min.js"></script>
   <script src="/public/js/exceplus-2.5.min.js"></script>
   <script src="/public/js/webtoolkit.base64.js"></script>
+  <script src="/public/js/moment-with-locales.min.js"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
   <!-- mojo -->
   <link rel="stylesheet" type="text/css" href="/public/css/mojo.css"/>
