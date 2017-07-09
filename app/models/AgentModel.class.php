@@ -27,8 +27,19 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_fill':
-            $sql  = 'SELECT * FROM `academic_era_quarter` WHERE CURDATE() BETWEEN `online` AND `offline`';
-            return $this->dbSelect($sql);
+            //$sql  = 'SELECT * FROM `academic_era_quarter` WHERE CURDATE() BETWEEN `online` AND `offline`';
+            $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND CURDATE() BETWEEN `online` AND `offline`';
+            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            if (sizeof($res)) {
+                $sql  = 'SELECT * FROM `academic_era_qurater` WHERE `era_id` = :era_id AND `quarter` = :quarter';
+                return $this->dbSelect($sql, array(':era_id'=>$res[0]['era_id'], 'quarter'=>$res[0]['quarter']));
+            } else {
+                $sql  = 'SELECT t1.* ';
+                $sql .= '  FROM `academic_era_quarter` t1';
+                $sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`state` = 0 AND t2.`agency_id` = :agency_id';
+                $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` ORDER BY t1.`id` ASC LIMIT 1';
+                return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            }
             break;
         case 'academic_agency_class':
             $sql  = 'SELECT t1.*, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
