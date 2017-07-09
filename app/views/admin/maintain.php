@@ -60,10 +60,11 @@
               columns: [
                 { title: '&nbsp;', field: 'id' },
                 { title: '&nbsp;', field: 'agency_id' },
-                { title: '使用者ID', field: 'username', width: '200px' },
+                { title: '使用者ID', field: 'username', width: '150px' },
                 { title: '電子郵件', field: 'email' },
-                { title: '所屬機構', field: 'academic_agency_cname', width: '300px' },
-                { title: '&nbsp;', width: '200px',
+                { title: '學校名稱', field: 'academic_institution_cname', width: '200px' },
+                { title: '所屬機構', field: 'academic_agency_cname', width: '200px' },
+                { title: '&nbsp;', width: '100px',
                   command: [
                     {
                       name: '編輯',

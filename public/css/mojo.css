@@ -188,3 +188,8 @@ label.warning {
   top: 0;
 }
 
+.mini-chkbox{
+  display: inline;
+  width: 30px;
+  height: 21px;
+}

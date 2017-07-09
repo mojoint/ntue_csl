@@ -519,7 +519,7 @@ console.log(res);
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
           $('#dialog-academic_agency_agent').data('kendoDialog').content(mojo.html).open().center();
           for (var x in mojo.refs.academic_agency) 
-            $('#dialog-agency_id').append('<option value="' + x + '">' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + ' ' + mojo.refs.academic_agency[x].cname + '</option>');
+            $('#dialog-agency_id').append('<option value="' + x + '">' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + '[ ' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].cname + ' ] ' + mojo.refs.academic_agency[x].cname + '</option>');
           break;
         case 'mod':
           mojo.html  = '<div><label for="dialog-agency_id">機構名稱</label><select id="dialog-agency_id" class="form-control"></select></div>';
@@ -528,7 +528,7 @@ console.log(res);
           $('#dialog-academic_agency_agent').data('kendoDialog').content(mojo.html).open().center();
           for (var x in mojo.refs.academic_agency) {
             if (x == params.agency_id)
-              $('#dialog-agency_id').append('<option value="' + x + '" selected>' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + ' ' + mojo.refs.academic_agency[x].cname + '</option>');
+              $('#dialog-agency_id').append('<option value="' + x + '" selected>' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + '[ ' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].cname + ' ] ' + mojo.refs.academic_agency[x].cname + '</option>');
             else
               $('#dialog-agency_id').append('<option value="' + x + '">' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + ' ' + mojo.refs.academic_agency[x].cname + '</option>');
 
@@ -1790,13 +1790,13 @@ console.log( mojo.json );
 
         mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" /></div>';
         mojo.html += '<div class="col-xs-12" ><label for="dialog-title">職稱</label><input type="text" id="dialog-title" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-manager">單位主管</label><input type="checkbox" id="dialog-manager" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-staff">單位職員</label><input type="checkbox" id="dialog-staff" class="form-control" /></div>';
+        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-manager" class="form-control mini-chkbox" /><label for="dialog-manager">單位主管</label></div>';
+        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
         mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
         mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
         mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
         mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-primary">主要聯絡人</label><input type="checkbox" id="dialog-primary" class="form-control" /></div>';
+        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
         $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
         for (var x in mojo.refs.area_list)
           $('#dialog-area_code').append('<option value="' + x + '">' + x + '(' + mojo.refs.area_list[x] + ')</option>');

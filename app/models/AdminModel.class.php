@@ -15,9 +15,10 @@ class AdminModel extends Model {
             return $this->dbSelect($sql);
             break;
         case 'academic_agency_agent':
-            $sql  = 'SELECT t1.*, t2.`cname` AS `academic_agency_cname` ';
+            $sql  = 'SELECT t1.*, t2.`cname` AS `academic_agency_cname` , t3.cname AS `academic_institution_cname` ';
             $sql .= '  FROM `academic_agency_agent` t1 ';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id` ';
+            $sql .= ' INNER JOIN `academic_institution` t3 on t2.`institution_code` = t3.code ';
             return $this->dbSelect($sql);
             break;
         case 'academic_class':
