@@ -75,6 +75,11 @@
 }
 
 /* <<< kendo + bootstrap hack */
+/* select2 hack >>> */
+.select2-container {
+  z-index: 9999999;
+}
+/* <<< select2 hack */
 
 body {
   /*background: #364050;*/

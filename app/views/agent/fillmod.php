@@ -97,10 +97,8 @@
           toolbar: kendo.template($('#template-academic_agency_class_summary').html())
         });
 
-
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
         mojo.data.academic_agency_class_country = JSON.parse('<?php echo json_encode($academic_agency_class_country); ?>');
-console.log( mojo.data.academic_agency_class_country );
       </script>
     </div>
   <?php endif; ?>

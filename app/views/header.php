@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css"/> 
+  <link rel="stylesheet" type="text/css" href="/public/css/select2.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/kendo.common-material.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/kendo.material.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/kendo.material.mobile.min.css"/> 
@@ -18,6 +19,7 @@
   <script src="/public/js/jquery.min.js"></script>
   <script src="/public/js/angular.min.js"></script>
   <script src="/public/js/bootstrap.min.js"></script>
+  <script src="/public/js/select2.min.js"></script>
   <script src="/public/js/skel.min.js"></script>
   <script src="/public/js/util.js"></script>
   <!--[if lte IE 8]><script src="/public/js/ie/respond.min.js"></script><![endif]-->
