@@ -237,11 +237,9 @@ console.log(res);
               case 'country_list':
                 mojo.refs.country_list = {};
                 mojo.refs.country_code_list = [];
-                mojo.refs.country_if = [];
                 for (var i=0; i<res.data.length; i++) {
                   mojo.refs.country_list[res.data[i]['code']] = res.data[i];
                   mojo.refs.country_code_list.push({'code': res.data[i].code, 'cname': res.data[i].cname, 'ename': res.data[i].ename, 'select_key': res.data[i].cname + ' ' + res.data[i].ename + ' ' + res.data[i].code });
-                  mojo.refs.country_if.push( new mojo.country_if(res.data[i].code, res.data[i].cname, res.data[i].ename) );
                 }
                 mojo.refs.major_list = {};
                 for (var i=0; i<res.data.length; i++)
@@ -287,57 +285,41 @@ console.log(res);
       return $('#' + id).length;
     };
 
-    mojo.country_if = function( code, cname, ename ) {
-        this.mojo_country_if = code;
-        this,cname = cname;
-        this.ename = ename;
-        this.textForSearch = code + ' ' + cname + ename;
-    }
+    mojo.to_json = function(wb) {
+      var result = {};
+      wb.SheetNames.forEach(function(sheetName) {
+        var roa = XLS.utils.sheet_to_row_object_array(wb.Sheets[sheetName]);
+        if (roa.length) 
+          result[sheetName] = roa;
+      });
+      return result;
+    };
+
+    mojo.process_wb = function(wb) {
+      output = JSON.stringify(mojo.to_json(wb), 2, 2);
+      mojo.json = output;
+    };
 
     mojo.excel = function(e) {
-      var files = e.target.files,file;
-      if (!files || files.length == 0) return;
-      file = files[0];
-      var fileReader = new FileReader();
-      fileReader.onload = function (e) {
-        var filename = file.name;
-        // pre-process data
-        var binary = "";
-        var bytes = new Uint8Array(e.target.result);
-        var length = bytes.byteLength;
-        for (var i = 0; i < length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        // call 'xlsx' to read the file
-        var oFile = XLSX.read(binary, {type: 'binary', cellDates:true, cellStyles:true});
-      };
-      fileReader.readAsArrayBuffer(file);
+      var files = e.target.files;
+      var i, f;
+      for (i = 0, f = files[i]; i != files.length; ++i) {
+        var reader = new FileReader();
+        var name = f.name;
+        reader.onload = function(e) {
+          var data = e.target.result;
+
+          var workbook = XLSX.read(data, {
+              type: 'binary'
+          });
+
+          /* DO SOMETHING WITH workbook HERE */
+          mojo.process_wb(workbook);
+        };
+        reader.readAsBinaryString(f);
+      }  
     };
 
-    /* timer */
-    /*
-    mojo.timer = function() {
-      if (mojo.flag) {
-        mojo.flag = false;
-        switch(mojo.tag)
-        {
-        case 'summary-country_reach':
-            $('#summary-reach').html($('.' + mojo.tag).html());
-            mojo.summary.reach = 0;
-            if (!isNaN($('#summary-reach').html()))
-              mojo.summary.reach = parseFloat($('#summary-reach').html());
-            mojo.summaryHours();
-            break;
-        }
-      }
-      mojo.watcher = setTimeout( mojo.timer, 1000 );
-    };
-
-    mojo.watcher = setTimeout( mojo.timer, 1000 );
-    mojo.flag = false;
-    mojo.tag = 'NA';
-    */
-    
     /* =========================================== */
     /* ------------------ login ------------------ */
     /* check input */
@@ -1173,6 +1155,9 @@ console.log(res);
               var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
+            case 'import':
+              
+              break;
             case 'mod':
               var tds = $(params.tr).find("td");
               $(tds[0]).html($('#dialog-country_code').val());
@@ -1201,6 +1186,12 @@ console.log(res);
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        break;
+      case 'import':
+        mojo.html  = '<div><label>EXCEL 匯入將會清除現有的國別資料</label></div>';
+        mojo.html  += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-file">EXCEL 檔案</label><input type="file" id="dialog-file" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        $('#dialog-file').on('change', mojo.excel);
         break;
       case 'del':
         mojo.html = '<div><label>刪除 ' + params.country_cname + ' 資料?</label></div>';
@@ -1322,11 +1313,6 @@ console.log(res);
         $('#summary-turnover').html(mojo.turnover);
       });
 
-      $('#btn-academic_agency_class-import').on('click', function(e) {
-        e.preventDefault();
-
-      });
-    
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_filladd) {
@@ -1352,11 +1338,6 @@ console.log(res);
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
             alert(mojo.errmsg);
-      });
-
-      /* excel */
-      $("#academic_agency_country-import").on('click', function(e) {
-        e.preventDefault();
       });
 
       mojo.data.academic_agency_class_country = [];
@@ -1408,13 +1389,18 @@ console.log(res);
         mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
         mojo.dialog_filladd('academic_agency_class_country', 'del', mojo.json);
       });
+
+      /* excel */
+      $("#btn-academic_agency_class_country-import").on('click', function(e) {
+        e.preventDefault();
+        mojo.dialog_filladd('academic_agency_class_country', 'import', {});
+      });
     };
       
     if (mojo.mojo_if('sec-filladd'))
       mojo.watch_filladd();
 
     /* fill mod */
-
     mojo.check_fillmod = function() {
       var pass = true;
       mojo.errmsg = '';
@@ -1458,6 +1444,9 @@ console.log(res);
               var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
+            case 'import':
+              
+              break;
             case 'mod':
               var tds = $(params.tr).find("td");
               $(tds[0]).html($('#dialog-country_code').val());
@@ -1490,6 +1479,12 @@ console.log(res);
       case 'del':
         mojo.html = '<div><label>刪除 ' + params.country_cname + ' 資料?</label></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        break;
+      case 'import':
+        mojo.html  = '<div><label>EXCEL 匯入將會清除現有的國別資料</label></div>';
+        mojo.html  += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-file">EXCEL 檔案</label><input type="file" id="dialog-file" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        $('#dialog-file').on('change', mojo.excel);
         break;
       case 'mod':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
@@ -1607,10 +1602,6 @@ console.log(res);
         $('#summary-turnover').html(mojo.turnover);
       });
 
-      $('#btn-academic_agency_class-import').on('click', function(e) {
-        e.preventDefault();
-      });
-    
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_fillmod) {
@@ -1638,8 +1629,9 @@ console.log(res);
       });
 
       /* excel */
-      $("#academic_agency_country-import").on('click', function(e) {
+      $("#btn-academic_agency_class_country-import").on('click', function(e) {
         e.preventDefault();
+        mojo.dialog_filladd('academic_agency_class_country', 'import', {});
       });
 
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 

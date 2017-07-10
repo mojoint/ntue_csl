@@ -42,8 +42,7 @@
       <script type="text/x-kendo-template" id="template-academic_agency_class_country">
         <div class="createBtnContainer">
           <a href="\\#" class="k-button k-grid-add" id="btn-academic_agency_class_country-add"><span class="fa fa-plus"></span>&nbsp;新增國別明細</a>
-          <!--<a href="\\#" class="k-button" id="btn-academic_agency_class_country-import"><span class="fa fa-file-excel-o"></span>&nbsp;自EXCEL匯入</a>-->
-          <!--<label><input type="file" name="file" id="academic_agency_country-import" /></label>-->
+          <a href="\\#" class="k-button" id="btn-academic_agency_class_country-import"><span class="fa fa-file-excel-o"></span>&nbsp;自EXCEL匯入</a>
         </div>
         <div class="toolbar"></div>
       </script>

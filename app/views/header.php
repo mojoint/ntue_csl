@@ -26,7 +26,8 @@
   <script src="/public/js/main.js"></script>
   <script src="/public/js/kendo.all.min.js"></script>
   <script src="/public/js/shim.js"></script>
-  <script src="/public/js/xlsx.full.min.js"></script>
+  <script src="/public/js/jszip.js"></script>
+  <script src="/public/js/xlsx.js"></script>
   <script src="/public/js/exceplus-2.5.min.js"></script>
   <script src="/public/js/webtoolkit.base64.js"></script>
   <script src="/public/js/moment-with-locales.min.js"></script>
@@ -35,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="/public/css/mojo.css"/>
   <script>
     var mojo = {
-      ver: '1.0.1',
+      ver: '1.1.1',
       errmsg: '',
       cache: {},
       data: {},
@@ -55,7 +56,7 @@
       refs: {},
     };
   </script>
-  <script src="/public/js/mojo.js?ver=2017061901"></script>
+  <script src="/public/js/mojo.js?ver=2017071001"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 
