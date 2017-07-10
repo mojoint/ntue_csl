@@ -898,12 +898,13 @@ console.log(res);
 
       mojo.grid.academic_agency_class.kendoGrid({
         pageable: false,
+        resizable: true,
         height: 0,
         columns: [
-          { field: "cname", title: "研習類別", width: "300px" },
-          { field: "people", title: "總人數", width: "120px" },
-          { field: "reach", title: "總人次", width: "120px" },
-          { field: "hours", title: "總時數", width: "120px" },
+          { field: "cname", title: "研習類別", width: "240px" },
+          { field: "people", title: "總人數", width: "100px" },
+          { field: "reach", title: "總人次", width: "100px" },
+          { field: "hours", title: "總時數", width: "100px" },
           { field: "turnover", title: "營收額度" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
@@ -936,13 +937,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          /*{ field: "cname", title: "第一類研習類別", width: "300px", footerTemplate: "第一類研習類別小計" },*/
-          { field: "minor_cname", title: "第一類研習類別", width: "300px", footerTemplate: "第一類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
+          { field: "minor_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-a" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -988,12 +989,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          { field: "minor_cname", title: "第二類研習類別", width: "300px", footerTemplate: "第二類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
+          { field: "minor_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-b" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1039,12 +1041,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          { field: "minor_cname", title: "第三類研習類別", width: "300px", footerTemplate: "第三類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
+          { field: "minor_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1067,17 +1070,13 @@ console.log(res);
         pageable: false,
         height: 0,
         columns: [
-          { field: "cname", title: "研習類別統計", width: "300px" },
-          { field: "people", title: "總人數", width: "120px", footerAttributes: { "class": "summary-people" } },
-          { field: "reach", title: "總人次", width: "120px", footerAttributes: { "class": "summary-reach" } },
-          { field: "hours", title: "總時數", width: "120px", footerAttributes: { "class": "summary-hours" } },
+          { field: "cname", title: "研習類別統計", width: "240px" },
+          { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },
+          { field: "reach", title: "總人次", width: "100px", footerAttributes: { "class": "summary-reach" } },
+          { field: "hours", title: "總時數", width: "100px", footerAttributes: { "class": "summary-hours" } },
           { field: "turnover", title: "營收額度", footerAttributes: { "class": "summary-turnover" } }
         ]
       });
-console.log( mojo.data.academic_agency_fill );
-      //$('#select_academic_era_quarter').empty();
-      //for (var i=0; i<mojo.data.academic_agency_fill_data.length; i++)
-      //  $('#select_academic_era_quarter').append('<option value="' + mojo.data.academic_agency_fill_data[i].id + '">' + mojo.data.academic_agency_fill_data[i].cname + '</option>');
 
       $('#btn-academic_agency_class-done').on('click', function(e) {
         e.preventDefault();
