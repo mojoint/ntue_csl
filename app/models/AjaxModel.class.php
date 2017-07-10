@@ -199,10 +199,10 @@ class AjaxModel extends Model {
             $sql = 'UPDATE `academic_agency_class` SET `cname` = :cname, `content_code` = :content_code, `target_code` = :target_code, `people` = :people, `reach` = :reach, `weekly` = :weekly, `weeks` = :weeks, `adjust` = :adjust, `hours` = :hours, `revenue` = :revenue, `subsidy` = :subsidy, `turnover` = :turnover, `note` = :note WHERE `id` = :class_id';
             $cnt = $this->dbUpdate($sql, array(':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':people'=>$data['people'], ':reach'=>$data['reach'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], ':adjust'=>$data['adjust'], ':hours'=>$data['hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>$data['note'], ':class_id'=>$data['class_id']));
             $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
-            $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id));
+            $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id']));
             for ($i=0; $i<sizeof($data['country']); $i++) {
                 $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `reach`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :reach, :note, 0)';
-                    $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id, ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':female'=>$data['country'][$i]['female'], ':reach'=>$data['country'][$i]['reach'], ':note'=>$data['country'][$i]['note']));
+                    $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id'], ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':female'=>$data['country'][$i]['female'], ':reach'=>$data['country'][$i]['reach'], ':note'=>$data['country'][$i]['note']));
             } 
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;

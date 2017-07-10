@@ -23,34 +23,12 @@ class AgentController extends Controller {
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
                 $_SESSION['agent']['quarter_id'] = $academic_agency_fill[0]['id'];
+                $this->assign('academic_agency_fill', $academic_agency_fill);
                 $this->assign('era_id', $academic_agency_fill[0]['era_id']);
                 $this->assign('quarter', $academic_agency_fill[0]['quarter']);
                 $this->assign('quarter_id', $academic_agency_fill[0]['id']);
                 $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$academic_agency_fill[0]['era_id'], 'quarter'=>$academic_agency_fill[0]['quarter'])));
             }
-            /*
-            $this->assign('academic_agency_fill', $academic_agency_fill);
-            if (sizeof($academic_agency_fill) > 0) {
-                $quarter_id = ($quarter_id == 0)? $academic_agency_fill[0]['id'] : $quarter_id;
-                $era_id = $academic_agency_fill[0]['era_id'];
-                $quarter = $academic_agency_fill[0]['quarter'];
-                foreach($academic_agency_fill as $fill) {
-                    if ($fill['id'] == $quarter_id) {
-                        $era_id = $fill['era_id'];
-                        $quarter = $fill['quarter'];
-                    }
-                }
-
-                $_SESSION['agent']['era_id'] = $era_id;
-                $_SESSION['agent']['quarter'] = $quarter;
-                $_SESSION['agent']['quarter_id'] = $quarter_id;
-
-                $this->assign('era_id', $era_id);
-                $this->assign('quarter', $quarter);
-                $this->assign('quarter_id', $quarter_id);
-                $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$era_id, 'quarter'=>$quarter)));
-            }
-            */
             $this->render();
         } else {
             $this->redirect();

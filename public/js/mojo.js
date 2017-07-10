@@ -121,6 +121,7 @@ console.log(res);
               {
               case 'academic_agency_class':
                 case 'add':
+                case 'mod':
                 case 'del':
                   window.location = "/agent/fill/";  
                   break;
@@ -1690,6 +1691,7 @@ console.log( mojo.data.academic_agency_fill );
         mojo.summary.revenue = mojo.data.academic_agency_class[0].revenue;
         mojo.summary.subsidy = mojo.data.academic_agency_class[0].subsidy;
         mojo.summary.turnover = mojo.data.academic_agency_class[0].turnover;
+        mojo.summaryReach();
       }
 
       $('#btn-academic_agency_class_country-add').on('click', function(e) {
