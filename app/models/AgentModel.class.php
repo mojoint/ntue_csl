@@ -27,11 +27,10 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_fill':
-            //$sql  = 'SELECT * FROM `academic_era_quarter` WHERE CURDATE() BETWEEN `online` AND `offline`';
             $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND CURDATE() BETWEEN `online` AND `offline`';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             if (sizeof($res)) {
-                $sql  = 'SELECT * FROM `academic_era_qurater` WHERE `era_id` = :era_id AND `quarter` = :quarter';
+                $sql  = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
                 return $this->dbSelect($sql, array(':era_id'=>$res[0]['era_id'], 'quarter'=>$res[0]['quarter']));
             } else {
                 $sql  = 'SELECT t1.* ';

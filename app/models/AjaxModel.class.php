@@ -167,9 +167,9 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_class_add':
-            $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `minor_code` = :minor_code';
-            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':minor_code'=>$data['minor_code']));
-            if (0 == sizeof($res)) {
+            //$sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `minor_code` = :minor_code';
+            //$res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':minor_code'=>$data['minor_code']));
+            //if (0 == sizeof($res)) {
                 $sql  = 'INSERT INTO `academic_agency_class`';
                 $sql .= ' (`id`, `agency_id`, `era_id`, `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `people`, `reach`, `weekly`, `weeks`, `adjust`, `hours`, `revenue`, `subsidy`, `turnover`, `note`, `state`)';
                 $sql .= ' VALUES (0, :agency_id, :era_id, :quarter, :major_code, :minor_code, :cname, :content_code, :target_code, :people, :reach, :weekly, :weeks, :adjust, :hours, :revenue, :subsidy, :turnover, :note, 0)';
@@ -183,7 +183,7 @@ class AjaxModel extends Model {
                     $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `reach`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :reach, :note, 0)';
                     $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id, ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':female'=>$data['country'][$i]['female'], ':reach'=>$data['country'][$i]['reach'], ':note'=>$data['country'][$i]['note']));
                 } 
-            }
+            //}
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_class_del':
