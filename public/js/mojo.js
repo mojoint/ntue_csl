@@ -14,6 +14,8 @@
         mojo.era_id = $('#academic_agency_class').attr('data-era_id'); 
         mojo.quarter = $('#academic_agency_class').attr('data-quarter');
         mojo.quarter_id = $('#academic_agency_class').attr('data-quarter_id');
+        mojo.sec = $('section').attr('id');
+console.log(mojo.sec);
     }
 
     /* ajax */
@@ -253,11 +255,13 @@ console.log(res);
                 if ($('#editor-minor_code').length) {
                   $('#editor-minor_code').empty();
                   for (var x in mojo.refs.minor_list) {
-                    if (mojo.refs.minor_list[x].major_code == mojo.major)
+                    if ((mojo.refs.minor_list[x].major_code == mojo.major) && ( 'sec-filladd' == mojo.sec))
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-                    else if (mojo.data.academic_agency_class && mojo.data.academic_agency_class[0].minor_code)
+                    else if (mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
                   }
+                  if ('sec-fillmod' == mojo.sec)
+                    $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
                 }
                 break;
               case 'target_list':
@@ -1662,6 +1666,7 @@ console.log(res);
 
       $('#grid-academic_agency_class_country').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_class_country, page: 1, pageSize: 10 }));
       if (mojo.data.academic_agency_class) {
+        $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
         $('#editor-cname').val(mojo.data.academic_agency_class[0].cname);
         $('#editor-weekly').val(mojo.data.academic_agency_class[0].weekly);
         $('#editor-weeks').val(mojo.data.academic_agency_class[0].weeks);
