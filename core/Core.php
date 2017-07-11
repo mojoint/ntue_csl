@@ -52,6 +52,18 @@ class Core
         return $value;
     }
 
+    public function setReporting()
+    {
+        if (APP_DEBUG === true) {
+            error_reporting(E_ALL);
+            ini_set('display_errors','On');
+        } else {
+            error_reporting(E_ALL);
+            ini_set('display_errors','Off');
+            ini_set('log_errors', 'On');
+        }
+    }
+
     public function removeMagicQuotes()
     {
         if (get_magic_quotes_gpc()) {
