@@ -119,7 +119,7 @@ class AdminController extends Controller {
         $html .=  '<ul>';
         //$html .=   '<li class="'. $currents['status'] .'"><a href="/admin/status/">填報狀況</a></li>';
         //$html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
-        $html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
+        //$html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
         $html .=   '<li class="'. $currents['maintain'] .'"><a href="/admin/maintain/">資料維護</a></li>';
         $html .=   '<li class="'. $currents['unlock'] .'"><a href="/admin/unlock/">解鎖設定</a></li>';
         $html .=   '<li class="'. $currents['settings'] .'"><a href="/admin/settings/">系統設定</a></li>';
