@@ -677,8 +677,8 @@ console.log(res);
           break;
         case 'mod':
           mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-cname">' + params.cname + '</div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">開放填寫</label><input type="text" id="dialog-online" class="form-control" /></div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">結束填寫</label><input type="text" id="dialog-offline" class="form-control" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">開放填報</label><input type="text" id="dialog-online" class="form-control" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">結束填報</label><input type="text" id="dialog-offline" class="form-control" /></div>';
           $('#dialog-academic_era').data('kendoDialog').content(mojo.html).open().center();
           $('#dialog-online').val(params.online).kendoDatePicker({format: "yyyy-MM-dd"}); 
           $('#dialog-offline').val(params.offline).kendoDatePicker({format: "yyyy-MM-dd"}); 
