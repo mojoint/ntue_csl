@@ -257,7 +257,7 @@ console.log(res);
                   for (var x in mojo.refs.minor_list) {
                     if ((mojo.refs.minor_list[x].major_code == mojo.major) && ( 'sec-filladd' == mojo.sec))
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-                    else if (mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
+                    else if (mojo.data.academic_agency_class && mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
                   }
                   if ('sec-fillmod' == mojo.sec)
