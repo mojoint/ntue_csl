@@ -14,6 +14,8 @@
         mojo.era_id = $('#academic_agency_class').attr('data-era_id'); 
         mojo.quarter = $('#academic_agency_class').attr('data-quarter');
         mojo.quarter_id = $('#academic_agency_class').attr('data-quarter_id');
+        mojo.sec = $('section').attr('id');
+console.log(mojo.sec);
     }
 
     /* ajax */
@@ -123,6 +125,7 @@ console.log(res);
               {
               case 'academic_agency_class':
                 case 'add':
+                case 'mod':
                 case 'del':
                   window.location = "/agent/fill/";  
                   break;
@@ -238,11 +241,9 @@ console.log(res);
               case 'country_list':
                 mojo.refs.country_list = {};
                 mojo.refs.country_code_list = [];
-                mojo.refs.country_if = [];
                 for (var i=0; i<res.data.length; i++) {
                   mojo.refs.country_list[res.data[i]['code']] = res.data[i];
                   mojo.refs.country_code_list.push({'code': res.data[i].code, 'cname': res.data[i].cname, 'ename': res.data[i].ename, 'select_key': res.data[i].cname + ' ' + res.data[i].ename + ' ' + res.data[i].code });
-                  mojo.refs.country_if.push( new mojo.country_if(res.data[i].code, res.data[i].cname, res.data[i].ename) );
                 }
                 mojo.refs.major_list = {};
                 for (var i=0; i<res.data.length; i++)
@@ -256,11 +257,13 @@ console.log(res);
                 if ($('#editor-minor_code').length) {
                   $('#editor-minor_code').empty();
                   for (var x in mojo.refs.minor_list) {
-                    if (mojo.refs.minor_list[x].major_code == mojo.major)
+                    if ((mojo.refs.minor_list[x].major_code == mojo.major) && ( 'sec-filladd' == mojo.sec))
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-                    else if (mojo.data.academic_agency_class && mojo.data.academic_agency_class[0].minor_code)
+                    else if (mojo.data.academic_agency_class && mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
                       $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
                   }
+                  if ('sec-fillmod' == mojo.sec)
+                    $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
                 }
                 break;
               case 'target_list':
@@ -288,55 +291,41 @@ console.log(res);
       return $('#' + id).length;
     };
 
-    mojo.country_if = function( code, cname, ename ) {
-        this.mojo_country_if = code;
-        this,cname = cname;
-        this.ename = ename;
-        this.textForSearch = code + ' ' + cname + ename;
-    }
+    mojo.to_json = function(wb) {
+      var result = {};
+      wb.SheetNames.forEach(function(sheetName) {
+        var roa = XLS.utils.sheet_to_row_object_array(wb.Sheets[sheetName]);
+        if (roa.length) 
+          result[sheetName] = roa;
+      });
+      return result;
+    };
+
+    mojo.process_wb = function(wb) {
+      output = JSON.stringify(mojo.to_json(wb), 2, 2);
+      mojo.json = output;
+    };
 
     mojo.excel = function(e) {
-      var files = e.target.files,file;
-      if (!files || files.length == 0) return;
-      file = files[0];
-      var fileReader = new FileReader();
-      fileReader.onload = function (e) {
-        var filename = file.name;
-        // pre-process data
-        var binary = "";
-        var bytes = new Uint8Array(e.target.result);
-        var length = bytes.byteLength;
-        for (var i = 0; i < length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        // call 'xlsx' to read the file
-        var oFile = XLSX.read(binary, {type: 'binary', cellDates:true, cellStyles:true});
-      };
-      fileReader.readAsArrayBuffer(file);
+      var files = e.target.files;
+      var i, f;
+      for (i = 0, f = files[i]; i != files.length; ++i) {
+        var reader = new FileReader();
+        var name = f.name;
+        reader.onload = function(e) {
+          var data = e.target.result;
+
+          var workbook = XLSX.read(data, {
+              type: 'binary'
+          });
+
+          /* DO SOMETHING WITH workbook HERE */
+          mojo.process_wb(workbook);
+        };
+        reader.readAsBinaryString(f);
+      }  
     };
 
-    /* timer */
-    mojo.timer = function() {
-      if (mojo.flag) {
-        mojo.flag = false;
-        switch(mojo.tag)
-        {
-        case 'summary-country_reach':
-            $('#summary-reach').html($('.' + mojo.tag).html());
-            mojo.summary.reach = 0;
-            if (!isNaN($('#summary-reach').html()))
-              mojo.summary.reach = parseFloat($('#summary-reach').html());
-            mojo.summaryHours();
-            break;
-        }
-      }
-      mojo.watcher = setTimeout( mojo.timer, 1000 );
-    };
-
-    mojo.watcher = setTimeout( mojo.timer, 1000 );
-    mojo.flag = false;
-    mojo.tag = 'NA';
-    
     /* =========================================== */
     /* ------------------ login ------------------ */
     /* check input */
@@ -877,33 +866,34 @@ console.log(res);
       mojo.grid.academic_agency_class_c = $('#grid-academic_agency_class-c');
       mojo.grid.academic_agency_class_summary = $('#grid-academic_agency_class-summary');
 
-      mojo.data.academic_agency_class_data_a = [];
-      mojo.data.academic_agency_class_data_b = [];
-      mojo.data.academic_agency_class_data_c = [];
+      mojo.data.academic_agency_class_a = [];
+      mojo.data.academic_agency_class_b = [];
+      mojo.data.academic_agency_class_c = [];
 
-      for (var i=0; i<mojo.data.academic_agency_class_data.length; i++) {
-        switch(mojo.data.academic_agency_class_data[i].major_code)
+      for (var i=0; i<mojo.data.academic_agency_class.length; i++) {
+        switch(mojo.data.academic_agency_class[i].major_code)
         {
         case 'A':
-          mojo.data.academic_agency_class_data_a.push(mojo.data.academic_agency_class_data[i]);
+          mojo.data.academic_agency_class_a.push(mojo.data.academic_agency_class[i]);
           break;
         case 'B':
-          mojo.data.academic_agency_class_data_b.push(mojo.data.academic_agency_class_data[i]);
+          mojo.data.academic_agency_class_b.push(mojo.data.academic_agency_class[i]);
           break;
         case 'C':
-          mojo.data.academic_agency_class_data_c.push(mojo.data.academic_agency_class_data[i]);
+          mojo.data.academic_agency_class_c.push(mojo.data.academic_agency_class[i]);
           break;
         }                                                                                                                                                                  
       }
 
       mojo.grid.academic_agency_class.kendoGrid({
         pageable: false,
+        resizable: true,
         height: 0,
         columns: [
-          { field: "cname", title: "研習類別", width: "300px" },
-          { field: "people", title: "總人數", width: "120px" },
-          { field: "reach", title: "總人次", width: "120px" },
-          { field: "hours", title: "總時數", width: "120px" },
+          { field: "cname", title: "研習類別", width: "240px" },
+          { field: "people", title: "總人數", width: "100px" },
+          { field: "reach", title: "總人次", width: "100px" },
+          { field: "hours", title: "總時數", width: "100px" },
           { field: "turnover", title: "營收額度" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
@@ -911,7 +901,7 @@ console.log(res);
 
       mojo.grid.academic_agency_class_a.kendoGrid({
         dataSource: {
-          data: mojo.data.academic_agency_class_data_a,
+          data: mojo.data.academic_agency_class_a,
           schema: {
             model: {
               id: "id",
@@ -936,13 +926,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          /*{ field: "cname", title: "第一類研習類別", width: "300px", footerTemplate: "第一類研習類別小計" },*/
-          { field: "minor_cname", title: "第一類研習類別", width: "300px", footerTemplate: "第一類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
+          { field: "minor_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-a" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -963,7 +953,7 @@ console.log(res);
 
       mojo.grid.academic_agency_class_b.kendoGrid({
         dataSource: {
-          data: mojo.data.academic_agency_class_data_b,
+          data: mojo.data.academic_agency_class_b,
           schema: {
             model: {
               id: "id",
@@ -988,12 +978,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          { field: "minor_cname", title: "第二類研習類別", width: "300px", footerTemplate: "第二類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
+          { field: "minor_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-b" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1014,7 +1005,7 @@ console.log(res);
 
       mojo.grid.academic_agency_class_c.kendoGrid({
         dataSource: {
-          data: mojo.data.academic_agency_class_data_c,
+          data: mojo.data.academic_agency_class_c,
           schema: {
             model: {
               id: "id",        
@@ -1039,12 +1030,13 @@ console.log(res);
         remove: function(e) {
         },   
         pageable: false,
+        resizable: true,
         columns: [
           { field: "id", title: "&nbsp;" },
-          { field: "minor_cname", title: "第三類研習類別", width: "300px", footerTemplate: "第三類研習類別小計" },
-          { field: "people", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
-          { field: "reach", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
-          { field: "hours", title: "&nbsp;", width: "120px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
+          { field: "minor_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
+          { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
+          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
+          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1067,22 +1059,13 @@ console.log(res);
         pageable: false,
         height: 0,
         columns: [
-          { field: "cname", title: "研習類別統計", width: "300px" },
-          { field: "people", title: "總人數", width: "120px", footerAttributes: { "class": "summary-people" } },
-          { field: "reach", title: "總人次", width: "120px", footerAttributes: { "class": "summary-reach" } },
-          { field: "hours", title: "總時數", width: "120px", footerAttributes: { "class": "summary-hours" } },
+          { field: "cname", title: "研習類別統計", width: "240px" },
+          { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },
+          { field: "reach", title: "總人次", width: "100px", footerAttributes: { "class": "summary-reach" } },
+          { field: "hours", title: "總時數", width: "100px", footerAttributes: { "class": "summary-hours" } },
           { field: "turnover", title: "營收額度", footerAttributes: { "class": "summary-turnover" } }
         ]
       });
-
-      $('#select_academic_era_quarter').empty();
-      for (var i=0; i<mojo.data.academic_agency_fill_data.length; i++)
-        $('#select_academic_era_quarter').append('<option value="' + mojo.data.academic_agency_fill_data[i].id + '">' + mojo.data.academic_agency_fill_data[i].cname + '</option>');
-      /*
-      $('#select_academic_era_quarter').on('change', function(e) {
-        
-      });
-      */
 
       $('#btn-academic_agency_class-done').on('click', function(e) {
         e.preventDefault();
@@ -1162,8 +1145,94 @@ console.log(res);
       return pass;
     }
 
-    mojo.dialog_filladd = function() {
+    mojo.dialog_filladd = function(key, val, params) {
+      $('#dialog-academic_agency_class_country').kendoDialog({
+        minWidth: 480,
+        minHeight: 120,
+        title: "國別資料",
+        content: '',
+        model: true,
+        visible: false,
+        closable: true,
+        actions: [
+          { text: '確定', primary: true, action: function(e) {
+            switch(val) 
+            {
+            case 'add':
+              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
+              $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+              break;
+            case 'import':
+              
+              break;
+            case 'mod':
+              var tds = $(params.tr).find("td");
+              $(tds[0]).html($('#dialog-country_code').val());
+              $(tds[1]).html(mojo.refs.country_list[$('#dialog-country_code').val()]['cname']);
+              $(tds[2]).html($('#dialog-male').val());
+              $(tds[3]).html($('#dialog-female').val());
+              $(tds[4]).html($('#dialog-reach').val());
+              $(tds[5]).html($('#dialog-note').val());
+              break;
+            case 'del':
+              params.tr.remove();
+              break;
+            }
+            mojo.summaryReach();
+          }},
+          { text: '取消'}
+        ]
+      });
 
+      switch(val)
+      {
+      case 'add':
+        mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        break;
+      case 'import':
+        mojo.html  = '<div><label>EXCEL 匯入將會清除現有的國別資料</label></div>';
+        mojo.html  += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-file">EXCEL 檔案</label><input type="file" id="dialog-file" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        $('#dialog-file').on('change', mojo.excel);
+        break;
+      case 'del':
+        mojo.html = '<div><label>刪除 ' + params.country_cname + ' 資料?</label></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        break;
+      case 'mod':
+        mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
+        $('#dialog-country_code').val(params.country_code);
+        $('#dialog-male').val(params.male);
+        $('#dialog-female').val(params.female);
+        $('#dialog-reach').val(params.reach);
+        $('#dialog-note').val(params.note);
+        break;
+      }
+
+      var country_code_list = {};
+      $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
+        var tds = $(this).find("td");
+        country_code_list[$(tds[0]).html()] = $(tds[1]).html();
+      });
+
+      options = '';
+      for (var x in mojo.refs.country_list) {
+        if (!country_code_list[x])
+          options += '<option value="' + x + '">' + mojo.refs.country_list[x]['code'] + ' ' + mojo.refs.country_list[x]['cname'] + ' ' + mojo.refs.country_list[x]['ename'] + '</option>';
+      }
+      $('#dialog-country_code').append(options);
+      $('#dialog-country_code').select2();
     };
 
     mojo.watch_filladd = function() {
@@ -1185,6 +1254,24 @@ console.log(res);
         subsidy: 0,
         turnover: 0
       };
+
+      mojo.summaryReach = function() {
+        mojo.summary.reach = 0;
+        mojo.summary.male = 0;
+        mojo.summary.female = 0;
+        $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
+          var tds = $(this).find('td');
+          mojo.summary.female += parseInt($(tds[3]).html());
+          mojo.summary.male += parseInt($(tds[2]).html());
+          mojo.summary.reach += parseFloat($(tds[4]).html());
+        });
+        
+        $('.summary-country_male').html(mojo.summary.male);
+        $('.summary-country_female').html(mojo.summary.female);
+        $('.summary-country_reach').html(mojo.summary.reach);
+        $('#summary-reach').html(mojo.summary.reach);
+        mojo.summaryHours();
+      }
 
       mojo.summaryHours = function() {
         mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks * mojo.summary.reach - mojo.summary.adjust;
@@ -1233,11 +1320,6 @@ console.log(res);
         $('#summary-turnover').html(mojo.turnover);
       });
 
-      $('#btn-academic_agency_class-import').on('click', function(e) {
-        e.preventDefault();
-
-      });
-    
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_filladd) {
@@ -1253,48 +1335,29 @@ console.log(res);
             hours = parseFloat($('#summary-hours').html());
           mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
-          var data = mojo.grid.academic_agency_class_country.data('kendoGrid').dataSource.data();
-console.log( data );
-          for (var i=0; i<data.length; i++) {
-            people += parseInt(data[i].male) + parseInt(data[i].female);
-            mojo.json.country.push({'country_code': data[i].country_code.match(mojo.reg.country_code)[0], 'male': data[i].male, 'female': data[i].female, 'reach': data[i].reach, 'note': data[i].note});  
-          }
+          $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
+            var tds = $(this).find('td');
+            people += parseInt($(tds[2]).html()) + parseInt($(tds[3]).html());
+            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'note': $(tds[5]).html()});
+          });
+          
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
             alert(mojo.errmsg);
       });
 
-      /* excel */
-      $("#academic_agency_country-import").on('click', function(e) {
-        e.preventDefault();
-      });
-
       mojo.data.academic_agency_class_country = [];
-
-      /*
-      mojo.academic_agency_class_country_list = function(container, options) {
-        $('<input required data-bind="value:' + options.field + '"/>')
-        .appendTo(container)
-        .kendoAutoComplete({
-          dataSource: mojo.refs.country_code_list,
-          dataTextField: "country_code",
-          placeholder: '中／英文國名／代碼',
-          template: '<span class="k-state-default">#:data.cname#</span>&nbsp;<span class="k-state-default">#:data.ename#</span>',
-          filter: "contains",
-          minLength: 1
-        }).data('kendoAutoComplete');
-      };
-      */
       
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country');
       mojo.grid.academic_agency_class_country.kendoGrid({
         pageable: false,
         columns: [
-          { field: "country_code", title: "國別", width: "200px", footerTemplate: " 人數小計" },
-          { field: "male", title: "男新生人數", aggregates: ["sum"], attributes: { "class": "country_male" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_male" } },
-          { field: "female", title: "女新生人數", aggregates: ["sum"], attributes: { "class": "country_female" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_female" } },
-          { field: "reach", title: "人次", aggregates: ["reach"], attributes: { "class": "country_reach" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_reach" } },
+          { field: "country_code", title: "&nbsp;" },
+          { field: "country_cname", title: "國別", width: "200px", footerTemplate: "人數小計" },
+          { field: "male", title: "男新生人數", attributes: { "class": "country_male" }, footerAttributes: { "class": "summary-country_male" } },
+          { field: "female", title: "女新生人數", attributes: { "class": "country_female" }, footerAttributes: { "class": "summary-country_female" } },
+          { field: "reach", title: "人次", attributes: { "class": "country_reach" }, footerAttributes: { "class": "summary-country_reach" } },
           { field: "note", title: "其他" }, 
           { title: "&nbsp;", width: "200px", 
             command: [
@@ -1311,75 +1374,40 @@ console.log( data );
         ],
         toolbar: kendo.template($('#template-academic_agency_class_country').html())
       });
-      /*
-      mojo.count = 0;
-      mojo.grid.academic_agency_class_country.kendoGrid({
-        pageable: false,
-        autoBind: false,
-        dataSource: {
-          data: mojo.data.academic_agency_class_country,
-          schema: {
-            model: {
-              id: "country_code",
-              fields: {
-                country_code: { type: "string", validation: { required: true } },
-                male: { type: "number", validation: { min: 0, required: true } },
-                female: { type: "number", validation: { min: 0, required: true } },
-                reach: { type: "number", validation: { min: 0, required: true } },
-                note: { type: "string" }
-              }
-            }
-          },
-          aggregate: [
-            { field: "male", aggregate: "sum" },
-            { field: "female", aggregate: "sum" },
-            { field: "reach", aggregate: "sum" }
-          ]
-        },
-        change: function(e) {
-        },
-        edit: function(e) {
-        },
-        remove: function(e) {
-            mojo.tag = 'summary-country_reach';
-            mojo.flag = true;
-        },
-        save: function(e) {
-            mojo.tag = 'summary-country_reach';
-            mojo.flag = true;
-        },
-        dataBound: mojo.onDataBound,
-        dataBinding: mojo.onDataBinding,
-        columns: [
-          { field: "country_code", title: "國別", width: "200px", editor: mojo.academic_agency_class_country_list, footerTemplate: " 人數小計" },
-          { field: "male", title: "男新生人數", aggregates: ["sum"], attributes: { "class": "country_male" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_male" } },
-          { field: "female", title: "女新生人數", aggregates: ["sum"], attributes: { "class": "country_female" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_female" } },
-          { field: "reach", title: "人次", aggregates: ["reach"], attributes: { "class": "country_reach" }, footerTemplate: "#=sum#", footerAttributes: { "class": "summary-country_reach" } },
-          { field: "note", title: "其他" }, 
-          { title: "&nbsp;", width: "200px", 
-            command: [
-              {   
-                name: '編輯',
-                template: '<a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a>'
-              },  
-              {   
-                name: '刪除',
-                template: '<a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a>'
-              } 
-            ]
-          }
-        ],
-        toolbar: kendo.template($('#template-academic_agency_class_country').html()),
-        editable: "popup"
+      $('#grid-academic_agency_class_country').data('kendoGrid').hideColumn(0);
+
+      $('#btn-academic_agency_class_country-add').on('click', function(e) {
+        e.preventDefault();
+        mojo.dialog_filladd('academic_agency_class_country', 'add', {});
       });
-      */
+
+      $('.btn-academic_agency_class_country-mod').on('click', function(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var tds = $(tr).find("td");
+        mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};
+        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+      });
+
+      $('.btn-academic_agency_class_country-del').on('click', function(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var tds = $(tr).find("td");
+        mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
+        mojo.dialog_filladd('academic_agency_class_country', 'del', mojo.json);
+      });
+
+      /* excel */
+      $("#btn-academic_agency_class_country-import").on('click', function(e) {
+        e.preventDefault();
+        mojo.dialog_filladd('academic_agency_class_country', 'import', {});
+      });
     };
       
     if (mojo.mojo_if('sec-filladd'))
       mojo.watch_filladd();
 
     /* fill mod */
-
     mojo.check_fillmod = function() {
       var pass = true;
       mojo.errmsg = '';
@@ -1408,7 +1436,7 @@ console.log( data );
 
     mojo.dialog_fillmod = function(key, val, params) {
       $('#dialog-academic_agency_class_country').kendoDialog({
-        minWidth: 600,
+        minWidth: 480,
         minHeight: 120,
         title: "國別資料",
         content: '',
@@ -1423,6 +1451,9 @@ console.log( data );
               var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
+            case 'import':
+              
+              break;
             case 'mod':
               var tds = $(params.tr).find("td");
               $(tds[0]).html($('#dialog-country_code').val());
@@ -1431,11 +1462,12 @@ console.log( data );
               $(tds[3]).html($('#dialog-female').val());
               $(tds[4]).html($('#dialog-reach').val());
               $(tds[5]).html($('#dialog-note').val());
+              break;
             case 'del':
               params.tr.remove();
               break;
             }
-//            mojo.ajax('agent', key, val, mojo.json);
+            mojo.summaryReach();
           }},
           { text: '取消'}
         ]
@@ -1444,23 +1476,29 @@ console.log( data );
       switch(val)
       {
       case 'add':
-        mojo.html  = '<div><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
-        mojo.html += '<div><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
+        mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         break;
       case 'del':
         mojo.html = '<div><label>刪除 ' + params.country_cname + ' 資料?</label></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         break;
+      case 'import':
+        mojo.html  = '<div><label>EXCEL 匯入將會清除現有的國別資料</label></div>';
+        mojo.html  += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-file">EXCEL 檔案</label><input type="file" id="dialog-file" /></div>';
+        $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
+        $('#dialog-file').on('change', mojo.excel);
+        break;
       case 'mod':
-        mojo.html  = '<div><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
-        mojo.html += '<div><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
+        mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
         $('#dialog-country_code').val(params.country_code);
@@ -1506,6 +1544,24 @@ console.log( data );
         turnover: 0
       };
 
+      mojo.summaryReach = function() {
+        mojo.summary.reach = 0;
+        mojo.summary.male = 0;
+        mojo.summary.female = 0;
+        $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
+          var tds = $(this).find('td');
+          mojo.summary.female += parseInt($(tds[3]).html());
+          mojo.summary.male += parseInt($(tds[2]).html());
+          mojo.summary.reach += parseFloat($(tds[4]).html());
+        });
+        
+        $('.summary-country_male').html(mojo.summary.male);
+        $('.summary-country_female').html(mojo.summary.female);
+        $('.summary-country_reach').html(mojo.summary.reach);
+        $('#summary-reach').html(mojo.summary.reach);
+        mojo.summaryHours();
+      }
+
       mojo.summaryHours = function() {
         mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks * mojo.summary.reach - mojo.summary.adjust;
         mojo.summary.hours = (mojo.summary.hours > 0)? mojo.summary.hours : 0;
@@ -1553,10 +1609,6 @@ console.log( data );
         $('#summary-turnover').html(mojo.turnover);
       });
 
-      $('#btn-academic_agency_class-import').on('click', function(e) {
-        e.preventDefault();
-      });
-    
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_fillmod) {
@@ -1572,20 +1624,21 @@ console.log( data );
             hours = parseFloat($('#summary-hours').html());
           mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
-          var data = mojo.grid.academic_agency_class_country.data('kendoGrid').dataSource.data();
-          for (var i=0; i<data.length; i++) {
-            people += parseInt(data[i].male) + parseInt(data[i].female);
-            mojo.json.country.push({'country_code': data[i].country_code.match(mojo.reg.country_code)[0], 'male': data[i].male, 'female': data[i].female, 'reach': data[i].reach, 'note': data[i].note});  
-          }
+          $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
+            var tds = $(this).find('td');
+            people += parseInt($(tds[2]).html()) + parseInt($(tds[3]).html());
+            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'note': $(tds[5]).html()});
+          });
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
         } else 
-            alert(mojo.errmsg);
+          alert(mojo.errmsg);
       });
 
       /* excel */
-      $("#academic_agency_country-import").on('click', function(e) {
+      $("#btn-academic_agency_class_country-import").on('click', function(e) {
         e.preventDefault();
+        mojo.dialog_filladd('academic_agency_class_country', 'import', {});
       });
 
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 
@@ -1613,9 +1666,10 @@ console.log( data );
         toolbar: kendo.template($('#template-academic_agency_class_country').html())
       });
       $('#grid-academic_agency_class_country').data('kendoGrid').hideColumn(0);
+
       $('#grid-academic_agency_class_country').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_class_country, page: 1, pageSize: 10 }));
-console.log( mojo.data.academic_agency_class_country ) ;
       if (mojo.data.academic_agency_class) {
+        $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
         $('#editor-cname').val(mojo.data.academic_agency_class[0].cname);
         $('#editor-weekly').val(mojo.data.academic_agency_class[0].weekly);
         $('#editor-weeks').val(mojo.data.academic_agency_class[0].weeks);
@@ -1628,17 +1682,24 @@ console.log( mojo.data.academic_agency_class_country ) ;
         $('#summary-weeks').html(mojo.data.academic_agency_class[0].weeks);
         $('#summary-hours').html(mojo.data.academic_agency_class[0].hours);
         $('#summary-turnover').html(mojo.data.academic_agency_class[0].turnover);
+        mojo.summary.weekly = mojo.data.academic_agency_class[0].weekly;
+        mojo.summary.weeks = mojo.data.academic_agency_class[0].weeks;
+        mojo.summary.adjust = mojo.data.academic_agency_class[0].adjust;
+        mojo.summary.hours = mojo.data.academic_agency_class[0].hours;
+        mojo.summary.reach = mojo.data.academic_agency_class[0].reach;
+        mojo.summary.revenue = mojo.data.academic_agency_class[0].revenue;
+        mojo.summary.subsidy = mojo.data.academic_agency_class[0].subsidy;
+        mojo.summary.turnover = mojo.data.academic_agency_class[0].turnover;
+        mojo.summaryReach();
       }
 
       $('#btn-academic_agency_class_country-add').on('click', function(e) {
         e.preventDefault();
-console.log('add');
         mojo.dialog_fillmod('academic_agency_class_country', 'add', {});
       });
 
       $('.btn-academic_agency_class_country-mod').on('click', function(e) {
         e.preventDefault();
-console.log('mod');
         var tr = $(e.target).closest("tr");
         var tds = $(tr).find("td");
         mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};
@@ -1647,7 +1708,6 @@ console.log('mod');
 
       $('.btn-academic_agency_class_country-del').on('click', function(e) {
         e.preventDefault();
-console.log('del');
         var tr = $(e.target).closest("tr");
         var tds = $(tr).find("td");
         mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
