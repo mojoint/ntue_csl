@@ -63,6 +63,8 @@ console.log(res);
                 {
                 case 'add':
                 case 'mod':
+                    kendo.alert('已寄出密碼重設通之信，敬請提醒使用者！');
+                    break;
                 case 'del':
                   $('#grid-academic_agency_agent').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: res.data, page: 1, pageSize: 10 }));
                   $('.btn-academic_agency_agent-mod').on('click', function(e) {
@@ -523,6 +525,7 @@ console.log(res);
           mojo.html  = '<div><label for="dialog-agency_id">機構名稱</label><select id="dialog-agency_id" class="form-control"></select></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-username">使用者ID</label><input type="text" id="dialog-username" class="form-control" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right" style="color:red">存檔後，將會重設使用者密碼，並發出電子郵件，通知使用立即更改密碼，才可以登入系統！</div>';
           $('#dialog-academic_agency_agent').data('kendoDialog').content(mojo.html).open().center();
           for (var x in mojo.refs.academic_agency) {
             if (x == params.agency_id)

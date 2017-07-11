@@ -19,7 +19,6 @@ class Controller
 
     public function debugger($key, $val)                                        
     {   
-    
     }   
 
     public function redirect($key='', $val=null) {

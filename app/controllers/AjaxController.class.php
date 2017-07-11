@@ -53,6 +53,8 @@ class AjaxController extends Controller {
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_mod', array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp));
                 $url = APP_URL .'/email/activate/'. $timestamp . '/' . $session .'/'. $res[0]['username'] .'/'. $_POST['email'];
                 $this->mailer('mod', $res[0]['username'], $_POST['email'], $url);
+
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_get');
                 $json = array("code"=>1, "data"=>$res);
                 break;
             } 
@@ -275,7 +277,7 @@ class AjaxController extends Controller {
             $subject = '華語文教育機構績效系統通知信';
             break;
         case 'mod':
-            $subject = '華語文教育機構績效系統通知信';
+            $subject = '華語文教育機構績效系統重設密碼通知信';
             break;
         }
         $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
