@@ -286,8 +286,9 @@ class AjaxController extends Controller {
         } else {
             $from = 'xelalee@gmail.com';
         }
+        $from = 'wenyu0421@tea.ntue.edu.tw';
 
-        $headers = 'From: ' . $from . " \r\n".
+        $headers = 'From: 許文諭<' . $from . "> \r\n".
             'Reply-To: ' . $from . " \r\n".
             'X-Mailer: PHP/'. phpversion();
 
