@@ -1308,6 +1308,7 @@ console.log(res);
         weeks: 0,
         adjust: 0,
         hours: 0,
+        total_hours: 0,
         reach: 0,
         revenue: 0,
         subsidy: 0,
@@ -1333,9 +1334,16 @@ console.log(res);
       }
 
       mojo.summaryHours = function() {
-        mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks * mojo.summary.reach - mojo.summary.adjust;
-        mojo.summary.hours = (mojo.summary.hours > 0)? mojo.summary.hours : 0;
-        $('#summary-hours').html(mojo.summary.hours);
+        mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks;
+        $('#editor-hours').val(mojo.summary.hours);
+        mojo.summaryTotalHours();
+      }
+
+      mojo.summaryTotalHours = function() {
+        mojo.summary.hours = $('#editor-hours').val();
+        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.reach - mojo.summary.adjust;
+        mojo.summary.total_hours = (mojo.summary.total_hours > 0)? mojo.summary.total_hours : 0;
+        $('#summary-total_hours').html(mojo.summary.total_hours);
       }
 
       $('#editor-weekly').on('keyup', function(e) {
@@ -1354,29 +1362,36 @@ console.log(res);
         mojo.summaryHours();
       });
 
+      $('#editor-hours').on('keyup', function(e) {
+        mojo.summary.hours = 0;
+        if (!isNaN(parseInt($(this).val()))) 
+          mojo.summary.hours = parseFloat($(this).val());
+        mojo.summaryTotalHours();
+      });
+
       $('#editor-adjust').on('keyup', function(e) {
         mojo.summary.adjust = 0;
         if (!isNaN(parseInt($(this).val()))) 
           mojo.summary.adjust = parseFloat($(this).val());
-        mojo.summaryHours();
+        mojo.summaryTotalHours();
       });
 
       $('#editor-revenue').on('keyup', function(e) {
-        mojo.turnover = 0;
+        mojo.summary.turnover = 0;
         if (!isNaN(parseInt($(this).val())))
-          mojo.turnover = parseFloat($(this).val());
+          mojo.summary.turnover = parseFloat($(this).val());
         if (!isNaN(parseInt($('#editor-subsidy').val())))
-          mojo.turnover += parseFloat($('#editor-subsidy').val());
-        $('#summary-turnover').html(mojo.turnover);
+          mojo.summary.turnover += parseFloat($('#editor-subsidy').val());
+        $('#summary-turnover').html(mojo.summary.turnover);
       });
 
       $('#editor-subsidy').on('keyup', function(e) {
-        mojo.turnover = 0;
+        mojo.summary.turnover = 0;
         if (!isNaN(parseInt($(this).val())))
-          mojo.turnover = parseFloat($(this).val());
+          mojo.summary.turnover = parseFloat($(this).val());
         if (!isNaN(parseInt($('#editor-revenue').val())))
-          mojo.turnover += parseFloat($('#editor-revenue').val());
-        $('#summary-turnover').html(mojo.turnover);
+          mojo.summary.turnover += parseFloat($('#editor-revenue').val());
+        $('#summary-turnover').html(mojo.summary.turnover);
       });
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
@@ -1385,14 +1400,17 @@ console.log(res);
           var adjust = 0,
               people = 0,
               reach = 0,
-              hours = 0;
+              hours = 0,
+              total_hours = 0;
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
           if (!isNaN(parseInt($('#summary-reach').html())))
             reach = parseInt($('#summary-reach').html());
-          if (!isNaN(parseFloat($('#summary-hours').html())))
-            hours = parseFloat($('#summary-hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
+          if (!isNaN(parseFloat($('#editor-hours').html())))
+            hours = parseFloat($('#editor-hours').html());
+          if (!isNaN(parseFloat($('#summary-total_hours').html())))
+            total_hours = parseFloat($('#summary-total_hours').html());
+          mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
           $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
             var tds = $(this).find('td');
@@ -1646,6 +1664,7 @@ console.log(res);
         weeks: 0,
         adjust: 0,
         hours: 0,
+        total_hours: 0,
         reach: 0,
         revenue: 0,
         subsidy: 0,
@@ -1671,9 +1690,16 @@ console.log(res);
       }
 
       mojo.summaryHours = function() {
-        mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks * mojo.summary.reach - mojo.summary.adjust;
-        mojo.summary.hours = (mojo.summary.hours > 0)? mojo.summary.hours : 0;
-        $('#summary-hours').html(mojo.summary.hours);
+        mojo.summary.hours = mojo.summary.weekly * mojo.summary.weeks;
+        $('#editor-hours').val(mojo.summary.hours);
+        mojo.summaryTotalHours();
+      }
+
+      mojo.summaryTotalHours = function() {
+        mojo.summary.hours = $('#editor-hours').val();
+        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.reach - mojo.summary.adjust;
+        mojo.summary.total_hours = (mojo.summary.total_hours > 0)? mojo.summary.total_hours : 0;
+        $('#summary-total_hours').html(mojo.summary.total_hours);
       }
 
       $('#editor-weekly').on('keyup', function(e) {
@@ -1692,29 +1718,37 @@ console.log(res);
         mojo.summaryHours();
       });
 
+      $('#editor-hours').on('keyup', function(e) {
+        mojo.summary.hours = 0;
+        if (!isNaN(parseInt($(this).val()))) 
+          mojo.summary.hours = parseFloat($(this).val());
+        mojo.summaryTotalHours();
+      });
+
       $('#editor-adjust').on('keyup', function(e) {
         mojo.summary.adjust = 0;
         if (!isNaN(parseInt($(this).val()))) 
           mojo.summary.adjust = parseFloat($(this).val());
-        mojo.summaryHours();
+console.log( mojo.summary.adjust );
+        mojo.summaryTotalHours();
       });
 
       $('#editor-revenue').on('keyup', function(e) {
-        mojo.turnover = 0;
+        mojo.summary.turnover = 0;
         if (!isNaN(parseInt($(this).val())))
-          mojo.turnover = parseFloat($(this).val());
+          mojo.summary.turnover = parseFloat($(this).val());
         if (!isNaN(parseInt($('#editor-subsidy').val())))
-          mojo.turnover += parseFloat($('#editor-subsidy').val());
-        $('#summary-turnover').html(mojo.turnover);
+          mojo.summary.turnover += parseFloat($('#editor-subsidy').val());
+        $('#summary-turnover').html(mojo.summary.turnover);
       });
 
       $('#editor-subsidy').on('keyup', function(e) {
-        mojo.turnover = 0;
+        mojo.summary.turnover = 0;
         if (!isNaN(parseInt($(this).val())))
-          mojo.turnover = parseFloat($(this).val());
+          mojo.summary.turnover = parseFloat($(this).val());
         if (!isNaN(parseInt($('#editor-revenue').val())))
-          mojo.turnover += parseFloat($('#editor-revenue').val());
-        $('#summary-turnover').html(mojo.turnover);
+          mojo.summary.turnover += parseFloat($('#editor-revenue').val());
+        $('#summary-turnover').html(mojo.summary.turnover);
       });
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
@@ -1723,14 +1757,17 @@ console.log(res);
           var adjust = 0,
               people = 0,
               reach = 0,
-              hours = 0;
+              hours = 0,
+              total_hours = 0;
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
           if (!isNaN(parseInt($('#summary-reach').html())))
             reach = parseInt($('#summary-reach').html());
-          if (!isNaN(parseFloat($('#summary-hours').html())))
-            hours = parseFloat($('#summary-hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
+          if (!isNaN(parseFloat($('#editor-hours').html())))
+            hours = parseFloat($('#editor-hours').html());
+          if (!isNaN(parseFloat($('#summary-total_hours').html())))
+            total_hours = parseFloat($('#summary-total_hours').html());
+          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
           $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
             var tds = $(this).find('td');
@@ -1779,16 +1816,16 @@ console.log(res);
         $('#editor-revenue').val(mojo.data.academic_agency_class[0].revenue);
         $('#editor-subsidy').val(mojo.data.academic_agency_class[0].subsidy);
         $('#editor-note').val(mojo.data.academic_agency_class[0].note);
-        $('#summary-weekly').html(mojo.data.academic_agency_class[0].weekly);
         $('#summary-reach').html(mojo.data.academic_agency_class[0].reach);
-        $('#summary-weeks').html(mojo.data.academic_agency_class[0].weeks);
-        $('#summary-hours').html(mojo.data.academic_agency_class[0].hours);
+        $('#editor-hours').val(mojo.data.academic_agency_class[0].hours);
+        $('#summary-total_hours').html(mojo.data.academic_agency_class[0].total_hours);
         $('#summary-turnover').html(mojo.data.academic_agency_class[0].turnover);
         mojo.summary.weekly = mojo.data.academic_agency_class[0].weekly;
         mojo.summary.weeks = mojo.data.academic_agency_class[0].weeks;
+        mojo.summary.reach = mojo.data.academic_agency_class[0].reach;
         mojo.summary.adjust = mojo.data.academic_agency_class[0].adjust;
         mojo.summary.hours = mojo.data.academic_agency_class[0].hours;
-        mojo.summary.reach = mojo.data.academic_agency_class[0].reach;
+        mojo.summary.total_hours = mojo.data.academic_agency_class[0].total_hours;
         mojo.summary.revenue = mojo.data.academic_agency_class[0].revenue;
         mojo.summary.subsidy = mojo.data.academic_agency_class[0].subsidy;
         mojo.summary.turnover = mojo.data.academic_agency_class[0].turnover;

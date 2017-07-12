@@ -60,29 +60,29 @@
         <table role="grid">
           <tbody>
             <tr>
-              <td>每週時數</td>
-              <td>人次總計</td>
-              <td>每期週數</td>
+              <td>總時數</td>
+              <td>總人次</td>
               <td>調整數值</td>
               <td>總時數</td>
-              <td>營收額度(元)</td>
             </tr>
             <tr>
-              <td><p id="summary-weekly"></p></td>
+              <td><input type="text" id="editor-hours"></p></td>
               <td><p id="summary-reach"></p></td>
-              <td><p id="summary-weeks"></p></td>
               <td><input type="text" id="editor-adjust" size="4" /></td>
-              <td><p id="summary-hours"></p></td>
+              <td><p id="summary-total_hours"></p></td>
+            </tr>
+            <tr>
+              <td colspan="4"><p><span class="fa fa-calculator"></span>&nbsp;總時數 X 總人次 - 調整值 = 總人時數</p></td>
+            </tr>
+            <tr>
+              <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" /></td>
+              <td><input type="text" id="editor-subsidy" placeholder="直接營收(元)" /></td>
+              <td>營收額度(元)</td>
               <td><p id="summary-turnover"></p></td>
             </tr>
             <tr>
-              <td colspan="5"><p><span class="fa fa-calculator"></span>&nbsp;每週時數 X 人次總計 X 每期週數 - 調整數值 = 總時數</p></td>
-              <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" /></td>
-            </tr>
-            <tr>
               <td>其他</td>
-              <td colspan="4"><textarea id="editor-note" cols="50" rows="3"></textarea></td>
-              <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" /></td>
+              <td colspan="3"><textarea id="editor-note" cols="50" rows="3"></textarea></td>
             </tr>
           </tbody>
         </table>
