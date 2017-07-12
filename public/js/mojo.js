@@ -15,7 +15,6 @@
         mojo.quarter = $('#academic_agency_class').attr('data-quarter');
         mojo.quarter_id = $('#academic_agency_class').attr('data-quarter_id');
         mojo.sec = $('section').attr('id');
-console.log(mojo.sec);
     }
 
     /* ajax */
@@ -172,7 +171,6 @@ console.log(res);
                 switch(params) 
                 {
                 case 'mod':
-                    console.log(res.data); 
                     /*這邊可以異動 email 及pwd，如果資料有異動成功的話，則res.data 會等於 1
                       如果異動的資料是一樣，則res.data 會等於 0，等於沒修改！
                       modi by thucop
@@ -190,7 +188,6 @@ console.log(res);
                 switch(params) 
                 {
                 case 'mod':
-                    console.log(res.data); 
                     kendo.alert('資料已儲存！');
                     break;
                 }
@@ -201,7 +198,6 @@ console.log(res);
                 switch(val) 
                 {
                 case 'mod':
-                    console.log(res.data); 
                     break;
                 }
                 break;
@@ -301,7 +297,7 @@ console.log(res);
 
     mojo.process_wb = function(wb) {
       output = JSON.stringify(mojo.to_json(wb), 2, 2);
-      mojo.json = output;
+      mojo.country = JSON.parse(output);
     };
 
     mojo.excel = function(e) {
@@ -312,7 +308,6 @@ console.log(res);
         var name = f.name;
         reader.onload = function(e) {
           var data = e.target.result;
-
           var workbook = XLSX.read(data, {
               type: 'binary'
           });
@@ -1158,9 +1153,73 @@ console.log(res);
             case 'add':
               var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+        
+              $('.btn-academic_agency_class_country-mod').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+              });    
+        
+              $('.btn-academic_agency_class_country-del').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'del', mojo.json);
+              });
               break;
             case 'import':
-              
+              var html = '';
+              $('#grid-academic_agency_class_country .k-grid-content table tbody').empty();
+              for (var x in mojo.country ) {
+                for (var i=0; i<mojo.country[x].length; i++) {
+                  if (typeof(mojo.country[x][i]) === 'object') {
+                    var country = mojo.country[x][i]['國別'];
+                    var male = mojo.country[x][i]['男新生人數'];
+                    var female = mojo.country[x][i]['女新生人數'];
+                    var reach = mojo.country[x][i]['人次'];
+                    var note = (mojo.country[x][i]['其他'])? mojo.country[x][i]['其他'] : "";
+                    var country_code = '';
+                    for (var j=0; j<mojo.refs.country_code_list.length; j++) {
+                      if (country == mojo.refs.country_code_list[j].code) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      } else if (country == mojo.refs.country_code_list[j].cname) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      } else if (country.toLowerCase() == mojo.refs.country_code_list[j].ename.toLowerCase()) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      }
+                    }
+                    html  = '<tr role="row">';
+                    html +=   '<td style="display:none" role="gridcell">' + country_code + '</td>';
+                    html +=   '<td role="girdcell">';
+                    html +=     mojo.refs.country_list[country_code].cname;
+                    html +=   '</td>';
+                    html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
+                    html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
+                    html +=   '<td role="girdcell" class="country_reach">' + reach + '</td>';
+                    html +=   '<td role="girdcell" >' + note + '</td>';
+                    html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
+                    html += '</tr>';
+                    $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+                  }
+                }
+              }
+        
+              $('.btn-academic_agency_class_country-mod').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+              });    
+        
+              $('.btn-academic_agency_class_country-del').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'del', mojo.json);
+              });
               break;
             case 'mod':
               var tds = $(params.tr).find("td");
@@ -1449,7 +1508,56 @@ console.log(res);
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
             case 'import':
-              
+              var html = '';
+              $('#grid-academic_agency_class_country .k-grid-content table tbody').empty();
+              for (var x in mojo.country ) {
+                for (var i=0; i<mojo.country[x].length; i++) {
+                  if (typeof(mojo.country[x][i]) === 'object') {
+                    var country = mojo.country[x][i]['國別'];
+                    var male = mojo.country[x][i]['男新生人數'];
+                    var female = mojo.country[x][i]['女新生人數'];
+                    var reach = mojo.country[x][i]['人次'];
+                    var note = (mojo.country[x][i]['其他'])? mojo.country[x][i]['其他'] : "";
+                    var country_code = '';
+                    for (var j=0; j<mojo.refs.country_code_list.length; j++) {
+                      if (country == mojo.refs.country_code_list[j].code) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      } else if (country == mojo.refs.country_code_list[j].cname) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      } else if (country.toLowerCase() == mojo.refs.country_code_list[j].ename.toLowerCase()) {
+                        country_code = mojo.refs.country_code_list[j].code;
+                      }
+                    }
+                    html  = '<tr role="row">';
+                    html +=   '<td style="display:none" role="gridcell">' + country_code + '</td>';
+                    html +=   '<td role="girdcell">';
+                    html +=     mojo.refs.country_list[country_code].cname;
+                    html +=   '</td>';
+                    html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
+                    html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
+                    html +=   '<td role="girdcell" class="country_reach">' + reach + '</td>';
+                    html +=   '<td role="girdcell" >' + note + '</td>';
+                    html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
+                    html += '</tr>';
+                    $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+                  }
+                }
+              }
+        
+              $('.btn-academic_agency_class_country-mod').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+              });    
+        
+              $('.btn-academic_agency_class_country-del').on('click', function(e) {
+                e.preventDefault();
+                var tr = $(e.target).closest("tr");
+                var tds = $(tr).find("td");
+                mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'del', mojo.json);
+              });
               break;
             case 'mod':
               var tds = $(params.tr).find("td");
@@ -1632,12 +1740,6 @@ console.log(res);
           alert(mojo.errmsg);
       });
 
-      /* excel */
-      $("#btn-academic_agency_class_country-import").on('click', function(e) {
-        e.preventDefault();
-        mojo.dialog_filladd('academic_agency_class_country', 'import', {});
-      });
-
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 
         pageable: false,
         columns: [
@@ -1710,6 +1812,13 @@ console.log(res);
         mojo.json = {'country_code': $(tds[0]).html(), 'country_cname': $(tds[1]).html(), 'tr': tr};
         mojo.dialog_fillmod('academic_agency_class_country', 'del', mojo.json);
       });
+
+      /* excel */
+      $("#btn-academic_agency_class_country-import").on('click', function(e) {
+        e.preventDefault();
+        mojo.dialog_fillmod('academic_agency_class_country', 'import', {});
+      });
+
     };
 
     if (mojo.mojo_if('sec-fillmod'))
@@ -1779,7 +1888,6 @@ console.log(res);
                 mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id, 'cname': $('#dialog-cname').val(), 'title': $('#dialog-title').val(), 'manager': ($('#dialog-manager').is(':checked'))? 1 : 0, 'staff': ($('#dialog-staff').is(':checked'))? 1 : 0, 'role': $('#dialog-role').val(), 'area_code': $('#dialog-area_code').val(), 'phone': $('#dialog-phone').val(), 'ext': $('#dialog-ext').val(), 'email': $('#dialog-email').val(), 'spare_email': $('#dialog-spare_email').val(), 'primary': ($('#dialog-primary').is(':checked'))? 1 : 0};  
                 break;
               }   
-console.log( mojo.json );
               mojo.ajax('agent', key, val, mojo.json);
             }}, 
             { text: '取消'}
@@ -1801,7 +1909,6 @@ console.log( mojo.json );
         switch(val)
         {   
         case 'mod':
-console.log( params );
           $('#dialog-cname').val(params.cname);
           $('#dialog-title').val(params.title);
           if (1 == params.manager)
@@ -1873,7 +1980,6 @@ console.log( params );
 
     mojo.watch_agency_unlock = function() {
       if (mojo.data.academic_agency_unlock.length) {
-       console.log(mojo.data.academic_agency_unlock); 
         $('#editor-academic_era').val(mojo.data.academic_agency_unlock[0]['era_id']);
         $('#editor-academic_era_quarter').val(mojo.data.academic_agency_unlock[0]['quarter']);
         $('#editor-academic_class-note').val(mojo.data.academic_agency_unlock[0]['note']);
