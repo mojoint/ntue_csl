@@ -223,6 +223,11 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$data['manager'], ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary']));
             return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
             break;
+        case 'agent_academic_agency_contact_del':
+            $sql = 'DELETE FROM `academic_agency_contact` WHERE `agency_id` = :agency_id AND `id` = :id';
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
+            break;
         case 'agent_academic_agency_contact_mod':
             if (1 == $data['primary']) {
                 $sql = 'UPDATE `academic_agency_contact` SET primary = 0 WHERE `agency_id` = :agency_id';

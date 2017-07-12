@@ -28,6 +28,8 @@ class AgentController extends Controller {
                 $this->assign('quarter', $academic_agency_fill[0]['quarter']);
                 $this->assign('quarter_id', $academic_agency_fill[0]['id']);
                 $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$academic_agency_fill[0]['era_id'], 'quarter'=>$academic_agency_fill[0]['quarter'])));
+            } else { 
+                $this->assign('quarter_id', $quarter_id);
             }
             $this->render();
         } else {

@@ -1,6 +1,14 @@
 <section id="sec-fill">
   <div class="container">
     <?php if ($_SESSION['agent']) : ?>
+    <script>
+      <?php if (isset($academic_agency_fill)) : ?>
+        mojo.data.academic_agency_fill = JSON.parse('<?php echo json_encode($academic_agency_fill); ?>');
+      <?php endif; ?>
+      <?php if (isset($academic_agency_class)) : ?>
+        mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
+      <?php endif; ?>
+    </script>
         <?php if (0 == $quarter_id) : ?>
     <div><p>目前未開放填報</p></div>      
         <?php else: ?>
@@ -23,10 +31,6 @@
       <div id="grid-academic_agency_class-c"></div>
       <div id="grid-academic_agency_class-summary"></div>
       
-      <script>
-        mojo.data.academic_agency_fill = JSON.parse('<?php echo json_encode($academic_agency_fill); ?>');
-        mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
-      </script>
     </div>
         <?php endif;?>
     <?php endif;?>
