@@ -73,6 +73,13 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             return $this->dbSelect($sql);
             break;
+        case 'admin_academic_agency_agent_get_byid':
+            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`';
+            $sql .= '  FROM `academic_agency_agent` t1';
+            $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
+            $sql .= ' WHERE t1.`id` = :id';
+            return $this->dbSelect($sql,array(':id'=>$data['id'])); 
+            break;
         case 'admin_academic_agency_agent_mod':
             $sql  = 'UPDATE `academic_agency_agent`';
             $sql .= '   SET `email` = :email,';
@@ -81,8 +88,8 @@ class AjaxModel extends Model {
             $sql .= '       `timestamp` = :timestamp,';
             $sql .= '       `state` = 0';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
-            return $this->dbQuery('admin_academic_agency_agent_get');
+            $res = $this->dbUpdate($sql, array(':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
+            return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
         case 'admin_academic_agency_unlock_yes':
             $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
