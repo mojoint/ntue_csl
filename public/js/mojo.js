@@ -868,8 +868,6 @@ console.log(res);
       };
       if (!mojo.data.academic_agency_class) 
         return;
-console.log( mojo.data.academic_agency_fill );
-console.log( mojo.data.academic_agency_class );
       mojo.grid.academic_agency_class = $('#grid-academic_agency_class');
       mojo.grid.academic_agency_class_a = $('#grid-academic_agency_class-a');
       mojo.grid.academic_agency_class_b = $('#grid-academic_agency_class-b');
@@ -903,7 +901,7 @@ console.log( mojo.data.academic_agency_class );
           { field: "cname", title: "研習類別", width: "240px" },
           { field: "people", title: "總人數", width: "100px" },
           { field: "reach", title: "總人次", width: "100px" },
-          { field: "total_hours", title: "總時數", width: "200px" },
+          { field: "total_hours", title: "總人時數", width: "200px" },
           { field: "turnover", title: "營收額度" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
@@ -1072,7 +1070,7 @@ console.log( mojo.data.academic_agency_class );
           { field: "cname", title: "研習類別統計", width: "240px" },
           { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },
           { field: "reach", title: "總人次", width: "100px", footerAttributes: { "class": "summary-reach" } },
-          { field: "total_hours", title: "總時數", width: "200px", footerAttributes: { "class": "summary-hours" } },
+          { field: "total_hours", title: "總人時數", width: "200px", footerAttributes: { "class": "summary-hours" } },
           { field: "turnover", title: "營收額度", footerAttributes: { "class": "summary-turnover" } }
         ]
       });
