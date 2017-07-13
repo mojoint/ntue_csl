@@ -295,6 +295,23 @@ console.log(res);
       return $('#' + id).length;
     };
 
+    mojo.dialog_error = function(key, val) {
+      $('#dialog').kendoDialog({
+        minWidth: 480,
+        minHeight: 120,
+        title: "錯誤提醒",
+        content: '',
+        model: true,
+        visible: false,
+        closable: true,
+        actions: [
+          { text: '確定', warning: true, action: function(e) { } }
+        ]
+      });
+      mojo.html = '<div>' + val + '</div>';
+      $('#dialog').data('kendoDialog').content(mojo.html).open().center();
+    };
+
     mojo.to_json = function(wb) {
       var result = {};
       wb.SheetNames.forEach(function(sheetName) {
@@ -1142,11 +1159,11 @@ console.log(res);
         mojo.errmsg += '<p>教學週數為必填</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-revenue').val())) {
+      if (!mojo.reg.int11.test($('#editor-revenue').val())) {
         mojo.errmsg += '<p>直接營收為必填</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-subsidy').val())) {
+      if (!mojo.reg.int11.test($('#editor-subsidy').val())) {
         mojo.errmsg += '<p>政府補助為必填</p>';
         pass = false;
       }
@@ -1409,7 +1426,7 @@ console.log(res);
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
-        if (mojo.check_filladd) {
+        if (mojo.check_filladd()) {
           var adjust = 0,
               people = 0,
               reach = 0,
@@ -1434,7 +1451,8 @@ console.log(res);
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
-            alert(mojo.errmsg);
+          mojo.dialog_error('academic_agency_class', mojo.errmsg);
+          //alert(mojo.errmsg);
       });
 
       mojo.data.academic_agency_class_country = [];
@@ -1766,7 +1784,7 @@ console.log( mojo.summary.adjust );
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
-        if (mojo.check_fillmod) {
+        if (mojo.check_fillmod()) {
           var adjust = 0,
               people = 0,
               reach = 0,
@@ -1790,7 +1808,8 @@ console.log( mojo.summary.adjust );
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
         } else 
-          alert(mojo.errmsg);
+          mojo.dialog_error('academic_agency_class', mojo.errmsg);
+          //alert(mojo.errmsg);
       });
 
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 

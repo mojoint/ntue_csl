@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="/public/css/mojo.css"/>
   <script>
     var mojo = {
-      ver: '1.1.3',
+      ver: '1.7.13',
       errmsg: '',
       cache: {},
       data: {},
@@ -51,12 +51,11 @@
         'int11': /^[\d]{1,11}$/,
         'string255': /^(.){1,255}$/,
         'country_code': /[a-z0-9][\d]{2}/i
-
       },
       refs: {},
     };
   </script>
-  <script src="/public/js/mojo.js?2017071301"></script>
+  <script src="/public/js/mojo.js?2017071302"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 
