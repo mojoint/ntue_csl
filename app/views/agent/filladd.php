@@ -43,6 +43,8 @@
         <div class="createBtnContainer">
           <a href="\\#" class="k-button k-grid-add" id="btn-academic_agency_class_country-add"><span class="fa fa-plus"></span>&nbsp;新增國別明細</a>
           <a href="\\#" class="k-button" id="btn-academic_agency_class_country-import"><span class="fa fa-file-excel-o"></span>&nbsp;自EXCEL匯入</a>
+          <a href="\\#" class="k-button" id="btn-academic_agency_class_country-sample"><span class="fa fa-file-excel-o"></span>&nbsp;下載範例EXCEL</a>
+          <a href="\\#" class="k-button" id="btn-academic_agency_class_country-country"><span class="fa fa-file-excel-o"></span>&nbsp;下載國別EXCEL</a>
         </div>
         <div class="toolbar"></div>
       </script>
@@ -63,7 +65,7 @@
               <td>總時數</td>
               <td>總人次</td>
               <td>調整數值</td>
-              <td>總時數</td>
+              <td>總人時數</td>
             </tr>
             <tr>
               <td><input type="text" id="editor-hours"></p></td>
@@ -76,7 +78,7 @@
             </tr>
             <tr>
               <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" /></td>
-              <td><input type="text" id="editor-subsidy" placeholder="直接營收(元)" /></td>
+              <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" /></td>
               <td>營收額度(元)</td>
               <td><p id="summary-turnover"></p></td>
             </tr>

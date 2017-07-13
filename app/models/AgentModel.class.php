@@ -35,7 +35,7 @@ class AgentModel extends Model {
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
-                $sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`state` = 0 AND t2.`agency_id` = :agency_id';
+                //$sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`state` = 0 AND t2.`agency_id` = :agency_id';
                 $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` ORDER BY t1.`id` ASC LIMIT 1';
                 return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             }

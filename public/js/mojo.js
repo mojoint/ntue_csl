@@ -150,8 +150,16 @@ console.log(res);
                 switch(params)
                 {
                 case 'add':
+                case 'del':
                 case 'mod':
                   $('#grid-academic_agency_contact').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: res.data, page: 1, pageSize: 10 }));
+                  $('.btn-academic_agency_contact-del').on('click', function(e) {
+                    e.preventDefault(); 
+                    var tr = $(e.target).closest("tr");
+                    var tds = $(tr).find("td");
+                    mojo.json = {'id': $(tds[0]).html(), 'agency_id': $(tds[1]).html(), 'cname': $(tds[2]).html()};
+                    mojo.dialog_info('academic_agency_contact', 'del', mojo.json);
+                  }); 
                   $('.btn-academic_agency_contact-mod').on('click', function(e) {
                     e.preventDefault(); 
                     var tr = $(e.target).closest("tr");
@@ -302,6 +310,23 @@ console.log(res);
 
     mojo.mojo_if = function(id) {
       return $('#' + id).length;
+    };
+
+    mojo.dialog_error = function(key, val) {
+      $('#dialog').kendoDialog({
+        minWidth: 480,
+        minHeight: 120,
+        title: "錯誤提醒",
+        content: '',
+        model: true,
+        visible: false,
+        closable: true,
+        actions: [
+          { text: '確定', warning: true, action: function(e) { } }
+        ]
+      });
+      mojo.html = '<div>' + val + '</div>';
+      $('#dialog').data('kendoDialog').content(mojo.html).open().center();
     };
 
     mojo.to_json = function(wb) {
@@ -862,6 +887,7 @@ console.log(res);
                 mojo.json = params;
                 break;
               case 'done':
+                mojo.json = params;
                 break;
               }
               mojo.ajax('agent', key, val, mojo.json);
@@ -873,6 +899,8 @@ console.log(res);
         switch(val)
         {
         case 'done':
+          mojo.html = '<div><label class="warning">送件後該季度資料即不可再更改，是否確定？</div>';
+          $('#dialog-academic_agency_class').data('kendoDialog').content(mojo.html).open().center();
           break;
         case 'del':
           mojo.html = '<div><label class="warning">刪除 ' + params.cname + '？</label></div>';
@@ -885,6 +913,8 @@ console.log(res);
       mojo.location_fillmod = function(params) {
         window.location = '/agent/fillmod/' + params;
       };
+      if (!mojo.data.academic_agency_class) 
+        return;
       mojo.grid.academic_agency_class = $('#grid-academic_agency_class');
       mojo.grid.academic_agency_class_a = $('#grid-academic_agency_class-a');
       mojo.grid.academic_agency_class_b = $('#grid-academic_agency_class-b');
@@ -907,7 +937,7 @@ console.log(res);
         case 'C':
           mojo.data.academic_agency_class_c.push(mojo.data.academic_agency_class[i]);
           break;
-        }                                                                                                                                                                  
+        }
       }
 
       mojo.grid.academic_agency_class.kendoGrid({
@@ -918,7 +948,7 @@ console.log(res);
           { field: "cname", title: "研習類別", width: "240px" },
           { field: "people", title: "總人數", width: "100px" },
           { field: "reach", title: "總人次", width: "100px" },
-          { field: "hours", title: "總時數", width: "100px" },
+          { field: "total_hours", title: "總人時數", width: "200px" },
           { field: "turnover", title: "營收額度" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
@@ -934,7 +964,7 @@ console.log(res);
                 cname: { type: "string" },
                 people: { type: "number" },
                 reach: { type: "number" },
-                hours: { type: "number" },
+                total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
             }    
@@ -942,7 +972,7 @@ console.log(res);
           aggregate: [
             { field: "people", aggregate: "sum" },
             { field: "reach", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
+            { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
         },   
@@ -957,7 +987,7 @@ console.log(res);
           { field: "minor_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
           { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
-          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
+          { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-a" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -986,7 +1016,7 @@ console.log(res);
                 cname: { type: "string" },
                 people: { type: "number" },
                 reach: { type: "number" },
-                hours: { type: "number" },
+                total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
             }    
@@ -994,7 +1024,7 @@ console.log(res);
           aggregate: [
             { field: "people", aggregate: "sum" },
             { field: "reach", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
+            { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
         },   
@@ -1009,7 +1039,7 @@ console.log(res);
           { field: "minor_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
           { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
-          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
+          { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-b" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1038,7 +1068,7 @@ console.log(res);
                 cname: { type: "string" },
                 people: { type: "number" },
                 reach: { type: "number" },
-                hours: { type: "number" },
+                total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
             }    
@@ -1046,7 +1076,7 @@ console.log(res);
           aggregate: [
             { field: "people", aggregate: "sum" },
             { field: "reach", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
+            { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
         },   
@@ -1061,7 +1091,7 @@ console.log(res);
           { field: "minor_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
           { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
-          { field: "hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
+          { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover" } },
           {
             title: '&nbsp;', width: '200px', 
@@ -1087,14 +1117,14 @@ console.log(res);
           { field: "cname", title: "研習類別統計", width: "240px" },
           { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },
           { field: "reach", title: "總人次", width: "100px", footerAttributes: { "class": "summary-reach" } },
-          { field: "hours", title: "總時數", width: "100px", footerAttributes: { "class": "summary-hours" } },
+          { field: "total_hours", title: "總人時數", width: "200px", footerAttributes: { "class": "summary-hours" } },
           { field: "turnover", title: "營收額度", footerAttributes: { "class": "summary-turnover" } }
         ]
       });
 
       $('#btn-academic_agency_class-done').on('click', function(e) {
         e.preventDefault();
-        mojo.dialog_fill('academic_agency_class', 'done');
+        mojo.dialog_fill('academic_agency_class', 'done', {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'quarter_id': mojo.quarter_id});
       });
       
       $('.btn-academic_agency_class-a-del').on('click', function(e) {
@@ -1159,11 +1189,11 @@ console.log(res);
         mojo.errmsg += '<p>教學週數為必填</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-revenue').val())) {
+      if (!mojo.reg.int11.test($('#editor-revenue').val())) {
         mojo.errmsg += '<p>直接營收為必填</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-subsidy').val())) {
+      if (!mojo.reg.int11.test($('#editor-subsidy').val())) {
         mojo.errmsg += '<p>政府補助為必填</p>';
         pass = false;
       }
@@ -1426,7 +1456,7 @@ console.log(res);
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
-        if (mojo.check_filladd) {
+        if (mojo.check_filladd()) {
           var adjust = 0,
               people = 0,
               reach = 0,
@@ -1451,7 +1481,8 @@ console.log(res);
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
-            alert(mojo.errmsg);
+          mojo.dialog_error('academic_agency_class', mojo.errmsg);
+          //alert(mojo.errmsg);
       });
 
       mojo.data.academic_agency_class_country = [];
@@ -1783,7 +1814,7 @@ console.log( mojo.summary.adjust );
 
       $('#btn-academic_agency_class-save').on('click', function(e) {
         e.preventDefault();
-        if (mojo.check_fillmod) {
+        if (mojo.check_fillmod()) {
           var adjust = 0,
               people = 0,
               reach = 0,
@@ -1807,7 +1838,8 @@ console.log( mojo.summary.adjust );
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
         } else 
-          alert(mojo.errmsg);
+          mojo.dialog_error('academic_agency_class', mojo.errmsg);
+          //alert(mojo.errmsg);
       });
 
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 
@@ -1957,6 +1989,9 @@ console.log( mojo.summary.adjust );
               case 'mod':
                 mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id, 'cname': $('#dialog-cname').val(), 'title': $('#dialog-title').val(), 'manager': ($('#dialog-manager').is(':checked'))? 1 : 0, 'staff': ($('#dialog-staff').is(':checked'))? 1 : 0, 'role': $('#dialog-role').val(), 'area_code': $('#dialog-area_code').val(), 'phone': $('#dialog-phone').val(), 'ext': $('#dialog-ext').val(), 'email': $('#dialog-email').val(), 'spare_email': $('#dialog-spare_email').val(), 'primary': ($('#dialog-primary').is(':checked'))? 1 : 0};  
                 break;
+              case 'del':
+                mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id};
+                break;
               }   
               mojo.ajax('agent', key, val, mojo.json);
             }}, 
@@ -1964,27 +1999,41 @@ console.log( mojo.summary.adjust );
           ],  
         }); 
 
-        mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-title">職稱</label><input type="text" id="dialog-title" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-manager" class="form-control mini-chkbox" /><label for="dialog-manager">單位主管</label></div>';
-        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
-        mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
-        $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
-        for (var x in mojo.refs.area_list)
-          $('#dialog-area_code').append('<option value="' + x + '">' + x + '(' + mojo.refs.area_list[x] + ')</option>');
         switch(val)
         {   
+        case 'add':
+          mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-title">職稱</label><input type="text" id="dialog-title" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-manager" class="form-control mini-chkbox" /><label for="dialog-manager">單位主管</label></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
+          $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
+          for (var x in mojo.refs.area_list)
+            $('#dialog-area_code').append('<option value="' + x + '">' + x + '(' + mojo.refs.area_list[x] + ')</option>');
+          break;
         case 'mod':
+          mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-title">職稱</label><input type="text" id="dialog-title" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-manager" class="form-control mini-chkbox" /><label for="dialog-manager">單位主管</label></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
+          $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
+          for (var x in mojo.refs.area_list)
+            $('#dialog-area_code').append('<option value="' + x + '">' + x + '(' + mojo.refs.area_list[x] + ')</option>');
           $('#dialog-cname').val(params.cname);
           $('#dialog-title').val(params.title);
           if (1 == params.manager)
-            $('#dialog-manager').prop(':checked', true);
-          if (1 == params.statff)
-            $('#dialog-staff').prop(':checked', true);
+            $('#dialog-manager').prop('checked', true);
+          if (1 == params.staff)
+            $('#dialog-staff').prop('checked', true);
           $('#dialog-role').val(params.role);
           $('#dialog-area_code').val(params.area_code);
           $('#dialog-phone').val(params.phone);
@@ -1992,7 +2041,11 @@ console.log( mojo.summary.adjust );
           $('#dialog-email').val(params.email);
           $('#dialog-spare_email').val(params.spare_email);
           if (1 == params.primary)
-            $('#dialog-primary').prop(':checked', true);
+            $('#dialog-primary').prop('checked', true);
+          break;
+        case 'del':
+          mojo.html = '<div class="col-xs-12"><label>刪除 聯絡人 ' + params.cname + '?</label></div>';
+          $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
           break;
         }   
         break;
@@ -2036,7 +2089,10 @@ console.log( mojo.summary.adjust );
 
       $('.btn-academic_agency_contact-del').on('click', function(e) {
         e.preventDefault(); 
-        mojo.dialog_info('academic_agency_contact', 'del');
+        var tr = $(e.target).closest("tr");
+        var tds = $(tr).find("td");
+        mojo.json = {'id': $(tds[0]).html(), 'agency_id': $(tds[1]).html(), 'cname': $(tds[2]).html()};
+        mojo.dialog_info('academic_agency_contact', 'del', mojo.json);
       });
     };
 

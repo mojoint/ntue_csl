@@ -182,6 +182,10 @@ class AjaxController extends Controller {
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_add', array('agency_id'=>$_POST['agency_id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
+            case 'del':
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_del', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']));
+                $json = array("code"=>1, "data"=>$res);
+                break;
             case 'get':
                 $res = (new AjaxModel)->dbQuery('agent_cademic_agency_contact', array('id'=>$_POST['id']));
                 $json = array("code"=>1, "data"=>$res);
