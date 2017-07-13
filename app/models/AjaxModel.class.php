@@ -293,6 +293,15 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
             return $cnt;
             break;
+        case 'admin_profile_email_mod':
+            $sql = 'UPDATE `admin` SET `email` = :email WHERE username = :username AND session= :session ';
+            return $this->dbUpdate($sql, array(':email'=>$data['email'], ':username'=>$data['username'],':session'=>$data['session']));
+            break;
+        case 'admin_profile_userpass_mod':
+            $sql = 'UPDATE `admin` SET `userpass` = MD5(:userpass) WHERE username = :username AND session = :session ';
+            debugger('sql:'. $sql);
+            return $this->dbUpdate($sql, array(':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix, ':username'=>$data['username'], ':session'=>$data['session']));
+            break;
         case 'agent_profile_email_mod':
             $sql = 'UPDATE `academic_agency_agent` SET `email` = :email WHERE agency_id = :agency_id AND username = :username';
             return $this->dbUpdate($sql, array(':email'=>$data['email'], ':agency_id'=>$data['agency_id'], ':username'=>$data['username']));

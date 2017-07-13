@@ -118,6 +118,23 @@ console.log(res);
                 }
                 break;
               }
+              case 'profile':
+                switch(params) 
+                {
+                case 'mod':
+                    /*這邊可以異動 email 及pwd，如果資料有異動成功的話，則res.data 會等於 1
+                      如果異動的資料是一樣，則res.data 會等於 0，等於沒修改！
+                      modi by thucop
+                    */
+                    if( 0 < parseInt(res.data)){
+                        kendo.alert('資料異動成功！');
+                    }else{
+                        kendo.alert('資料無異動！');
+
+                    }
+                    break;
+                }
+                break;
               break;
             case 'agent':
               switch(val)
@@ -555,7 +572,7 @@ console.log(res);
         e.preventDefault();
         mojo.dialog_maintain('academic_agency_agent', 'add');
       });
-      $('.btn-academic_agency_agent-mod').on('click', function(e) {
+      $('#grid-academic_agency_agent .btn-academic_agency_agent-mod').on('click', function(e) {
           e.preventDefault();
           var tr = $(e.target).closest("tr");
           var tds = $(tr).find("td");
@@ -771,6 +788,8 @@ console.log(res);
       $('#select-academic_class-era').on('change', function() {
         mojo.ajax('admin', 'academic_class', 'era');
       });
+
+
     };
 
     if (mojo.mojo_if('sec-settings'))
@@ -779,7 +798,11 @@ console.log(res);
     /* =========================================== */
     /* ------------------- agent ------------------- */
     /* profile */
-    mojo.dialog_agent = function() {
+    mojo.dialog_agent = function(_self) {
+      var _type = '';
+      if(typeof _self.id != 'undefined' && _self.id.indexOf('admin'>-1)){
+        _type = 'admin';
+      }
       $('#dialog').kendoDialog({
         minWidth: 480,
         title: "帳號維護",
@@ -794,7 +817,11 @@ console.log(res);
               mojo.json.email = $('#dialog-email').val();
             if (mojo.reg.userpass.test($('#dialog-userpass').val()))
               mojo.json.userpass = $('#dialog-userpass').val();
-            mojo.ajax('agent', 'profile', 'mod', mojo.json);
+            if(_type == 'admin') {
+              mojo.ajax('admin', 'profile', 'mod', mojo.json);
+            }else{
+              mojo.ajax('agent', 'profile', 'mod', mojo.json);
+            }
           }},
           { text: '取消'}
         ]
@@ -806,11 +833,14 @@ console.log(res);
     }
     
     mojo.watch_agent = function() {
-      $('#btn-agent-profile').on('click', function(e) {
+      $('#btn-agent-profile,#btn-admin').on('click', function(e) {
         e.preventDefault();
-        mojo.dialog_agent();
+        mojo.dialog_agent(this);
       });
     }
+
+    if (mojo.mojo_if('btn-admin')) 
+      mojo.watch_agent();
 
     if (mojo.mojo_if('btn-agent-profile')) 
       mojo.watch_agent();

@@ -2,7 +2,7 @@
     <div class="container">
     <?php if ($_SESSION['agent']) : ?>
       <ul class="nav nav-tabs" role="tablist">
-        <li class="active" role="presentation"><a id="tab-academic_agency" href="#academic_agency" aria-controls="academic_agency" role="tab" data-toggle="tab">機構資訊</a></li>
+        <li class="active" role="presentation"><a id="tab-academic_agency" href="#academic_agency" aria-controls="academic_agency" role="tab" data-toggle="tab">教育機構通訊資料</a></li>
         <li role="presentation"><a id="tab-academic_agency_hr" href="#academic_agency_hr" aria-controls="academic_agency_hr" role="tab" data-toggle="tab">教學人力</a></li>
         <li role="presentation"><a id="tab-academic_agency_contact" href="#academic_agency_contact" aria-controls="academic_agency_contact" role="tab" data-toggle="tab">聯絡人</a></li>
       </ul>    

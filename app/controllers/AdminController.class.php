@@ -121,7 +121,7 @@ class AdminController extends Controller {
         //$html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
         //$html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
         $html .=   '<li class="'. $currents['maintain'] .'"><a href="/admin/maintain/">資料維護</a></li>';
-        $html .=   '<li class="'. $currents['unlock'] .'"><a href="/admin/unlock/">解鎖設定</a></li>';
+        $html .=   '<li class="'. $currents['unlock'] .'"><a href="/admin/unlock/">解鎖管理</a></li>';
         $html .=   '<li class="'. $currents['settings'] .'"><a href="/admin/settings/">系統設定</a></li>';
         //$html .=   '<li class="'. $currents['message'] .'"><a href="/admin/message/">留言回覆</a></li>';
         $html .=   '<li class=""><a href="/admin/logout/">系統登出</a></li>';

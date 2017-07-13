@@ -100,6 +100,28 @@ class AjaxController extends Controller {
                 break;
             }
             break;
+        case 'profile':
+            switch( $val )
+            {
+            case 'add':
+                break;
+            case 'sel':
+                break;
+            case 'mod':
+                if (isset($_POST['username'])) {
+                    $username = str_replace('NTUE', "", $_POST['username']);
+
+                    if (isset($_POST['email'])) {
+                        $res = (new AjaxModel)->dbQuery('admin_profile_email_mod', array('username'=>$username, 'email'=>$_POST['email'],'session'=>$_SESSION['admin']['session']));
+                    }
+                    if (isset($_POST['userpass'])) {
+                        $res = (new AjaxModel)->dbQuery('admin_profile_userpass_mod', array('username'=>$username, 'userpass'=>$_POST['userpass'],'session'=>$_SESSION['admin']['session']));
+                    }
+                    $json = array("code"=>1, "data"=>$res);
+                }
+                break;
+            }
+            break;
         } 
         echo json_encode($json);
     } 
