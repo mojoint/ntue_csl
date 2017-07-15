@@ -9,7 +9,7 @@ class IndexController extends Controller {
     }
 
     function activate() {
-        $reg_userpass = '/^(\w){4,80}$/';
+        $reg_userpass = '/^(\w){3,80}$/';
         $email = $_POST['email'];
         $timestamp = $_POST['timestamp'];
         $session = $_POST['session'];
@@ -27,8 +27,8 @@ class IndexController extends Controller {
     }
 
     function admin() {
-        $reg_username = '/^([a-zA-Z0-9]){4,50}$/';
-        $reg_userpass = '/^(\w){4,80}$/';
+        $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+        $reg_userpass = '/^(\w){3,80}$/';
         $username = $_POST['username'];
         $userpass = $_POST['userpass'];
 
@@ -48,8 +48,8 @@ class IndexController extends Controller {
     }
 
     function agent() {
-        $reg_username = '/^([a-zA-Z0-9]){4,50}$/';
-        $reg_userpass = '/^(\w+){4,80}$/';
+        $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+        $reg_userpass = '/^(\w+){3,80}$/';
         $username = $_POST['username'];
         $userpass = $_POST['userpass'];
 
