@@ -68,7 +68,7 @@
             </tr>
             <tr>
               <td><input type="text" id="editor-hours"></p></td>
-              <td><p id="summary-reach"></p></td>
+              <td><p id="summary-people"></p></td>
               <td><input type="text" id="editor-adjust" size="4" /></td>
               <td><p id="summary-total_hours"></p></td>
             </tr>

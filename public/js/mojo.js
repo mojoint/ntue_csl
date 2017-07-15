@@ -947,7 +947,6 @@ console.log(res);
         columns: [
           { field: "cname", title: "研習類別", width: "240px" },
           { field: "people", title: "總人數", width: "100px" },
-          { field: "reach", title: "總人次", width: "100px" },
           { field: "total_hours", title: "總人時數", width: "200px" },
           { field: "turnover", title: "營收額度" }
         ],
@@ -963,7 +962,6 @@ console.log(res);
               fields: {
                 cname: { type: "string" },
                 people: { type: "number" },
-                reach: { type: "number" },
                 total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
@@ -971,7 +969,6 @@ console.log(res);
           },
           aggregate: [
             { field: "people", aggregate: "sum" },
-            { field: "reach", aggregate: "sum" },
             { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
@@ -986,7 +983,6 @@ console.log(res);
           { field: "id", title: "&nbsp;" },
           { field: "minor_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
-          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-a" } },
           { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-a" } },
           {
@@ -1015,7 +1011,6 @@ console.log(res);
               fields: {
                 cname: { type: "string" },
                 people: { type: "number" },
-                reach: { type: "number" },
                 total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
@@ -1023,7 +1018,6 @@ console.log(res);
           },   
           aggregate: [
             { field: "people", aggregate: "sum" },
-            { field: "reach", aggregate: "sum" },
             { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
@@ -1038,7 +1032,6 @@ console.log(res);
           { field: "id", title: "&nbsp;" },
           { field: "minor_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
-          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-b" } },
           { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-b" } },
           {
@@ -1067,7 +1060,6 @@ console.log(res);
               fields: {
                 cname: { type: "string" },
                 people: { type: "number" },
-                reach: { type: "number" },
                 total_hours: { type: "number" },
                 turnover: { type: "number" }
               }    
@@ -1075,7 +1067,6 @@ console.log(res);
           },   
           aggregate: [
             { field: "people", aggregate: "sum" },
-            { field: "reach", aggregate: "sum" },
             { field: "total_hours", aggregate: "sum" },
             { field: "turnover", aggregate: "sum" }
           ]    
@@ -1090,7 +1081,6 @@ console.log(res);
           { field: "id", title: "&nbsp;" },
           { field: "minor_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
           { field: "people", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
-          { field: "reach", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-reach-c" } },
           { field: "total_hours", title: "&nbsp;", width: "200px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
           { field: "turnover", title: "&nbsp;", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover" } },
           {
@@ -1116,7 +1106,6 @@ console.log(res);
         columns: [
           { field: "cname", title: "研習類別統計", width: "240px" },
           { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },
-          { field: "reach", title: "總人次", width: "100px", footerAttributes: { "class": "summary-reach" } },
           { field: "total_hours", title: "總人時數", width: "200px", footerAttributes: { "class": "summary-hours" } },
           { field: "turnover", title: "營收額度", footerAttributes: { "class": "summary-turnover" } }
         ]
@@ -1214,14 +1203,15 @@ console.log(res);
             switch(val) 
             {
             case 'add':
-              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
+              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_new_male" role="gridcell">' + $('#dialog-new_male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_new_female" role="gridcell">' + $('#dialog-new_female').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
         
               $('.btn-academic_agency_class_country-mod').on('click', function(e) {
                 e.preventDefault();
                 var tr = $(e.target).closest("tr");
                 var tds = $(tr).find("td");
-                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'new_female': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
               });    
         
               $('.btn-academic_agency_class_country-del').on('click', function(e) {
@@ -1239,9 +1229,10 @@ console.log(res);
                 for (var i=0; i<mojo.country[x].length; i++) {
                   if (typeof(mojo.country[x][i]) === 'object') {
                     var country = mojo.country[x][i]['國別'];
-                    var male = mojo.country[x][i]['男新生人數'];
-                    var female = mojo.country[x][i]['女新生人數'];
-                    var reach = mojo.country[x][i]['人次'];
+                    var male = mojo.country[x][i]['男舊生'];
+                    var new_male = mojo.country[x][i]['男新生'];
+                    var female = mojo.country[x][i]['女舊生'];
+                    var new_female = mojo.country[x][i]['女新生'];
                     var note = (mojo.country[x][i]['其他'])? mojo.country[x][i]['其他'] : "";
                     var country_code = '';
                     for (var j=0; j<mojo.refs.country_code_list.length; j++) {
@@ -1259,8 +1250,9 @@ console.log(res);
                     html +=     mojo.refs.country_list[country_code].cname;
                     html +=   '</td>';
                     html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
+                    html +=   '<td role="girdcell" class="country_new_male">' + new_male + '</td>';
                     html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
-                    html +=   '<td role="girdcell" class="country_reach">' + reach + '</td>';
+                    html +=   '<td role="girdcell" class="country_new_female">' + new_female + '</td>';
                     html +=   '<td role="girdcell" >' + note + '</td>';
                     html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
                     html += '</tr>';
@@ -1273,7 +1265,8 @@ console.log(res);
                 e.preventDefault();
                 var tr = $(e.target).closest("tr");
                 var tds = $(tr).find("td");
-                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
               });    
         
               $('.btn-academic_agency_class_country-del').on('click', function(e) {
@@ -1289,15 +1282,16 @@ console.log(res);
               $(tds[0]).html($('#dialog-country_code').val());
               $(tds[1]).html(mojo.refs.country_list[$('#dialog-country_code').val()]['cname']);
               $(tds[2]).html($('#dialog-male').val());
-              $(tds[3]).html($('#dialog-female').val());
-              $(tds[4]).html($('#dialog-reach').val());
-              $(tds[5]).html($('#dialog-note').val());
+              $(tds[3]).html($('#dialog-new_male').val());
+              $(tds[4]).html($('#dialog-female').val());
+              $(tds[5]).html($('#dialog-new_female').val());
+              $(tds[6]).html($('#dialog-note').val());
               break;
             case 'del':
               params.tr.remove();
               break;
             }
-            mojo.summaryReach();
+            mojo.summaryPeople();
           }},
           { text: '取消'}
         ]
@@ -1307,9 +1301,10 @@ console.log(res);
       {
       case 'add':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         break;
@@ -1325,16 +1320,18 @@ console.log(res);
         break;
       case 'mod':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
         $('#dialog-country_code').val(params.country_code);
         $('#dialog-male').val(params.male);
+        $('#dialog-new_male').val(params.new_male);
         $('#dialog-female').val(params.female);
-        $('#dialog-reach').val(params.reach);
+        $('#dialog-new_female').val(params.new_female);
         $('#dialog-note').val(params.note);
         break;
       }
@@ -1364,32 +1361,41 @@ console.log(res);
       mojo.major = $('#academic_agency_class').attr('data-mojo');
 
       mojo.summary = {
-        weekly: 0,
-        weeks: 0,
         adjust: 0,
         hours: 0,
-        total_hours: 0,
-        reach: 0,
+        male: 0,
+        new_male: 0,
+        female: 0,
+        new_female: 0,
+        people: 0,
         revenue: 0,
         subsidy: 0,
-        turnover: 0
+        total_hours: 0,
+        turnover: 0,
+        weekly: 0,
+        weeks: 0
       };
 
-      mojo.summaryReach = function() {
-        mojo.summary.reach = 0;
+      mojo.summaryPeople = function() {
+        mojo.summary.people = 0;
         mojo.summary.male = 0;
+        mojo.summary.new_male = 0;
         mojo.summary.female = 0;
+        mojo.summary.new_female = 0;
         $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
           var tds = $(this).find('td');
-          mojo.summary.female += parseInt($(tds[3]).html());
           mojo.summary.male += parseInt($(tds[2]).html());
-          mojo.summary.reach += parseFloat($(tds[4]).html());
+          mojo.summary.new_male += parseInt($(tds[3]).html());
+          mojo.summary.female += parseFloat($(tds[4]).html());
+          mojo.summary.new_female += parseFloat($(tds[5]).html());
         });
+        mojo.summary.people = mojo.summary.male + mojo.summary.new_male + mojo.summary.female + mojo.summary.new_female;
         
         $('.summary-country_male').html(mojo.summary.male);
+        $('.summary-country_new_male').html(mojo.summary.new_male);
         $('.summary-country_female').html(mojo.summary.female);
-        $('.summary-country_reach').html(mojo.summary.reach);
-        $('#summary-reach').html(mojo.summary.reach);
+        $('.summary-country_new_female').html(mojo.summary.new_female);
+        $('#summary-people').html(mojo.summary.people);
         mojo.summaryHours();
       }
 
@@ -1401,7 +1407,7 @@ console.log(res);
 
       mojo.summaryTotalHours = function() {
         mojo.summary.hours = $('#editor-hours').val();
-        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.reach - mojo.summary.adjust;
+        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.people - mojo.summary.adjust;
         mojo.summary.total_hours = (mojo.summary.total_hours > 0)? mojo.summary.total_hours : 0;
         $('#summary-total_hours').html(mojo.summary.total_hours);
       }
@@ -1459,30 +1465,26 @@ console.log(res);
         if (mojo.check_filladd()) {
           var adjust = 0,
               people = 0,
-              reach = 0,
               hours = 0,
               total_hours = 0;
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
-          if (!isNaN(parseInt($('#summary-reach').html())))
-            reach = parseInt($('#summary-reach').html());
           if (!isNaN(parseFloat($('#editor-hours').html())))
             hours = parseFloat($('#editor-hours').html());
           if (!isNaN(parseFloat($('#summary-total_hours').html())))
             total_hours = parseFloat($('#summary-total_hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
+          mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
           $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
             var tds = $(this).find('td');
             people += parseInt($(tds[2]).html()) + parseInt($(tds[3]).html());
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'note': $(tds[5]).html()});
+            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'note': $(tds[6]).html()});
           });
           
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
           mojo.dialog_error('academic_agency_class', mojo.errmsg);
-          //alert(mojo.errmsg);
       });
 
       mojo.data.academic_agency_class_country = [];
@@ -1490,12 +1492,14 @@ console.log(res);
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country');
       mojo.grid.academic_agency_class_country.kendoGrid({
         pageable: false,
+        resizable: false,
         columns: [
           { field: "country_code", title: "&nbsp;" },
           { field: "country_cname", title: "國別", width: "200px", footerTemplate: "人數小計" },
-          { field: "male", title: "男新生人數", attributes: { "class": "country_male" }, footerAttributes: { "class": "summary-country_male" } },
-          { field: "female", title: "女新生人數", attributes: { "class": "country_female" }, footerAttributes: { "class": "summary-country_female" } },
-          { field: "reach", title: "人次", attributes: { "class": "country_reach" }, footerAttributes: { "class": "summary-country_reach" } },
+          { field: "male", title: "男舊生", attributes: { "class": "country_male" }, footerAttributes: { "class": "summary-country_male" }, width: "90px" },
+          { field: "new_male", title: "男新生", attributes: { "class": "country_new_male" }, footerAttributes: { "class": "summary-country_new_male" }, width: "90px" },
+          { field: "female", title: "女舊生", attributes: { "class": "country_female" }, footerAttributes: { "class": "summary-country_female" }, width: "90px" },
+          { field: "new_female", title: "女新生", attributes: { "class": "country_new_female" }, footerAttributes: { "class": "summary-country_new_female" }, width: "90px" },
           { field: "note", title: "其他" }, 
           { title: "&nbsp;", width: "200px", 
             command: [
@@ -1523,7 +1527,7 @@ console.log(res);
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var tds = $(tr).find("td");
-        mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};
+        mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'tr': tr};
         mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
       });
 
@@ -1586,7 +1590,7 @@ console.log(res);
             switch(val) 
             {
             case 'add':
-              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_reach" role="gridcell">' + $('#dialog-reach').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
+              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_new_male" role="gridcell">' + $('#dialog-new_male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_new_female" role="gridcell">' + $('#dialog-new_female').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
             case 'import':
@@ -1596,9 +1600,10 @@ console.log(res);
                 for (var i=0; i<mojo.country[x].length; i++) {
                   if (typeof(mojo.country[x][i]) === 'object') {
                     var country = mojo.country[x][i]['國別'];
-                    var male = mojo.country[x][i]['男新生人數'];
-                    var female = mojo.country[x][i]['女新生人數'];
-                    var reach = mojo.country[x][i]['人次'];
+                    var male = mojo.country[x][i]['男舊生'];
+                    var new_male = mojo.country[x][i]['男新生'];
+                    var female = mojo.country[x][i]['女舊生'];
+                    var new_female = mojo.country[x][i]['女新生'];
                     var note = (mojo.country[x][i]['其他'])? mojo.country[x][i]['其他'] : "";
                     var country_code = '';
                     for (var j=0; j<mojo.refs.country_code_list.length; j++) {
@@ -1616,8 +1621,9 @@ console.log(res);
                     html +=     mojo.refs.country_list[country_code].cname;
                     html +=   '</td>';
                     html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
+                    html +=   '<td role="girdcell" class="country_new_male">' + new_male + '</td>';
                     html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
-                    html +=   '<td role="girdcell" class="country_reach">' + reach + '</td>';
+                    html +=   '<td role="girdcell" class="country_new_female">' + new_female + '</td>';
                     html +=   '<td role="girdcell" >' + note + '</td>';
                     html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
                     html += '</tr>';
@@ -1630,7 +1636,8 @@ console.log(res);
                 e.preventDefault();
                 var tr = $(e.target).closest("tr");
                 var tds = $(tr).find("td");
-                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};        mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
+                mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'tr': tr};
+                mojo.dialog_filladd('academic_agency_class_country', 'mod', mojo.json);
               });    
         
               $('.btn-academic_agency_class_country-del').on('click', function(e) {
@@ -1646,15 +1653,16 @@ console.log(res);
               $(tds[0]).html($('#dialog-country_code').val());
               $(tds[1]).html(mojo.refs.country_list[$('#dialog-country_code').val()]['cname']);
               $(tds[2]).html($('#dialog-male').val());
-              $(tds[3]).html($('#dialog-female').val());
-              $(tds[4]).html($('#dialog-reach').val());
-              $(tds[5]).html($('#dialog-note').val());
+              $(tds[3]).html($('#dialog-new_male').val());
+              $(tds[4]).html($('#dialog-female').val());
+              $(tds[5]).html($('#dialog-new_female').val());
+              $(tds[6]).html($('#dialog-note').val());
               break;
             case 'del':
               params.tr.remove();
               break;
             }
-            mojo.summaryReach();
+            mojo.summaryPeople();
           }},
           { text: '取消'}
         ]
@@ -1664,9 +1672,10 @@ console.log(res);
       {
       case 'add':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         break;
@@ -1682,16 +1691,18 @@ console.log(res);
         break;
       case 'mod':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生人數</label><input type="text" id="dialog-male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生人數</label><input type="text" id="dialog-female" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-reach">人次</label><input type="text" id="dialog-reach" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男新生</label><input type="text" id="dialog-male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女新生</label><input type="text" id="dialog-female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
         $('#dialog-country_code').val(params.country_code);
         $('#dialog-male').val(params.male);
+        $('#dialog-new_male').val(params.new_male);
         $('#dialog-female').val(params.female);
-        $('#dialog-reach').val(params.reach);
+        $('#dialog-new_female').val(params.new_female);
         $('#dialog-note').val(params.note);
         break;
       }
@@ -1721,32 +1732,40 @@ console.log(res);
       mojo.class_id = $('#academic_agency_class').attr('data-mojo');
 
       mojo.summary = {
-        weekly: 0,
-        weeks: 0,
         adjust: 0,
         hours: 0,
-        total_hours: 0,
-        reach: 0,
+        male: 0,
+        new_male: 0,
+        female: 0,
+        new_female: 0,
         revenue: 0,
         subsidy: 0,
-        turnover: 0
+        total_hours: 0,
+        turnover: 0,
+        weekly: 0,
+        weeks: 0
       };
 
-      mojo.summaryReach = function() {
-        mojo.summary.reach = 0;
+      mojo.summaryPeople = function() {
+        mojo.summary.people = 0;
         mojo.summary.male = 0;
+        mojo.summary.new_male = 0;
         mojo.summary.female = 0;
+        mojo.summary.new_female = 0;
         $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
           var tds = $(this).find('td');
-          mojo.summary.female += parseInt($(tds[3]).html());
           mojo.summary.male += parseInt($(tds[2]).html());
-          mojo.summary.reach += parseFloat($(tds[4]).html());
+          mojo.summary.new_male += parseInt($(tds[3]).html());
+          mojo.summary.female += parseInt($(tds[4]).html());
+          mojo.summary.new_female += parseInt($(tds[5]).html());
         });
         
+        mojo.summary.people = mojo.summary.male + mojo.summary.new_male + mojo.summary.female + mojo.summary.new_female;
         $('.summary-country_male').html(mojo.summary.male);
+        $('.summary-country_new_male').html(mojo.summary.new_male);
         $('.summary-country_female').html(mojo.summary.female);
-        $('.summary-country_reach').html(mojo.summary.reach);
-        $('#summary-reach').html(mojo.summary.reach);
+        $('.summary-country_new_female').html(mojo.summary.new_female);
+        $('#summary-people').html(mojo.summary.people);
         mojo.summaryHours();
       }
 
@@ -1758,7 +1777,7 @@ console.log(res);
 
       mojo.summaryTotalHours = function() {
         mojo.summary.hours = $('#editor-hours').val();
-        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.reach - mojo.summary.adjust;
+        mojo.summary.total_hours = mojo.summary.hours * mojo.summary.people - mojo.summary.adjust;
         mojo.summary.total_hours = (mojo.summary.total_hours > 0)? mojo.summary.total_hours : 0;
         $('#summary-total_hours').html(mojo.summary.total_hours);
       }
@@ -1790,7 +1809,6 @@ console.log(res);
         mojo.summary.adjust = 0;
         if (!isNaN(parseInt($(this).val()))) 
           mojo.summary.adjust = parseFloat($(this).val());
-console.log( mojo.summary.adjust );
         mojo.summaryTotalHours();
       });
 
@@ -1817,29 +1835,25 @@ console.log( mojo.summary.adjust );
         if (mojo.check_fillmod()) {
           var adjust = 0,
               people = 0,
-              reach = 0,
               hours = 0,
               total_hours = 0;
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
-          if (!isNaN(parseInt($('#summary-reach').html())))
-            reach = parseInt($('#summary-reach').html());
           if (!isNaN(parseFloat($('#editor-hours').html())))
             hours = parseFloat($('#editor-hours').html());
           if (!isNaN(parseFloat($('#summary-total_hours').html())))
             total_hours = parseFloat($('#summary-total_hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'reach': reach, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
+          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
     
           $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
             var tds = $(this).find('td');
             people += parseInt($(tds[2]).html()) + parseInt($(tds[3]).html());
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'note': $(tds[5]).html()});
+            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'note': $(tds[6]).html()});
           });
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
         } else 
           mojo.dialog_error('academic_agency_class', mojo.errmsg);
-          //alert(mojo.errmsg);
       });
 
       mojo.grid.academic_agency_class_country = $('#grid-academic_agency_class_country').kendoGrid({ 
@@ -1847,9 +1861,10 @@ console.log( mojo.summary.adjust );
         columns: [
           { field: "country_code", title: "&nbsp;" },
           { field: "country_cname", title: "國別", width: "200px", footerTemplate: "人數小計" },
-          { field: "male", title: "男新生人數", attributes: { "class": "country_male" }, footerAttributes: { "class": "summary-country_male" } },
-          { field: "female", title: "女新生人數", attributes: { "class": "country_female" }, footerAttributes: { "class": "summary-country_female" } },
-          { field: "reach", title: "人次", attributes: { "class": "country_reach" }, footerAttributes: { "class": "summary-country_reach" } },
+          { field: "male", title: "男舊生", attributes: { "class": "country_male" }, footerAttributes: { "class": "summary-country_male" }, width: "90px" },
+          { field: "new_male", title: "男新生", attributes: { "class": "country_new_male" }, footerAttributes: { "class": "summary-country_new_male" }, width: "90px" },
+          { field: "female", title: "女舊生", attributes: { "class": "country_female" }, footerAttributes: { "class": "summary-country_female" }, width: "90px" },
+          { field: "new_female", title: "女新生", attributes: { "class": "country_new_female" }, footerAttributes: { "class": "summary-country_new_female" }, width: "90px" },
           { field: "note", title: "其他" }, 
           { title: "&nbsp;", width: "200px", 
             command: [
@@ -1878,20 +1893,18 @@ console.log( mojo.summary.adjust );
         $('#editor-revenue').val(mojo.data.academic_agency_class[0].revenue);
         $('#editor-subsidy').val(mojo.data.academic_agency_class[0].subsidy);
         $('#editor-note').val(mojo.data.academic_agency_class[0].note);
-        $('#summary-reach').html(mojo.data.academic_agency_class[0].reach);
         $('#editor-hours').val(mojo.data.academic_agency_class[0].hours);
         $('#summary-total_hours').html(mojo.data.academic_agency_class[0].total_hours);
         $('#summary-turnover').html(mojo.data.academic_agency_class[0].turnover);
         mojo.summary.weekly = mojo.data.academic_agency_class[0].weekly;
         mojo.summary.weeks = mojo.data.academic_agency_class[0].weeks;
-        mojo.summary.reach = mojo.data.academic_agency_class[0].reach;
         mojo.summary.adjust = mojo.data.academic_agency_class[0].adjust;
         mojo.summary.hours = mojo.data.academic_agency_class[0].hours;
         mojo.summary.total_hours = mojo.data.academic_agency_class[0].total_hours;
         mojo.summary.revenue = mojo.data.academic_agency_class[0].revenue;
         mojo.summary.subsidy = mojo.data.academic_agency_class[0].subsidy;
         mojo.summary.turnover = mojo.data.academic_agency_class[0].turnover;
-        mojo.summaryReach();
+        mojo.summaryPeople();
       }
 
       $('#btn-academic_agency_class_country-add').on('click', function(e) {
@@ -1903,7 +1916,7 @@ console.log( mojo.summary.adjust );
         e.preventDefault();
         var tr = $(e.target).closest("tr");
         var tds = $(tr).find("td");
-        mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'reach': $(tds[4]).html(), 'tr': tr};
+        mojo.json = {'country_code': $(tds[0]).html(), 'cname': $(tds[1]).html(), 'male': $(tds[2]).html(), 'new_male': $(tds[3]).html(), 'female': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'tr': tr};
         mojo.dialog_fillmod('academic_agency_class_country', 'mod', mojo.json);
       });
 

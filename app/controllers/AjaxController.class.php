@@ -147,7 +147,7 @@ class AjaxController extends Controller {
             switch( $val )
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_add', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'major_code'=>$_POST['major_code'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'people'=>$_POST['people'], 'reach'=>$_POST['reach'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$_POST['country']));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_add', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'major_code'=>$_POST['major_code'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$_POST['country']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'del':
@@ -157,7 +157,7 @@ class AjaxController extends Controller {
             case 'get':
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', array('cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'people'=>$_POST['people'], 'reach'=>$_POST['reach'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'class_id'=>$_POST['class_id'], 'country'=>$_POST['country'], 'agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter_id'=>$_POST['quarter_id'], 'quarter'=>$_POST['quarter']));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', array('cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'class_id'=>$_POST['class_id'], 'country'=>$_POST['country'], 'agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter_id'=>$_POST['quarter_id'], 'quarter'=>$_POST['quarter']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
