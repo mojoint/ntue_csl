@@ -15,24 +15,24 @@
           <thead></thead>
           <tbody>
             <tr>
-              <td>研習類別名稱</td>
+              <td><span class="required_field">*</span>研習類別名稱</td>
               <td colspan="2"><select id="editor-minor_code"></select></td>
             </tr>
             <tr>
-              <td>課程名稱</td>
-              <td colspan="2"><input type="text" id="editor-cname" class="form-control" /></td>
+              <td><span class="required_field">*</span>課程名稱</td>
+              <td colspan="2"><input type="text" id="editor-cname" class="form-control" required /></td>
             </tr>
             <tr>
-              <td>教學時數</td>
-              <td><input type="text" id="editor-weekly" placeholder="6.8" />&nbsp;小時/週</td>
-              <td>週數&nbsp;<input type="text" id="editor-weeks" placeholder="6.8" /></td>
+              <td><span class="required_field">*</span>教學時數</td>
+              <td><input type="text" id="editor-weekly" placeholder="" required />&nbsp;小時/週</td>
+              <td>週數&nbsp;<input type="text" id="editor-weeks" placeholder=""  required /></td>
             </tr>
             <tr>
-              <td>招生對象</td>
+              <td><span class="required_field">*</span>招生對象</td>
               <td colspan="2"><select id="editor-target"></select></td>
             </tr>
             <tr>
-              <td>教學內容</td>
+              <td><span class="required_field">*</span>教學內容</td>
               <td colspan="2"><select id="editor-content"></select></td>
             </tr>
           </tbody>
@@ -42,8 +42,8 @@
         <div class="createBtnContainer">
           <a href="\\#" class="k-button k-grid-add" id="btn-academic_agency_class_country-add"><span class="fa fa-plus"></span>&nbsp;新增國別明細</a>
           <a href="\\#" class="k-button" id="btn-academic_agency_class_country-import"><span class="fa fa-file-excel-o"></span>&nbsp;自EXCEL匯入</a>
-          <a href="\\#" class="k-button" id="btn-academic_agency_class_country-sample"><span class="fa fa-file-excel-o"></span>&nbsp;下載範例EXCEL</a>
-          <a href="\\#" class="k-button" id="btn-academic_agency_class_country-country"><span class="fa fa-file-excel-o"></span>&nbsp;下載國別EXCEL</a>
+          <a href="/public/template/classdata_sample.xls" class="k-button" id="btn-academic_agency_class_country-sample" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載範例EXCEL</a>
+          <a href="/public/template/country_list.xls" class="k-button" id="btn-academic_agency_class_country-country" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載國別EXCEL</a>
         </div>
         <div class="toolbar"></div>
       </script>
@@ -53,7 +53,7 @@
 
       <script type="text/x-kendo-template" id="template-academic_agency_class_summary">
         <div class="createBtnContainer">
-          <a href="\\#" class="k-button" id="btn-academic_agency_class-save"><span class="fa fa-save"></span>&nbsp;設定完成</a>
+          <a href="\\#" class="k-button" id="btn-academic_agency_class-save"><span class="fa fa-save"></span>&nbsp;儲存設定</a>
         </div>
         <div class="toolbar"></div>
       </script>
@@ -61,13 +61,13 @@
         <table role="grid">
           <tbody>
             <tr>
-              <td>總時數</td>
+              <td><span class="required_field">*</span>總時數</td>
               <td>總人次</td>
               <td>調整數值</td>
               <td>總人時數</td>
             </tr>
             <tr>
-              <td><input type="text" id="editor-hours"></p></td>
+              <td><input type="text" id="editor-hours" required ></p></td>
               <td><p id="summary-people"></p></td>
               <td><input type="text" id="editor-adjust" size="4" /></td>
               <td><p id="summary-total_hours"></p></td>
@@ -76,13 +76,13 @@
               <td colspan="4"><p><span class="fa fa-calculator"></span>&nbsp;總時數 X 總人次 - 調整值 = 總人時數</p></td>
             </tr>
             <tr>
-              <td>直接營收(元)</td>
-              <td>政府補助(元)</td>
+              <td><span class="required_field">*</span>直接營收(元)</td>
+              <td><span class="required_field">*</span>政府補助(元)</td>
               <td colspan="2">營收額度(元)</td>
             </tr>
             <tr>
-              <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" /></td>                                                                                                                                            
-              <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" /></td>
+              <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" required /></td>                                                                                                                                            
+              <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" required /></td>
               <td colspan="2"><p id="summary-turnover"></p></td>
             </tr>
             <tr>

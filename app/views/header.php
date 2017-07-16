@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="/public/css/jquery-ui.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/select2.min.css"/> 
   <link rel="stylesheet" type="text/css" href="/public/css/kendo.common-material.min.css"/> 
@@ -17,6 +18,7 @@
   <!--<link rel="stylesheet" type="text/css" href="/public/css/kendo.custom.css"/>-->
   <!-- Javascript -->
   <script src="/public/js/jquery.min.js"></script>
+  <script src="/public/js/jquery-ui.min.js"></script>
   <script src="/public/js/angular.min.js"></script>
   <script src="/public/js/bootstrap.min.js"></script>
   <script src="/public/js/select2.min.js"></script>
@@ -28,6 +30,7 @@
   <script src="/public/js/shim.js"></script>
   <script src="/public/js/jszip.js"></script>
   <script src="/public/js/xlsx.js"></script>
+  <script src="/public/js/JQueryDatePickerTW.js"></script>
   <script src="/public/js/exceplus-2.5.min.js"></script>
   <script src="/public/js/webtoolkit.base64.js"></script>
   <script src="/public/js/moment-with-locales.min.js"></script>

@@ -735,8 +735,10 @@ console.log(res);
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">開放填報</label><input type="text" id="dialog-online" class="form-control" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-online">結束填報</label><input type="text" id="dialog-offline" class="form-control" /></div>';
           $('#dialog-academic_era').data('kendoDialog').content(mojo.html).open().center();
-          $('#dialog-online').val(params.online).kendoDatePicker({format: "yyyy-MM-dd"}); 
-          $('#dialog-offline').val(params.offline).kendoDatePicker({format: "yyyy-MM-dd"}); 
+          //$('#dialog-online').val(params.online).kendoDatePicker({format: "yyyy-MM-dd"}); 
+          //$('#dialog-offline').val(params.offline).kendoDatePicker({format: "yyyy-MM-dd"}); 
+          $('#dialog-online').val(params.online).datepickerTW({dateFormat: "yy-MM-dd"});
+          $('#dialog-offline').val(params.offline).datepickerTW({dateFormat: "yy-MM-dd"});
           break;
         } 
         break;
@@ -1120,7 +1122,6 @@ console.log(res);
 
       mojo.grid.academic_agency_class_summary.kendoGrid({
         pageable: false,
-        height: 0,
         columns: [
           { field: "cname", title: "研習類別統計", width: "240px" },
           { field: "people", title: "總人數", width: "100px", footerAttributes: { "class": "summary-people" } },

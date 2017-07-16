@@ -193,3 +193,8 @@ label.warning {
   width: 30px;
   height: 21px;
 }
+
+/* agent fill */
+.required_field {
+  color: #fc4810;
+}
