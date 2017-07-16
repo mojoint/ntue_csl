@@ -77,10 +77,14 @@
               <td colspan="4"><p><span class="fa fa-calculator"></span>&nbsp;總時數 X 總人次 - 調整值 = 總人時數</p></td>
             </tr>
             <tr>
+              <td>直接營收(元)</td>
+              <td>政府補助(元)</td>
+              <td colspan="2">營收額度(元)</td>
+            </tr>
+            <tr>
               <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" /></td>
               <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" /></td>
-              <td>營收額度(元)</td>
-              <td><p id="summary-turnover"></p></td>
+              <td colspan="2"><p id="summary-turnover"></p></td>
             </tr>
             <tr>
               <td>其他</td>
