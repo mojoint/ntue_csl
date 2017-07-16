@@ -156,6 +156,10 @@ class AjaxController extends Controller {
                 break;
             case 'get':
                 break;
+            case 'done':
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_done', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'quarter_id'=>$_POST['quarter_id']));
+                $json = array("code"=>1, "data"=>$res);
+                break;
             case 'mod':
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', array('cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'class_id'=>$_POST['class_id'], 'country'=>$_POST['country'], 'agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter_id'=>$_POST['quarter_id'], 'quarter'=>$_POST['quarter']));
                 $json = array("code"=>1, "data"=>$res);
@@ -297,27 +301,32 @@ class AjaxController extends Controller {
     }
 
     public function mailer($type, $username, $email, $url) {
-        switch($type)
-        {
-        case 'add':
-            $subject = '華語文教育機構績效系統通知信';
-            break;
-        case 'mod':
-            $subject = '華語文教育機構績效系統重設密碼通知信';
-            break;
-        }
-        $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
-        if (isset($_SESSION) && isset($_SESSION['admin'])) {
-            $from = $_SESSION['admin']['email'];
-        } else {
-            $from = 'xelalee@gmail.com';
-        }
-        $from = 'wenyu0421@tea.ntue.edu.tw';
+        $official = (new AjaxModel)->dbQuery('mailer_official_get')[0];
 
-        $headers = 'From: 許文諭<' . $from . "> \r\n".
+        if ($official) {
+            switch($type)
+            {
+            case 'add':
+                $subject = $official['subject_agent_add'];
+                $message = str_ireplace("@@@url@@@", $url, str_ireplace("@@@username@@@", $username, $official['message_agent_add']));
+                break;
+            case 'mod':
+                $subject = $official['subject_agent_mod'];
+                $message = str_ireplace("@@@url@@@", $url, str_ireplace("@@@username@@@", $username, $official['message_agent_mod']));
+                break;
+            }
+            $headers = 'From: '. $official['cname'] . '<' . $official['email_from'] . "> \r\n".
+                       'Reply-To: '. $official['email_reply'] . "\r\n".
+                       'X-Mailer: PHP/' . phpversion();
+        } else {
+            $subject = '華語文教育機構績效系統通知信';
+            $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
+            $from = 'wenyu0421@tea.ntue.edu.tw';
+
+            $headers = 'From: 許文諭<' . $from . "> \r\n".
             'Reply-To: ' . $from . " \r\n".
             'X-Mailer: PHP/'. phpversion();
-
+        }
         mail( $email, $subject, $message, $headers );
     }
 }

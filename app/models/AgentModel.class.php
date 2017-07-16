@@ -35,9 +35,16 @@ class AgentModel extends Model {
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
-                //$sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`state` = 0 AND t2.`agency_id` = :agency_id';
                 $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` ORDER BY t1.`id` ASC LIMIT 1';
-                return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+                $res = $this->dbSelect($sql);
+                if (sizeof($res)) {
+                    $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
+                    $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
+                    if (sizeof($res)) {
+                        return array();
+                    } 
+                } 
+                return $res;
             }
             break;
         case 'academic_agency_class':

@@ -141,8 +141,9 @@ console.log(res);
               {
               case 'academic_agency_class':
                 case 'add':
-                case 'mod':
                 case 'del':
+                case 'done':
+                case 'mod':
                   window.location = "/agent/fill/";  
                   break;
                 break;
@@ -675,6 +676,23 @@ console.log(res);
         var tds = $(tr).find("td");
         mojo.dialog_admin_unlock('academic_agency_unlock', 'no', {'agency_id': $(tds[0]).html(), 'id': $(tds[1]).html(), 'cname': $(tds[3]).html()});
       });
+
+      $('#grid-academic_agency_unlock .k-grid-content table tbody tr').each(function(index) {
+        var tds = $(this).find("td");
+        switch(parseInt($(tds[9]).html()))
+        {
+        case 1:
+          $(tds[10]).find('a:eq(0)').addClass("k-state-disabled");
+          $(tds[10]).find('a:eq(1)').hide();
+          break;
+        case 2:
+          $(tds[10]).find('a:eq(0)').hide();
+          $(tds[10]).find('a:eq(1)').addClass("k-state-disabled");
+          break;
+        }
+        console.log($(tds[9]).html());
+        console.log($(tds[10]).html());
+      });
     };
 
     if (mojo.mojo_if('sec-admin_unlock'))
@@ -1167,23 +1185,23 @@ console.log(res);
       var pass = true;
       mojo.errmsg = '';
       if (!mojo.reg.string255.test($('#editor-cname').val())) {
-        mojo.errmsg += '<p>課程名稱為必填</p>';
+        mojo.errmsg += '<p>課程名稱為必填 ( 字串 255 )</p>';
         pass = false;
       }
       if (!mojo.reg.float31.test($('#editor-weekly').val())) {
-        mojo.errmsg += '<p>教學時數為必填</p>';
+        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 1 )</p>';
         pass = false;
       }
       if (!mojo.reg.float31.test($('#editor-weeks').val())) {
-        mojo.errmsg += '<p>教學週數為必填</p>';
+        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 1 )</p>';
         pass = false;
       }
       if (!mojo.reg.int11.test($('#editor-revenue').val())) {
-        mojo.errmsg += '<p>直接營收為必填</p>';
+        mojo.errmsg += '<p>直接營收為必填 ( 整數 >= 0 )</p>';
         pass = false;
       }
       if (!mojo.reg.int11.test($('#editor-subsidy').val())) {
-        mojo.errmsg += '<p>政府補助為必填</p>';
+        mojo.errmsg += '<p>政府補助為必填 ( 整數 >= 0 )</p>';
         pass = false;
       }
       return pass;
@@ -1554,23 +1572,23 @@ console.log(res);
       var pass = true;
       mojo.errmsg = '';
       if (!mojo.reg.string255.test($('#editor-cname').val())) {
-        mojo.errmsg += '<p>課程名稱為必填</p>';
+        mojo.errmsg += '<p>課程名稱為必填 ( 字串 255 )</p>';
         pass = false;
       }
       if (!mojo.reg.float31.test($('#editor-weekly').val())) {
-        mojo.errmsg += '<p>教學時數為必填</p>';
+        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 1 )</p>';
         pass = false;
       }
       if (!mojo.reg.float31.test($('#editor-weeks').val())) {
-        mojo.errmsg += '<p>教學週數為必填</p>';
+        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 1 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-revenue').val())) {
-        mojo.errmsg += '<p>直接營收為必填</p>';
+      if (!mojo.reg.int11.test($('#editor-revenue').val())) {
+        mojo.errmsg += '<p>直接營收為必填 ( 整數 >= 0 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-subsidy').val())) {
-        mojo.errmsg += '<p>政府補助為必填</p>';
+      if (!mojo.reg.int11.test($('#editor-subsidy').val())) {
+        mojo.errmsg += '<p>政府補助為必填 ( 整數 >= 0 )</p>';
         pass = false;
       }
       return pass;

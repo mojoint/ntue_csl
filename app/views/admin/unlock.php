@@ -19,6 +19,7 @@
               { title: '申請類別', field: 'minors' },
               { title: '申請天數', field: 'work_days' },
               { title: '修改原因', field: 'note' },
+              { title: '&nbsp;', field: 'state' },
               { title: '&nbsp;', width: '200px',
                 command: [
                   {   
@@ -35,6 +36,7 @@
           });
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(0);
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(1);
+          $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(9);
           $('#grid-academic_agency_unlock').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_unlock, page: 1, pageSize: 10 }));  
         </script>
     <?php endif; ?>
