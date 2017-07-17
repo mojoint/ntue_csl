@@ -27,18 +27,22 @@ class IndexController extends Controller {
     }
 
     function admin() {
-        $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
-        $reg_userpass = '/^(\w){3,80}$/';
-        $username = $_POST['username'];
-        $userpass = $_POST['userpass'];
-
-        if (preg_match($reg_username, $username) && preg_match($reg_userpass, $userpass)) {
-            $res = (new IndexModel)->dbQuery('admin', array('username'=>$username, 'userpass'=>$userpass));
-            if (1 == sizeof($res)) {
-                $this->assign('username', $res[0]['username']);
-                $_SESSION['admin'] = $res[0];
-                $_SESSION['username'] = $username;
-                $this->redirect('admin');
+        if ($_POST['g-recaptcha-response']) {
+            $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+            $reg_userpass = '/^(\w){3,80}$/';
+            $username = $_POST['username'];
+            $userpass = $_POST['userpass'];
+    
+            if (preg_match($reg_username, $username) && preg_match($reg_userpass, $userpass)) {
+                $res = (new IndexModel)->dbQuery('admin', array('username'=>$username, 'userpass'=>$userpass));
+                if (1 == sizeof($res)) {
+                    $this->assign('username', $res[0]['username']);
+                    $_SESSION['admin'] = $res[0];
+                    $_SESSION['username'] = $username;
+                    $this->redirect('admin');
+                } else {
+                    $this->redirect();
+                }
             } else {
                 $this->redirect();
             }
@@ -48,18 +52,22 @@ class IndexController extends Controller {
     }
 
     function agent() {
-        $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
-        $reg_userpass = '/^(\w+){3,80}$/';
-        $username = $_POST['username'];
-        $userpass = $_POST['userpass'];
-
-        if (preg_match($reg_username, $username) && preg_match($reg_userpass, $userpass)) {
-            $res = (new IndexModel)->dbQuery('agent', array('username'=>$username, 'userpass'=>$userpass));
-            if (1 == sizeof($res)) {
-                $this->assign('username', $res[0]['username']);
-                $_SESSION['agent'] = $res[0];
-                $_SESSION['username'] = $username;
-                $this->redirect('agent');
+        if ($_POST['g-recaptcha-response']) {
+            $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+            $reg_userpass = '/^(\w+){3,80}$/';
+            $username = $_POST['username'];
+            $userpass = $_POST['userpass'];
+    
+            if (preg_match($reg_username, $username) && preg_match($reg_userpass, $userpass)) {
+                $res = (new IndexModel)->dbQuery('agent', array('username'=>$username, 'userpass'=>$userpass));
+                if (1 == sizeof($res)) {
+                    $this->assign('username', $res[0]['username']);
+                    $_SESSION['agent'] = $res[0];
+                    $_SESSION['username'] = $username;
+                    $this->redirect('agent');
+                } else {
+                    $this->redirect();
+                }
             } else {
                 $this->redirect();
             }

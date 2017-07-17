@@ -370,8 +370,8 @@ console.log(res);
     mojo.check_login = function() {
       var pass = true;
       if (!mojo.reg.username.test($('#username').val()) || !mojo.reg.userpass.test($('#userpass').val())) {
-          pass = false;
-          kendo.alert('請確認您的帳號與密碼！');
+        pass = false;
+        kendo.alert('請確認您的帳號與密碼！');
       }   
       return pass;
     };
