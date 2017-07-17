@@ -1189,12 +1189,12 @@ console.log(res);
         mojo.errmsg += '<p>課程名稱為必填 ( 字串 255 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-weekly').val())) {
-        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 1 )</p>';
+      if (!mojo.reg.float32.test($('#editor-weekly').val())) {
+        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 2 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-weeks').val())) {
-        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 1 )</p>';
+      if (!mojo.reg.float32.test($('#editor-weeks').val())) {
+        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 2 )</p>';
         pass = false;
       }
       if (!mojo.reg.int11.test($('#editor-revenue').val())) {
@@ -1576,12 +1576,12 @@ console.log(res);
         mojo.errmsg += '<p>課程名稱為必填 ( 字串 255 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-weekly').val())) {
-        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 1 )</p>';
+      if (!mojo.reg.float32.test($('#editor-weekly').val())) {
+        mojo.errmsg += '<p>教學時數為必填 ( 浮點 3, 2 )</p>';
         pass = false;
       }
-      if (!mojo.reg.float31.test($('#editor-weeks').val())) {
-        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 1 )</p>';
+      if (!mojo.reg.float32.test($('#editor-weeks').val())) {
+        mojo.errmsg += '<p>教學週數為必填 ( 浮點 3, 2 )</p>';
         pass = false;
       }
       if (!mojo.reg.int11.test($('#editor-revenue').val())) {
