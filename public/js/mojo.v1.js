@@ -689,8 +689,6 @@ console.log(res);
           $(tds[10]).find('a:eq(1)').addClass("k-state-disabled");
           break;
         }
-        console.log($(tds[9]).html());
-        console.log($(tds[10]).html());
       });
     };
 
@@ -1914,7 +1912,7 @@ console.log(res);
       });
       $('#grid-academic_agency_class_country').data('kendoGrid').hideColumn(0);
 
-      $('#grid-academic_agency_class_country').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_class_country, page: 1, pageSize: 10 }));
+      $('#grid-academic_agency_class_country').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_class_country }));
       if (mojo.data.academic_agency_class) {
         $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
         $('#editor-cname').val(mojo.data.academic_agency_class[0].cname);
