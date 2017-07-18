@@ -27,7 +27,7 @@ class IndexController extends Controller {
     }
 
     function admin() {
-        if ($_POST['g-recaptcha-response']) {
+        //if ($_POST['g-recaptcha-response']) {
             $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
             $reg_userpass = '/^(\w){3,80}$/';
             $username = $_POST['username'];
@@ -46,13 +46,13 @@ class IndexController extends Controller {
             } else {
                 $this->redirect();
             }
-        } else {
-            $this->redirect();
-        }
+        //} else {
+        //    $this->redirect();
+        //}
     }
 
     function agent() {
-        if ($_POST['g-recaptcha-response']) {
+        //if ($_POST['g-recaptcha-response']) {
             $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
             $reg_userpass = '/^(\w+){3,80}$/';
             $username = $_POST['username'];
@@ -71,9 +71,9 @@ class IndexController extends Controller {
             } else {
                 $this->redirect();
             }
-        } else {
-            $this->redirect();
-        }
+        //} else {
+        //    $this->redirect();
+        //}
     }
 
     function contents() {
