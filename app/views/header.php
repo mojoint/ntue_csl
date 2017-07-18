@@ -58,7 +58,7 @@
       refs: {},
     };
   </script>
-  <script src="/public/js/mojo.js?2017071302"></script>
+  <script src="/public/js/mojo.v1.js?2017071701"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 
