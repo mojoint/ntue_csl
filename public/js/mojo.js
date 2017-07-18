@@ -81,6 +81,13 @@ console.log(res);
                       mojo.dialog_maintain( 'academic_agency_agent', 'del', {"id": $(tds[0]).html(), "agency_id": $(tds[1]).html(), "username": $(tds[2]).html()} );
                   });
                   break;
+                case 'chk':
+                    if(0 < parseInt(res.data[0].cnt)) {
+                        kendo.alert('使用者 ID ['+ $('#dialog-username').val()+ '] 已經有人使用，請修改！');
+                        $('#dialog-username').val('');
+                        $('#dialog-username').focus();
+                    }
+                    break;
                 }
                 break;
               case 'academic_agency_unlock':
@@ -545,6 +552,11 @@ console.log(res);
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-username">使用者ID</label><input type="text" id="dialog-username" class="form-control" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
           $('#dialog-academic_agency_agent').data('kendoDialog').content(mojo.html).open().center();
+          $('#dialog-username').on('change',function(){
+            if($.trim($(this).val()) != ''){
+              mojo.ajax('admin','academic_agency_agent','chk',{'username':$.trim($(this).val())});
+            }
+          });
           for (var x in mojo.refs.academic_agency) 
             $('#dialog-agency_id').append('<option value="' + x + '">' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + '[ ' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].cname + ' ] ' + mojo.refs.academic_agency[x].cname + '</option>');
           break;
