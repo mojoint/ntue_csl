@@ -854,7 +854,7 @@ console.log(res);
     /* profile */
     mojo.dialog_agent = function(_self) {
       var _type = '';
-      if(typeof _self.id != 'undefined' && _self.id.indexOf('admin'>-1)){
+      if(typeof _self.id != 'undefined' && _self.id.indexOf('admin')>-1){
         _type = 'admin';
       }
       $('#dialog').kendoDialog({
