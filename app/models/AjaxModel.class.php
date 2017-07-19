@@ -151,6 +151,10 @@ class AjaxModel extends Model {
               $cnt = $this->dbUpdate($sql, array(':id'=>$data['checks'][$i]));
             }
             break;
+        case 'admin_check_new_user_add':
+            $sql = 'SELECT count(*) `cnt` FROM `academic_agency_agent` where `username` = :username ';
+            return $this->dbSelect($sql, array(':username'=>$data['username']));
+            break;
         /* agent */
         case 'agent_academic_agency':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`';
@@ -306,7 +310,6 @@ class AjaxModel extends Model {
             break;
         case 'admin_profile_userpass_mod':
             $sql = 'UPDATE `admin` SET `userpass` = MD5(:userpass) WHERE username = :username AND session = :session ';
-            debugger('sql:'. $sql);
             return $this->dbUpdate($sql, array(':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix, ':username'=>$data['username'], ':session'=>$data['session']));
             break;
         case 'agent_profile_email_mod':

@@ -57,6 +57,10 @@ class AjaxController extends Controller {
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_get');
                 $json = array("code"=>1, "data"=>$res);
                 break;
+            case 'chk':
+                $res =  (new AjaxModel)->dbQuery('admin_check_new_user_add',array('username'=>$_POST['username']));
+                $json = array('code'=>1,'data'=>$res);
+                break;
             } 
             break;
         case 'academic_agency_unlock':
