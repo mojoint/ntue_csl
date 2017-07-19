@@ -924,7 +924,7 @@ console.log(res);
           { field: "people", title: "總人數", width: "80px" },
           { field: "total_hours", title: "總人時數", width: "100px" },
           { field: "turnover", title: "營收額度", width: "100px" },
-          { title: "&nbsp;", width: "180px" }
+          { title: "&nbsp;" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
       });
@@ -1179,7 +1179,7 @@ console.log(res);
             switch(val) 
             {
             case 'add':
-              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_new_male" role="gridcell">' + $('#dialog-new_male').val() + '</td><td class="country_new_female" role="gridcell">' + $('#dialog-new_female').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
+              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + (parseInt($('#dialog-male').val()) || 0) + '</td><td class="country_female" role="gridcell">' + (parseInt($('#dialog-female').val()) || 0) + '</td><td class="country_new_male" role="gridcell">' + (parseInt($('#dialog-new_male').val()) || 0) + '</td><td class="country_new_female" role="gridcell">' + (parseInt($('#dialog-new_female').val()) || 0) + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
         
               $('.btn-academic_agency_class_country-mod').on('click', function(e) {
@@ -1257,10 +1257,10 @@ console.log(res);
               var tds = $(params.tr).find("td");
               $(tds[0]).html($('#dialog-country_code').val());
               $(tds[1]).html(mojo.refs.country_list[$('#dialog-country_code').val()]['cname']);
-              $(tds[2]).html($('#dialog-male').val());
-              $(tds[3]).html($('#dialog-female').val());
-              $(tds[4]).html($('#dialog-new_male').val());
-              $(tds[5]).html($('#dialog-new_female').val());
+              $(tds[2]).html( (parseInt($('#dialog-male').val()) || 0) );
+              $(tds[3]).html( (parseInt($('#dialog-female').val()) || 0) );
+              $(tds[4]).html( (parseInt($('#dialog-new_male').val()) || 0) );
+              $(tds[5]).html( (parseInt($('#dialog-new_female').val()) || 0) );
               $(tds[6]).html($('#dialog-note').val());
               break;
             case 'del':
@@ -1330,10 +1330,7 @@ console.log(res);
     mojo.watch_filladd = function() {
          
       mojo.major = $('#academic_agency_class').attr('data-mojo');
-console.log( mojo.major );
       for (var x in mojo.refs.minor_list) {
-console.log( x );
-console.log( mojo.refs.minor_list[x] );
         if (mojo.refs.minor_list[x].major_code == mojo.major) 
           $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
       }
@@ -1390,7 +1387,7 @@ console.log( mojo.refs.minor_list[x] );
       }
 
       mojo.summaryTotalHours = function() {
-        mojo.summary.hours = $('#editor-hours').val();
+        mojo.summary.hours = parseFloat($('#editor-hours').val()) || 0;
         mojo.summary.total_hours = mojo.summary.hours * mojo.summary.people - mojo.summary.adjust;
         mojo.summary.total_hours = (mojo.summary.total_hours > 0)? mojo.summary.total_hours : 0;
         $('#summary-total_hours').html(mojo.summary.total_hours);
@@ -1578,7 +1575,7 @@ console.log( mojo.refs.minor_list[x] );
             switch(val) 
             {
             case 'add':
-              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + $('#dialog-male').val() + '</td><td class="country_female" role="gridcell">' + $('#dialog-female').val() + '</td><td class="country_new_male" role="gridcell">' + $('#dialog-new_male').val() + '</td><td class="country_new_female" role="gridcell">' + $('#dialog-new_female').val() + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
+              var html = '<tr role="row"><td style="display:none" role="gridcell">' + $('#dialog-country_code').val() + '</td><td role="girdcell">' + mojo.refs.country_list[$('#dialog-country_code').val()]['cname'] + '</td><td class="country_male" role="gridcell">' + (parseInt($('#dialog-male').val()) || 0) + '</td><td class="country_female" role="gridcell">' + (parseInt($('#dialog-female').val()) || 0) + '</td><td class="country_new_male" role="gridcell">' + (parseInt($('#dialog-new_male').val()) || 0) + '</td><td class="country_new_female" role="gridcell">' + (parseInt($('#dialog-new_female').val()) || 0) + '</td><td role="gridcell">' + $('#dialog-note').val() + '</td><td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td></tr>';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
               break;
             case 'import':
@@ -1641,10 +1638,10 @@ console.log( mojo.refs.minor_list[x] );
               var tds = $(params.tr).find("td");
               $(tds[0]).html($('#dialog-country_code').val());
               $(tds[1]).html(mojo.refs.country_list[$('#dialog-country_code').val()]['cname']);
-              $(tds[2]).html($('#dialog-male').val());
-              $(tds[3]).html($('#dialog-female').val());
-              $(tds[4]).html($('#dialog-new_male').val());
-              $(tds[5]).html($('#dialog-new_female').val());
+              $(tds[2]).html( (parseInt($('#dialog-male').val()) || 0) );
+              $(tds[3]).html( (parseInt($('#dialog-female').val()) || 0) );
+              $(tds[4]).html( (parseInt($('#dialog-new_male').val()) || 0) );
+              $(tds[5]).html( (parseInt($('#dialog-new_female').val()) || 0) );
               $(tds[6]).html($('#dialog-note').val());
               break;
             case 'del':
