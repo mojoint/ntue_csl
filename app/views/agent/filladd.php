@@ -92,6 +92,7 @@
             </tr>
           </tbody>
         </table>
+        <div class="div-academic_agency_class-send"><a href="\\#" class="k-button" id="btn-academic_agency_class-send"><span class="fa fa-save"></span>&nbsp;儲存設定</a></div>
       </div>
       <script>  
         $('#grid-academic_agency_class').kendoGrid({
@@ -131,7 +132,6 @@
         mojo.refs.target_list = {};
         for (var i=0; i<mojo.data.target_list.length; i++)
           mojo.refs.target_list[mojo.data.target_list[i]['code']] = mojo.data.target_list[i]['cname']; 
-console.log(mojo.refs);
       </script>
     </div>
   <?php endif; ?>

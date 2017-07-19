@@ -81,8 +81,8 @@
               <td colspan="2">營收額度(元)</td>
             </tr>
             <tr>
-              <td><input type="text" id="editor-revenue" placeholder="直接營收(元)" required /></td>                                                                                                                                            
-              <td><input type="text" id="editor-subsidy" placeholder="政府補助(元)" required /></td>
+              <td><input type="text" id="editor-revenue" placeholder="" required /></td>
+              <td><input type="text" id="editor-subsidy" placeholder="" required /></td>
               <td colspan="2"><p id="summary-turnover"></p></td>
             </tr>
             <tr>
@@ -91,6 +91,7 @@
             </tr>
           </tbody>
         </table>
+        <div class="div-academic_agency_class-send"><a href="\\#" class="k-button" id="btn-academic_agency_class-send"><span class="fa fa-save"></span>&nbsp;儲存設定</a></div>
       </div>
       <script>  
         $('#grid-academic_agency_class').kendoGrid({
@@ -132,7 +133,6 @@
         mojo.refs.target_list = {};
         for (var i=0; i<mojo.data.target_list.length; i++)
           mojo.refs.target_list[mojo.data.target_list[i]['code']] = mojo.data.target_list[i]['cname']; 
-console.log(mojo.refs);
       </script>
     </div>
   <?php endif; ?>
