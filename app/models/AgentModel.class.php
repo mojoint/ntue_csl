@@ -101,6 +101,39 @@ class AgentModel extends Model {
             $sql = 'SELECT * FROM `academic_institution` WHERE `code` != null';
             return $this->dbSelect($sql);
             break;
+            break;
+        case 'refs_academic_institution':
+            $sql = 'SELECT * FROM `academic_institution` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_academic_agency':
+            $sql = 'SELECT * FROM `academic_agency` ORDER BY `id`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_area_list':
+            $sql = 'SELECT * FROM `area_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_content_list':
+            $sql = 'SELECT * FROM `content_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_country_list':
+            $sql = 'SELECT * FROM `country_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_major_list':
+            $sql = 'SELECT `code`, `cname` FROM `major_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_minor_list':
+            $sql = 'SELECT * FROM `minor_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
+        case 'refs_target_list':
+            $sql = 'SELECT * FROM `target_list` ORDER BY `code`';
+            return $this->dbSelect($sql);
+            break;
         }
     }
 }

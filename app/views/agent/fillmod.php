@@ -105,6 +105,34 @@
 
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
         mojo.data.academic_agency_class_country = JSON.parse('<?php echo json_encode($academic_agency_class_country); ?>');
+
+        mojo.data.content_list = JSON.parse('<?php echo json_encode($content_list); ?>');
+        mojo.refs.content_list = {};
+        for (var i=0; i<mojo.data.content_list.length; i++)
+          mojo.refs.content_list[mojo.data.content_list[i]['code']] = mojo.data.content_list[i]['cname'];
+
+        mojo.data.country_list = JSON.parse('<?php echo json_encode($country_list); ?>');
+        mojo.refs.country_list = {};
+        mojo.refs.country_code_list = []; 
+        for (var i=0; i<mojo.data.country_list.length; i++) {
+          mojo.refs.country_list[mojo.data.country_list[i]['code']] = mojo.data.country_list[i];                                                                                                                                                 mojo.refs.country_code_list.push({'code': mojo.data.country_list[i].code, 'cname': mojo.data.country_list[i].cname, 'ename': mojo.data.country_list[i].ename, 'select_key': mojo.data.country_list[i].cname + ' ' + mojo.data.country_list[i].ename + ' ' + mojo.data.country_list[i].code });
+        }
+
+        mojo.data.major_list = JSON.parse('<?php echo json_encode($major_list); ?>');
+        mojo.refs.major_list = {};
+        for (var i=0; i<mojo.data.major_list.length; i++)
+          mojo.refs.major_list[mojo.data.major_list[i]['code']] = mojo.data.major_list[i];
+
+        mojo.data.minor_list = JSON.parse('<?php echo json_encode($minor_list); ?>');
+        mojo.refs.minor_list = {};
+        for (var i=0; i<mojo.data.minor_list.length; i++)
+          mojo.refs.minor_list[mojo.data.minor_list[i]['code']] = mojo.data.minor_list[i];
+
+        mojo.data.target_list = JSON.parse('<?php echo json_encode($target_list); ?>');
+        mojo.refs.target_list = {};
+        for (var i=0; i<mojo.data.target_list.length; i++)
+          mojo.refs.target_list[mojo.data.target_list[i]['code']] = mojo.data.target_list[i]['cname']; 
+console.log(mojo.refs);
       </script>
     </div>
   <?php endif; ?>

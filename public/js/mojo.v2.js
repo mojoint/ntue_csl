@@ -81,6 +81,13 @@ console.log(res);
                       mojo.dialog_maintain( 'academic_agency_agent', 'del', {"id": $(tds[0]).html(), "agency_id": $(tds[1]).html(), "username": $(tds[2]).html()} );
                   });
                   break;
+                case 'chk':
+                    if(0 < parseInt(res.data[0].cnt)) {
+                        kendo.alert('使用者 ID ['+ $('#dialog-username').val()+ '] 已經有人使用，請修改！');
+                        $('#dialog-username').val('');
+                        $('#dialog-username').focus();
+                    }
+                    break;
                 }
                 break;
               case 'academic_agency_unlock':
@@ -245,60 +252,6 @@ console.log(res);
                 mojo.refs.area_list = {};
                 for (var i=0; i<res.data.length; i++)
                   mojo.refs.area_list[res.data[i]['code']] = res.data[i]['cname'];
-                break;
-              case 'content_list':
-                mojo.refs.content_list = {};
-                for (var i=0; i<res.data.length; i++)
-                  mojo.refs.content_list[res.data[i]['code']] = res.data[i]['cname'];
-
-                if ($('#editor-content').length) {
-                  $('#editor-content').empty();
-                  for (var x in mojo.refs.content_list) 
-                    $('#editor-content').append('<option value="' + x + '">' + mojo.refs.content_list[x] + '</option>');
-                  if (mojo.data.academic_agency_classe && mojo.data.academic_agency_class[0].content_code)
-                    $('#editor-content').val(mojo.data.academic_agency_class[0].content_code);
-                }
-                break;
-              case 'country_list':
-                mojo.refs.country_list = {};
-                mojo.refs.country_code_list = [];
-                for (var i=0; i<res.data.length; i++) {
-                  mojo.refs.country_list[res.data[i]['code']] = res.data[i];
-                  mojo.refs.country_code_list.push({'code': res.data[i].code, 'cname': res.data[i].cname, 'ename': res.data[i].ename, 'select_key': res.data[i].cname + ' ' + res.data[i].ename + ' ' + res.data[i].code });
-                }
-                mojo.refs.major_list = {};
-                for (var i=0; i<res.data.length; i++)
-                  mojo.refs.major_list[res.data[i]['code']] = res.data[i];
-                break;
-              case 'minor_list':
-                mojo.refs.minor_list = {};
-                for (var i=0; i<res.data.length; i++)
-                  mojo.refs.minor_list[res.data[i]['code']] = res.data[i];
-
-                if ($('#editor-minor_code').length) {
-                  $('#editor-minor_code').empty();
-                  for (var x in mojo.refs.minor_list) {
-                    if ((mojo.refs.minor_list[x].major_code == mojo.major) && ( 'sec-filladd' == mojo.sec))
-                      $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-                    else if (mojo.data.academic_agency_class && mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
-                      $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-                  }
-                  if ('sec-fillmod' == mojo.sec)
-                    $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
-                }
-                break;
-              case 'target_list':
-                mojo.refs.target_list = {};
-                for (var i=0; i<res.data.length; i++)
-                  mojo.refs.target_list[res.data[i]['code']] = res.data[i]['cname'];
-                if ($('#editor-target').length) {
-                  $('#editor-target').empty();
-                  for (var x in mojo.refs.target_list) 
-                    $('#editor-target').append('<option value="' + x + '">' + mojo.refs.target_list[x] + '</option>');
-                 
-                  if (mojo.data.academic_agency_class && mojo.data.academic_agency_class[0].target_code)
-                    $('#editor-target').val(mojo.data.academic_agency_class[0].target_code);
-                }
                 break;
               }
               break;
@@ -544,6 +497,11 @@ console.log(res);
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-username">使用者ID</label><input type="text" id="dialog-username" class="form-control" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
           $('#dialog-academic_agency_agent').data('kendoDialog').content(mojo.html).open().center();
+          $('#dialog-username').on('change',function(){
+            if($.trim($(this).val()) != ''){
+              mojo.ajax('admin','academic_agency_agent','chk',{'username':$.trim($(this).val())});
+            }
+          });
           for (var x in mojo.refs.academic_agency) 
             $('#dialog-agency_id').append('<option value="' + x + '">' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].aka + '[ ' + mojo.refs.academic_institution[mojo.refs.academic_agency[x].institution_code].cname + ' ] ' + mojo.refs.academic_agency[x].cname + '</option>');
           break;
@@ -1370,14 +1328,22 @@ console.log(res);
     };
 
     mojo.watch_filladd = function() {
-      mojo.ajax('refs', 'content_list', 'get')
-      mojo.ajax('refs', 'country_list', 'get');
-      mojo.ajax('refs', 'major_list', 'get');
-      mojo.ajax('refs', 'minor_list', 'get');
-      mojo.ajax('refs', 'target_list', 'get');
          
       mojo.major = $('#academic_agency_class').attr('data-mojo');
+console.log( mojo.major );
+      for (var x in mojo.refs.minor_list) {
+console.log( x );
+console.log( mojo.refs.minor_list[x] );
+        if (mojo.refs.minor_list[x].major_code == mojo.major) 
+          $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
+      }
 
+      for (var x in mojo.refs.content_list) 
+        $('#editor-content').append('<option value="' + x + '">' + mojo.refs.content_list[x] + '</option>');
+
+      for (var x in mojo.refs.target_list) 
+        $('#editor-target').append('<option value="' + x + '">' + mojo.refs.target_list[x] + '</option>');
+      
       mojo.summary = {
         adjust: 0,
         hours: 0,
@@ -1746,13 +1712,29 @@ console.log(res);
     };
 
     mojo.watch_fillmod = function() {
+      /*
       mojo.ajax('refs', 'content_list', 'get')
       mojo.ajax('refs', 'country_list', 'get');
       mojo.ajax('refs', 'major_list', 'get');
       mojo.ajax('refs', 'minor_list', 'get');
       mojo.ajax('refs', 'target_list', 'get');
+      */
          
       mojo.class_id = $('#academic_agency_class').attr('data-mojo');
+
+      for (var x in mojo.refs.minor_list) {
+        if (mojo.data.academic_agency_class && mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
+          $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
+      }                                                                                                                                                                                                                                
+      $('#editor-minor_code').val(mojo.data.academic_agency_class[0].major_code);
+
+      for (var x in mojo.refs.content_list) 
+        $('#editor-content').append('<option value="' + x + '">' + mojo.refs.content_list[x] + '</option>');
+      $('#editor-content').val(mojo.data.academic_agency_class[0].content_code);
+
+      for (var x in mojo.refs.target_list) 
+        $('#editor-target').append('<option value="' + x + '">' + mojo.refs.target_list[x] + '</option>');
+      $('#editor-target').val(mojo.data.academic_agency_class[0].target_code);
 
       mojo.summary = {
         adjust: 0,

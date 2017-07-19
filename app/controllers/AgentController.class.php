@@ -46,6 +46,11 @@ class AgentController extends Controller {
             $this->assign('era_id', $_SESSION['agent']['era_id']);
             $this->assign('quarter', $_SESSION['agent']['quarter']);
             $this->assign('quarter_id', $_SESSION['agent']['quarter_id']);
+            $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
+            $this->assign('content_list', (new AgentModel)->dbQuery('refs_content_list'));
+            $this->assign('major_list', (new AgentModel)->dbQuery('refs_major_list'));
+            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list'));
+            $this->assign('target_list', (new AgentModel)->dbQuery('refs_target_list'));
             $this->render();
         } else {
             $this->redirect();
@@ -63,6 +68,11 @@ class AgentController extends Controller {
             $this->assign('mojo', $mojo);
             $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class_query', array('class_id'=>$mojo)));
             $this->assign('academic_agency_class_country', (new AgentModel)->dbQuery('academic_agency_class_country_query', array('class_id'=>$mojo)));
+            $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
+            $this->assign('content_list', (new AgentModel)->dbQuery('refs_content_list'));
+            $this->assign('major_list', (new AgentModel)->dbQuery('refs_major_list'));
+            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list'));
+            $this->assign('target_list', (new AgentModel)->dbQuery('refs_target_list'));
             $this->render();
         } else {
             $this->redirect();
