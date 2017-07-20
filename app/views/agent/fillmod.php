@@ -105,6 +105,7 @@
         });
 
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
+console.log( mojo.data.academic_agency_class );
         mojo.data.academic_agency_class_country = JSON.parse('<?php echo json_encode($academic_agency_class_country); ?>');
 
         mojo.data.content_list = JSON.parse('<?php echo json_encode($content_list); ?>');

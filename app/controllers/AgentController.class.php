@@ -1,7 +1,6 @@
 <?php
 
 class AgentController extends Controller {
-    
     function dashboard() {
         if (isset($_SESSION['agent'])) {
             $this->assign('title', '華語文-機構');
@@ -19,6 +18,7 @@ class AgentController extends Controller {
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('fill'));
             $academic_agency_fill = (new AgentModel)->dbQuery('academic_agency_fill', array('agency_id'=>$_SESSION['agent']['agency_id']));
+
             if (sizeof($academic_agency_fill)) {
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
@@ -66,7 +66,11 @@ class AgentController extends Controller {
             $this->assign('quarter', $_SESSION['agent']['quarter']);
             $this->assign('quarter_id', $_SESSION['agent']['quarter_id']);
             $this->assign('mojo', $mojo);
-            $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class_query', array('class_id'=>$mojo)));
+            $academic_agency_class = (new AgentModel)->dbQuery('academic_agency_class_query', array('class_id'=>$mojo));
+            foreach($academic_agency_class as $key=>$val) {
+                $academic_agency_class[$key]['note'] = base64_encode($val['note']);
+            }
+            $this->assign('academic_agency_class', $academic_agency_class);
             $this->assign('academic_agency_class_country', (new AgentModel)->dbQuery('academic_agency_class_country_query', array('class_id'=>$mojo)));
             $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
             $this->assign('content_list', (new AgentModel)->dbQuery('refs_content_list'));

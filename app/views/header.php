@@ -119,7 +119,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.v2.js?2017071901"></script>
+  <script src="/public/js/mojo.v3.js?2017072001"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 
