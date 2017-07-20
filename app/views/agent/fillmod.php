@@ -42,8 +42,8 @@
         <div class="createBtnContainer">
           <a href="\\#" class="k-button k-grid-add" id="btn-academic_agency_class_country-add"><span class="fa fa-plus"></span>&nbsp;新增國別明細</a>
           <a href="\\#" class="k-button" id="btn-academic_agency_class_country-import"><span class="fa fa-file-excel-o"></span>&nbsp;自EXCEL匯入</a>
-          <a href="/public/template/classdata_sample.xls" class="k-button" id="btn-academic_agency_class_country-sample" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載範例EXCEL</a>
-          <a href="/public/template/country_list.xls" class="k-button" id="btn-academic_agency_class_country-country" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載國別EXCEL</a>
+          <a href="/public/template/classdata_sample.xls" class="k-button" id="btn-academic_agency_class_country-sample" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載範例檔</a>
+          <a href="/public/template/country_list.xls" class="k-button" id="btn-academic_agency_class_country-country" target="_blank"><span class="fa fa-file-excel-o"></span>&nbsp;下載國別表</a>
         </div>
         <div class="toolbar"></div>
       </script>
@@ -52,9 +52,7 @@
       <div id="grid-academic_agency_class_country"></div>
 
       <script type="text/x-kendo-template" id="template-academic_agency_class_summary">
-        <div class="createBtnContainer">
-          <a href="\\#" class="k-button" id="btn-academic_agency_class-save"><span class="fa fa-save"></span>&nbsp;儲存設定</a>
-        </div>
+        <div class="createBtnContainer"></div>
         <div class="toolbar"></div>
       </script>
       <div id="grid-academic_agency_class_summary">
@@ -91,7 +89,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="div-academic_agency_class-send"><a href="\\#" class="k-button" id="btn-academic_agency_class-send"><span class="fa fa-save"></span>&nbsp;儲存設定</a></div>
+        <div class="row div-academic_agency_class-send"><div class="col-xs-4"></div><div class="col-xs-4"><a href="\\#" class="btn btn-lg btn-block btn-primary" id="btn-academic_agency_class-send"><span class="fa fa-save"></span>&nbsp;儲存設定</a></div><div class="col-xs-4"></div></div>
       </div>
       <script>  
         $('#grid-academic_agency_class').kendoGrid({
