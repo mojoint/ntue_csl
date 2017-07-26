@@ -789,7 +789,6 @@ console.log(res);
         mojo.ajax('admin', 'academic_class', 'era');
       });
 
-
     };
 
     if (mojo.mojo_if('sec-settings'))
@@ -1441,44 +1440,14 @@ console.log(res);
         $('#summary-turnover').html(mojo.summary.turnover);
       });
 
-      $('#btn-academic_agency_class-save').on('click', function(e) {
-        e.preventDefault();
-        if (mojo.check_filladd()) {
-          var adjust = 0,
-              people = 0,
-              hours = 0,
-              total_hours = 0;
-          if (!isNaN(parseFloat($('#editor-adjust').val())))
-            adjust = $('#editor-adjust').val();
-          if (!isNaN(parseFloat($('#editor-hours').val())))
-            hours = $('#editor-hours').val();
-          if (!isNaN(parseFloat($('#summary-total_hours').html())))
-            total_hours = $('#summary-total_hours').html();
-          mojo.json = {'agency_id': mojo.mojos[2], 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'major_code': mojo.major, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
-    
-          $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
-            var tds = $(this).find('td');
-            var male = parseInt($(tds[2]).html()) || 0;
-            var female = parseInt($(tds[3]).html()) || 0;
-            var new_male = parseInt($(tds[4]).html()) || 0;
-            var new_female = parseInt($(tds[5]).html()) || 0;
-            people += male + female + new_male + new_female;
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': male, 'female': female, 'new_male': new_male, 'new_female': new_female, 'note': $(tds[6]).html()});
-          });
-          
-          mojo.json.people = people;
-          mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
-        } else 
-          mojo.dialog_error('academic_agency_class', mojo.errmsg);
-      });
-
       $('#btn-academic_agency_class-send').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_filladd()) {
           var adjust = 0,
               people = 0,
               hours = 0,
-              total_hours = 0;
+              total_hours = 0,
+              country = [];
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
           if (!isNaN(parseFloat($('#editor-hours').val())))
@@ -1494,9 +1463,11 @@ console.log(res);
             var new_male = parseInt($(tds[4]).html()) || 0;
             var new_female = parseInt($(tds[5]).html()) || 0;
             people += male + female + new_male + new_female;
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': male, 'female': female, 'new_male': new_male, 'new_female': new_female, 'note': $(tds[6]).html()});
+            country.push({'country_code': $(tds[0]).html(), 'male': male, 'female': female, 'new_male': new_male, 'new_female': new_female, 'note': $(tds[6]).html()});
+            //mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': male, 'female': female, 'new_male': new_male, 'new_female': new_female, 'note': $(tds[6]).html()});
           });
           
+          mojo.json.country = country;
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'add', mojo.json);
         } else 
@@ -1740,21 +1711,14 @@ console.log(res);
     };
 
     mojo.watch_fillmod = function() {
-      /*
-      mojo.ajax('refs', 'content_list', 'get')
-      mojo.ajax('refs', 'country_list', 'get');
-      mojo.ajax('refs', 'major_list', 'get');
-      mojo.ajax('refs', 'minor_list', 'get');
-      mojo.ajax('refs', 'target_list', 'get');
-      */
          
       mojo.class_id = $('#academic_agency_class').attr('data-mojo');
 
       for (var x in mojo.refs.minor_list) {
         if (mojo.data.academic_agency_class && mojo.refs.minor_list[x].major_code ==  mojo.data.academic_agency_class[0].major_code)
           $('#editor-minor_code').append('<option value="' + x + '">' + mojo.refs.minor_list[x].cname + '</option>');
-      }                                                                                                                                                                                                                                
-      $('#editor-minor_code').val(mojo.data.academic_agency_class[0].major_code);
+      }
+      $('#editor-minor_code').val(mojo.data.academic_agency_class[0].minor_code);
 
       for (var x in mojo.refs.content_list) 
         $('#editor-content').append('<option value="' + x + '">' + mojo.refs.content_list[x] + '</option>');
@@ -1865,50 +1829,21 @@ console.log(res);
         $('#summary-turnover').html(mojo.summary.turnover);
       });
 
-      $('#btn-academic_agency_class-save').on('click', function(e) {
-        e.preventDefault();
-        if (mojo.check_fillmod()) {
-          var adjust = 0,
-              people = 0,
-              hours = 0,
-              total_hours = 0;
-          if (!isNaN(parseFloat($('#editor-adjust').val())))
-            adjust = $('#editor-adjust').val();
-          if (!isNaN(parseFloat($('#editor-hours').val())))
-            hours = parseFloat($('#editor-hours').val());
-          if (!isNaN(parseFloat($('#summary-total_hours').html())))
-            total_hours = parseFloat($('#summary-total_hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
-    
-          $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
-            var tds = $(this).find('td');
-            var male = parseInt($(tds[2]).html()) || 0;
-            var female = parseInt($(tds[3]).html()) || 0;
-            var new_male = parseInt($(tds[4]).html()) || 0;
-            var new_female = parseInt($(tds[5]).html()) || 0;
-            people += male + female + new_male + new_female;
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'new_male': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'note': $(tds[6]).html()});
-          });
-          mojo.json.people = people;
-          mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
-        } else 
-          mojo.dialog_error('academic_agency_class', mojo.errmsg);
-      });
-
       $('#btn-academic_agency_class-send').on('click', function(e) {
         e.preventDefault();
         if (mojo.check_fillmod()) {
           var adjust = 0,
               people = 0,
               hours = 0,
-              total_hours = 0;
+              total_hours = 0,
+              country = [];
           if (!isNaN(parseFloat($('#editor-adjust').val())))
             adjust = $('#editor-adjust').val();
           if (!isNaN(parseFloat($('#editor-hours').val())))
             hours = parseFloat($('#editor-hours').val());
           if (!isNaN(parseFloat($('#summary-total_hours').html())))
             total_hours = parseFloat($('#summary-total_hours').html());
-          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'people': people, 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val(), 'country': []}; 
+          mojo.json = {'agency_id': mojo.mojos[2], 'class_id': mojo.class_id, 'era_id': mojo.era_id, 'quarter': mojo.quarter, 'minor_code': $('#editor-minor_code').val(), 'cname': $('#editor-cname').val(), 'weekly': $('#editor-weekly').val(), 'weeks': $('#editor-weeks').val(), 'adjust': adjust, 'content_code': $('#editor-content').val(), 'target_code': $('#editor-target').val(), 'hours': hours, 'total_hours': total_hours, 'revenue': $('#editor-revenue').val(), 'subsidy': $('#editor-subsidy').val(), 'turnover': $('#summary-turnover').html(), 'note': $('#editor-note').val()}; 
     
           $('#grid-academic_agency_class_country .k-grid-content table tbody tr').each(function(e) {
             var tds = $(this).find('td');
@@ -1917,8 +1852,9 @@ console.log(res);
             var new_male = parseInt($(tds[4]).html()) || 0;
             var new_female = parseInt($(tds[5]).html()) || 0;
             people += male + female + new_male + new_female;
-            mojo.json.country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'new_male': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'note': $(tds[6]).html()});
+            country.push({'country_code': $(tds[0]).html(), 'male': $(tds[2]).html(), 'female': $(tds[3]).html(), 'new_male': $(tds[4]).html(), 'new_female': $(tds[5]).html(), 'note': $(tds[6]).html()});
           });
+          mojo.json.country = country;
           mojo.json.people = people;
           mojo.ajax('agent', 'academic_agency_class', 'mod', mojo.json);
         } else 

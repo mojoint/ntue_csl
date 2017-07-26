@@ -47,7 +47,7 @@ class Model
           $str->execute($arr);
         }   
         return $str->rowCount();
-    }   
+    }  
 
     private function dbConnect() {
         $this->pdo = new PDO('mysql:host='. DB_HOST .';port=3306;dbname='. DB_NAME .';charset=utf8', DB_USER, DB_PASSWORD, array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC));
