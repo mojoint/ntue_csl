@@ -49,7 +49,7 @@
         'userpass': /^[a-zA-Z0-9!@#$%^&*`~\-_=+\\|;:'",<.>\/?\[{\]}]{3,80}$/,
         'email': /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         'float32': /^(\d){1,3}(\.(\d){1,2})?$/,
-        'float51': /^(\d){1,5}(\.\d)?$/,
+        'float51': /^(-)?(\d){1,5}(\.\d)?$/,
         'float111': /^(\d){1,11}(\.\d)?$/,
         'int11': /^[\d]{1,11}$/,
         'string255': /^(.){1,255}$/,
@@ -119,7 +119,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.v3.js?2017072001"></script>
+  <script src="/public/js/mojo.v4.js?2017073101"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 

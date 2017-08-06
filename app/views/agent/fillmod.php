@@ -59,7 +59,7 @@
         <table role="grid">
           <tbody>
             <tr>
-              <td><span class="required_field">*</span>總時數</td>
+              <td><span class="required_field">*</span>總時數(每期上課時數)</td>
               <td>總人次</td>
               <td>調整數值</td>
               <td>總人時數</td>

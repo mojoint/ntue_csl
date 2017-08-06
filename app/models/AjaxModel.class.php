@@ -210,7 +210,7 @@ class AjaxModel extends Model {
             break;
         case 'agent_academic_agency_class_mod':
             $sql = 'UPDATE `academic_agency_class` SET `minor_code` = :minor_code, `cname` = :cname, `content_code` = :content_code, `target_code` = :target_code, `people` = :people, `weekly` = :weekly, `weeks` = :weeks, `hours` = :hours, `adjust` = :adjust, `total_hours` = :total_hours, `revenue` = :revenue, `subsidy` = :subsidy, `turnover` = :turnover, `note` = :note WHERE `id` = :class_id';
-            $cnt = $this->dbUpdate($sql, array(':minor_code'=>$data['mior_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>$data['note'], ':class_id'=>$data['class_id']));
+            $cnt = $this->dbUpdate($sql, array(':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>$data['note'], ':class_id'=>$data['class_id']));
             $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
             $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id']));
             for ($i=0; $i<sizeof($data['country']); $i++) {
