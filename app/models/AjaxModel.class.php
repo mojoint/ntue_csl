@@ -9,16 +9,16 @@ class AjaxModel extends Model {
             $sql  = 'INSERT INTO `academic_agency`';
             $sql .= ' (`id`, `institution_code`, `cname`, `zipcode`, `address`, `established`, `approval`, `note`, `agent`)';
             $sql .= ' VALUES (0, :institution_code, :cname, "", "", "", "", "", 0)';
-            $res = $this->dbUpdate($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname']));
+            $id = $this->dbInsert($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname']));
             return $this->dbQuery('admin_academic_agency_get');
             break;
         case 'admin_academic_agency_del':
             $sql  = 'DELETE FROM `academic_agency_agent`';
             $sql .= ' WHERE `agency_id` = :agency_id';
-            $res = $this->dbUpdate($sql, array(':agency_id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['id']));
             $sql  = 'DELETE FROM `academic_agency`';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_get');
             break;
         case 'admin_academic_agency_get':
@@ -26,14 +26,15 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_agency` t1 ';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code` ';
             $sql .= '  LEFT JOIN ( SELECT t4.`agency_id`, t4.`administration`, t4.`subject`, t4.`adjunct`, t4.`reserve` FROM `academic_agency_hr` t4 INNER JOIN `academic_era` t5 ON t4.`era_id` = t5.id AND t5.`state` = 1 ) t3 ON t1.`id` = t3.`agency_id` ';
-            return $this->dbSelect($sql);
+            $sql .= ' WHERE "NTUE" = :ntue';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'admin_academic_agency_mod':
             $sql  = 'UPDATE `academic_agency`';
             $sql .= '   SET `cname` = :cname,';
             $sql .= '       `institution_code` = :institution_code';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname'], ':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname'], ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_get');
             break;
         case 'admin_academic_agency_agent_add':
@@ -47,9 +48,9 @@ class AjaxModel extends Model {
                     $sql  = 'INSERT INTO `academic_agency_agent`';
                     $sql .= ' (`id`, `agency_id`, `username`, `userpass`, `email`, `session`, `timestamp`, `state`)';
                     $sql .= ' VALUES (0, :agency_id, :username, MD5(:userpass), :email, "", :timestamp, 0)';
-                    $res = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':username'=>$data['username'], ':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp']));
+                    $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':username'=>$data['username'], ':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp']));
                     $sql = 'UPDATE `academic_agency` SET `agent` = `agent` + 1 WHERE `id` = :id';
-                    $res = $this->dbUpdate($sql, array(':id'=>$data['agency_id']));
+                    $cnt = $this->dbUpdate($sql, array(':id'=>$data['agency_id']));
                     return array('code'=>1, 'res'=>$this->dbQuery('admin_academic_agency_agent_get'));
                 } else {
                     return array('code'=>2);
@@ -61,18 +62,19 @@ class AjaxModel extends Model {
         case 'admin_academic_agency_agent_del':
             $sql  = 'DELETE FROM `academic_agency_agent`';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':id'=>$data['id']));
             $sql  = 'UPDATE `academic_agency`';
             $sql .= '   SET `agent` = `agent` -1';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':id'=>$data['agency_id']));
+            $cnt = $this->dbUpdate($sql, array(':id'=>$data['agency_id']));
             return $this->dbQuery('admin_academic_agency_agent_get');
             break;
         case 'admin_academic_agency_agent_get':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`';
             $sql .= '  FROM `academic_agency_agent` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
-            return $this->dbSelect($sql);
+            $sql .= ' WHERE "NTUE" = :ntue';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prfix));
             break;
         case 'admin_academic_agency_agent_get_byid':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`';
@@ -89,22 +91,20 @@ class AjaxModel extends Model {
             $sql .= '       `timestamp` = :timestamp,';
             $sql .= '       `state` = 0';
             $sql .= ' WHERE `id` = :id';
-            $res = $this->dbUpdate($sql, array(':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
         case 'admin_academic_agency_unlock_yes':
             $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
-            $cnt = $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
-            return $sql;
+            return $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
         case 'admin_academic_agency_unlock_no':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
-            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
-            return $sql;
+            return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
         case 'admin_academic_era_add':
-            $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
-            $res = $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_era` WHERE "NTUE" = :ntue ORDER BY `id` DESC LIMIT 1';
+            $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             $sql  = 'INSERT INTO `academic_era` (`id`, `common`, `roc`, `code`, `cname`, `state`)';
             $sql .= ' VALUES (0, :common, :roc, :code, :cname, 0)';
             $common = intval($res[0]['common']) + 1;
@@ -112,9 +112,9 @@ class AjaxModel extends Model {
             $code = "Y". $roc;
             $cname = $roc . "年度";
             // add academic_era
-            $cnt = $this->dbUpdate($sql, array(':common'=>$common, ':roc'=>$roc, ':code'=>$code, ':cname'=>$cname));
-            $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
-            $res = $this->dbSelect($sql);
+            $id = $this->dbInsert($sql, array(':common'=>$common, ':roc'=>$roc, ':code'=>$code, ':cname'=>$cname));
+            $sql = 'SELECT * FROM `academic_era` WHERE id = :id';
+            $res = $this->dbSelect($sql, array(':id'=>$id));
             // add academic_era_quarter
             $sql  = 'INSERT INTO `academic_era_quarter` (`id`, `era_id`, `quarter`, `cname`, `online`, `offline`, `state`)';
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
@@ -129,16 +129,16 @@ class AjaxModel extends Model {
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
             $cnt = $this->dbUpdate($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>4, ':cname'=>$res[0]['code'] . " 第四季(10~12月)"));
             // add academic_class
-            $sql = 'INSERT INTO `academic_class` SELECT 0, '. $res[0]['id'] .', `major_code`, `code`, `cname`, 0 FROM `minor_list` WHERE `code` != ""';
-            $cnt = $this->dbUpdate($sql);
+            $sql = 'INSERT INTO `academic_class` SELECT 0, '. $res[0]['id'] .', `major_code`, `code`, `cname`, 0 FROM `minor_list` WHERE `code` != :code';
+            $cnt = $this->dbInsert($sql, array(':code'=>""));
             return $this->dbQuery('admin_academic_era_quarter');
             break;
         case 'admin_academic_era_quarter':
             $sql  = 'SELECT t1.*';
             $sql .= '  FROM `academic_era_quarter` t1';
-            $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id` AND t2.`state` < 2';
+            $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id` AND t2.`state` < :state';
             $sql .= ' ORDER BY t1.`era_id` DESC, t1.`id` ASC';
-            return $this->dbSelect($sql);
+            return $this->dbSelect($sql, array(':state'=>2));
             break;
         case 'admin_academic_era_quarter_mod':
             $sql = 'UPDATE `academic_era_quarter` SET `online` = :online, `offline` = :offline WHERE `id` = :id';
@@ -167,7 +167,6 @@ class AjaxModel extends Model {
         case 'agent_academic_agency_mod':
             $sql = 'UPDATE `academic_agency` SET cname = :cname, zipcode = :zipcode, address = :address, established = :established, approval = :approval, note = :note WHERE id = :id';
             $cnt = $this->dbUpdate($sql, array(':cname'=>$data['cname'], ':zipcode'=>$data['zipcode'], ':address'=>$data['address'], ':established'=>$data['established'], ':approval'=>$data['approval'], ':note'=>$data['note'], ':id'=>$data['id']));
-            $res = $this->dbSelect($sql, array(":id"=>$data['id']));
             return $this->dbQuery('agent_academic_agency', array('id'=>$data['id']));
             break;
         case 'agent_academic_agency_class':
@@ -179,18 +178,22 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_class_add':
-            $sql  = 'INSERT INTO `academic_agency_class`';
-            $sql .= ' (`id`, `agency_id`, `era_id`, `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, `state`)';
-            $sql .= ' VALUES (0, :agency_id, :era_id, :quarter, :major_code, :minor_code, :cname, :content_code, :target_code, :people, :weekly, :weeks, :hours, :adjust, :total_hours, :revenue, :subsidy, :turnover, :note, 0)';
-            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':major_code'=>$data['major_code'], ':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>$data['note']));
-            $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter ORDER BY `id` DESC LIMIT 1';
+            $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter ORDER BY `id` DESC';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
-            $class_id = $res[0]['id'];
-            $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
-            $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id));
-            for ($i=0; $i<sizeof($data['country']); $i++) {
-                $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
-                $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id, ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>$data['country'][$i]['note']));
+            $classed_id = (sizeof($res))? $res[0]['id'] : 0;
+            $sql  = 'INSERT INTO `academic_agency_class`';
+            $sql .= ' (`id`, `agency_id`, `era_id`, `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `new_people`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, `latest`, `state`)';
+            $sql .= ' VALUES (0, :agency_id, :era_id, :quarter, :major_code, :minor_code, :cname, :content_code, :target_code, :new_people, :people, :weekly, :weeks, :hours, :adjust, :total_hours, :revenue, :subsidy, :turnover, :note, NOW(), 0)';
+            $class_id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':major_code'=>$data['major_code'], ':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':new_people'=>$data['new_people'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>base64_decode($data['note'])));
+            if ($class_id && $class_id != $classed_id) {
+                $sql = 'SELECT * FROM `academic_agency_class` WHERE `id` = :id';
+                $res = $this->dbSelect($sql, array(':id'=>$class_id));
+                $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
+                $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id));
+                for ($i=0; $i<sizeof($data['country']); $i++) {
+                    $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
+                    $id = $this->dbInsert($sql, array(':class_id'=>$class_id, ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>base64_decode($data['country'][$i]['note'])));
+                } 
             } 
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
@@ -209,13 +212,13 @@ class AjaxModel extends Model {
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_class_mod':
-            $sql = 'UPDATE `academic_agency_class` SET `minor_code` = :minor_code, `cname` = :cname, `content_code` = :content_code, `target_code` = :target_code, `people` = :people, `weekly` = :weekly, `weeks` = :weeks, `hours` = :hours, `adjust` = :adjust, `total_hours` = :total_hours, `revenue` = :revenue, `subsidy` = :subsidy, `turnover` = :turnover, `note` = :note WHERE `id` = :class_id';
-            $cnt = $this->dbUpdate($sql, array(':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>$data['note'], ':class_id'=>$data['class_id']));
+            $sql = 'UPDATE `academic_agency_class` SET `minor_code` = :minor_code, `cname` = :cname, `content_code` = :content_code, `target_code` = :target_code, `new_people` = :new_people, `people` = :people, `weekly` = :weekly, `weeks` = :weeks, `hours` = :hours, `adjust` = :adjust, `total_hours` = :total_hours, `revenue` = :revenue, `subsidy` = :subsidy, `turnover` = :turnover, `note` = :note, `latest` = NOW() WHERE `id` = :class_id';
+            $cnt = $this->dbUpdate($sql, array(':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':new_people'=>$data['new_people'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>base64_decode($data['note']), ':class_id'=>$data['class_id']));
             $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
             $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id']));
             for ($i=0; $i<sizeof($data['country']); $i++) {
                 $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
-                    $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id'], ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>$data['country'][$i]['note']));
+                    $id = $this->dbInsert($sql, array(':class_id'=>$data['class_id'], ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>base64_decode($data['country'][$i]['note'])));
             } 
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
@@ -230,7 +233,7 @@ class AjaxModel extends Model {
             }
             $staff = ($data['manager'] == 1)? $data['staff'] : 1;
             $sql = 'INSERT INTO `academic_agency_contact` (`id`, `agency_id`, `cname`, `title`, `manager`, `staff`, `role`, `area_code`, `phone`, `ext`, `email`, `spare_email`, `primary`) VALUES (0, :agency_id, :cname, :title, :manager, :staff, :role, :area_code, :phone, :ext, :email, :spare_email, :primary)';
-            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$data['manager'], ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary']));
+            $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$data['manager'], ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary']));
             return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_contact_del':
@@ -279,14 +282,14 @@ class AjaxModel extends Model {
                 $res = $this->dbSelect($sql, array(':id'=>$res[0]['era_id']));
                 if (1 == sizeof($res)) {
                     $sql = 'INSERT INTO `academic_agency_hr` (`agency_id`, `era_id`, `administration`, `subject`, `adjunct`, `reserve`, `others`, `note`, `state`) VALUES (:agency_id, :era_id, 0, 0, 0, 0, 0, "", 0)';
-                    $cnt = $this->dbUpdate($sql, array(":agency_id"=>$data['agency_id'], ":era_id"=>$res[0]['id']));
+                    $id = $this->dbInsert($sql, array(":agency_id"=>$data['agency_id'], ":era_id"=>$res[0]['id']));
                 }
             } else {
                 $sql = 'SELECT * FROM `academic_era` WHERE state = 1 ORDER BY `id` ASC LIMIT 1';
                 $res = $this->dbSelect($sql);
                 if (sizeof($res) > 0) {
                     $sql = 'INSERT INTO `academic_agency_hr` (`agency_id`, `era_id`, `administration`, `subject`, `adjunct`, `reserve`, `others`, `note`, `state`) VALUES (:agency_id, :era_id, 0, 0, 0, 0, 0, "", 0)';
-                    $cnt = $this->dbUpdate($sql, array(":agency_id"=>$data['agency_id'], ":era_id"=>$res[0]['id']));
+                    $id = $this->dbInsert($sql, array(":agency_id"=>$data['agency_id'], ":era_id"=>$res[0]['id']));
                 }
             }
             
@@ -294,15 +297,28 @@ class AjaxModel extends Model {
             break;
         case 'agent_academic_agency_hr_mod':
             $sql  = 'UPDATE `academic_agency_hr` SET `administration` = :administration, `subject` = :subject, `adjunct` = :adjunct, `reserve` = :reserve, `others` = :others, `note` = :note, `state` = 1 WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
-            $res = $this->dbUpdate($sql, array(':administration'=>$data['administration'], ':subject'=>$data['subject'], ':adjunct'=>$data['adjunct'], ':reserve'=>$data['reserve'], ':others'=>$data['others'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            $cnt = $this->dbUpdate($sql, array(':administration'=>$data['administration'], ':subject'=>$data['subject'], ':adjunct'=>$data['adjunct'], ':reserve'=>$data['reserve'], ':others'=>$data['others'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             return $this->dbQuery('agent_academic_agency_hr', array('agency_id'=>$data['agency_id']));
+            break;
+        case 'agent_academic_agency_report_summary':
+            /* academic_agency_report_quarter */
+            /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
+            break;
+        case 'agent_academic_agency_report_detail':
+            /* academic_agency_report_quarter */
+            /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
+
+            break;
+        case 'agent_academic_agency_report_pdf':
+            /* academic_agency_report_quarter */
+            /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
+
             break;
         case 'agent_academic_agency_unlock':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
             $sql = 'INSERT INTO `academic_agency_unlock` (`id`, `agency_id`, `era_id`, `quarter`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :minors, :work_days, "", "", :note, 0)';
-            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
-            return $cnt;
+            return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
             break;
         case 'admin_profile_email_mod':
             $sql = 'UPDATE `admin` SET `email` = :email WHERE username = :username AND session= :session ';
@@ -323,41 +339,41 @@ class AjaxModel extends Model {
 
         /* mailer */
         case 'mailer_official_get':
-            $sql = 'SELECT * FROM `official`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `official` WHERE "NTUE" = :ntue ';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         /* references */
         case 'refs_academic_institution':
-            $sql = 'SELECT * FROM `academic_institution` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_institution` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_academic_agency':
-            $sql = 'SELECT * FROM `academic_agency` ORDER BY `id`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_agency` WHERE "NTUE" = :ntue ORDER BY `id`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_area_list':
-            $sql = 'SELECT * FROM `area_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `area_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_content_list':
-            $sql = 'SELECT * FROM `content_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `content_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_country_list':
-            $sql = 'SELECT * FROM `country_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `country_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_major_list':
-            $sql = 'SELECT * FROM `major_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `major_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_minor_list':
-            $sql = 'SELECT * FROM `minor_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `minor_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_target_list':
-            $sql = 'SELECT * FROM `target_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `target_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         }
     }

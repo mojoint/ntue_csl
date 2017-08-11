@@ -20,7 +20,7 @@ class AgentModel extends Model {
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             if (0 == sizeof($res)) {
                 $sql = 'INSERT INTO `academic_agency` (agency_id) VALUES (:agency_id)';
-                $res = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
+                $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id']));
                 $sql = 'SELECT * FROM `academic_agency` WHERE agency_id = :agency_id';
                 $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             }
@@ -35,8 +35,8 @@ class AgentModel extends Model {
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
-                $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` ORDER BY t1.`id` ASC LIMIT 1';
-                $res = $this->dbSelect($sql);
+                $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
+                $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
                 if (sizeof($res)) {
                     $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
                     $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
@@ -79,12 +79,12 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_era':
-            $sql = 'SELECT * FROM `academic_era` WHERE state = 1';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_era` WHERE state = :state';
+            return $this->dbSelect($sql, array(':state'=>1));
             break;
         case 'academic_class':
-            $sql = 'SELECT * FROM `academic_class` ORDER BY `era_id`, `major_code`, `minor_code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_class` WHERE "NTUE" = :ntue ORDER BY `era_id`, `major_code`, `minor_code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'academic_agency_unlock':
             $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
@@ -98,41 +98,41 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_institution':
-            $sql = 'SELECT * FROM `academic_institution` WHERE `code` != null';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_institution` WHERE `code` != :code';
+            return $this->dbSelect($sql, array(':code'=>""));
             break;
             break;
         case 'refs_academic_institution':
-            $sql = 'SELECT * FROM `academic_institution` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_institution` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_academic_agency':
-            $sql = 'SELECT * FROM `academic_agency` ORDER BY `id`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `academic_agency` WHERE "NTUE" = :ntue ORDER BY `id`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_area_list':
-            $sql = 'SELECT * FROM `area_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `area_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_content_list':
-            $sql = 'SELECT * FROM `content_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `content_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_country_list':
-            $sql = 'SELECT * FROM `country_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `country_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_major_list':
-            $sql = 'SELECT `code`, `cname` FROM `major_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT `code`, `cname` FROM `major_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_minor_list':
-            $sql = 'SELECT * FROM `minor_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `minor_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'refs_target_list':
-            $sql = 'SELECT * FROM `target_list` ORDER BY `code`';
-            return $this->dbSelect($sql);
+            $sql = 'SELECT * FROM `target_list` WHERE "NTUE" = :ntue ORDER BY `code`';
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         }
     }

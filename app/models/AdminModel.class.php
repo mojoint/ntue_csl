@@ -27,11 +27,11 @@ class AdminModel extends Model {
             break;
         case 'academic_era':
             $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC';
-            return $this->dbSelect($sql);
+            return $this->dbSelect($sql, array());
             break;
         case 'academic_era_add':
             $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
-            $res = $this->dbSelect($sql);
+            $res = $this->dbSelect($sql, array());
             $sql  = 'INSERT INTO `academic_era` (`id`, `common`, `roc`, `code`, `cname`, `state`)';
             $sql .= ' VALUES (0, :common, :roc, :code, :cname, 0)';
             $common = intval($res[0]['common']) + 1;
@@ -39,32 +39,32 @@ class AdminModel extends Model {
             $code = "Y". $roc;
             $cname = $roc . "學年度";
             // add academic_era
-            $cnt = $this->dbUpdate($sql, array(':common'=>$common, ':roc'=>$roc, ':code'=>$code, ':cname'=>$cname));
-            $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
-            $res = $this->dbSelect($sql);
+            $id = $this->dbInsert($sql, array(':common'=>$common, ':roc'=>$roc, ':code'=>$code, ':cname'=>$cname));
+            $sql = 'SELECT * FROM `academic_era` WHERE `id` = :id';
+            $res = $this->dbSelect($sql, array(':id'=>$id));
             // add academic_era_quarter
             $sql  = 'INSERT INTO `academic_era_quarter` (`id`, `era_id`, `quarter`, `cname`, `online`, `offline`, `state`)';
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
-            $cnt = $this->dbUpdate($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>1, ':cname'=>$res[0]['code'] . " 第一季(1~3月)"));
+            $id = $this->dbInsert($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>1, ':cname'=>$res[0]['code'] . " 第一季(1~3月)"));
             $sql  = 'INSERT INTO `academic_era_quarter` (`id`, `era_id`, `quarter`, `cname`, `online`, `offline`, `state`)';
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
-            $cnt = $this->dbUpdate($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>2, ':cname'=>$res[0]['code'] . " 第二季(4~6月)"));
+            $id = $this->dbInsert($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>2, ':cname'=>$res[0]['code'] . " 第二季(4~6月)"));
             $sql  = 'INSERT INTO `academic_era_quarter` (`id`, `era_id`, `quarter`, `cname`, `online`, `offline`, `state`)';
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
-            $cnt = $this->dbUpdate($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>3, ':cname'=>$res[0]['code'] . " 第三季(7~9月)"));
+            $id = $this->dbInsert($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>3, ':cname'=>$res[0]['code'] . " 第三季(7~9月)"));
             $sql  = 'INSERT INTO `academic_era_quarter` (`id`, `era_id`, `quarter`, `cname`, `online`, `offline`, `state`)';
             $sql .= ' VALUES (0, :era_id, :quarter, :cname, "", "", 0)';
-            $cnt = $this->dbUpdate($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>4, ':cname'=>$res[0]['code'] . " 第四季(10~12月)"));
+            $id = $this->dbInsert($sql, array(':era_id'=>$res[0]['id'], ':quarter'=>4, ':cname'=>$res[0]['code'] . " 第四季(10~12月)"));
             // add academic_class
-            $sql = 'INSERT INTO `academic_class` SELECT 0, '. $res[0]['id'] .', `major_code`, `code`, `cname`, 0 FROM `minor_list` WHERE `code` != ""';
-            $cnt = $this->dbUpdate($sql);
+            $sql = 'INSERT INTO `academic_class` SELECT 0, '. $res[0]['id'] .', `major_code`, `code`, `cname`, 0 FROM `minor_list` WHERE `code` != :code';
+            $id = $this->dbInsert($sql, array(':code'=>""));
             break;
         case 'academic_era_quarter':
             $sql  = 'SELECT t1.*';
             $sql .= '  FROM `academic_era_quarter` t1';
-            $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id` AND t2.`state` < 2';
+            $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id` AND t2.`state` < :state';
             $sql .= ' ORDER BY t1.`era_id` DESC, t1.`id` ASC';
-            return $this->dbSelect($sql);
+            return $this->dbSelect($sql, array(':state'=>2));
             break;
         case 'academic_agency_unlock':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t3.`cname` `academic_institution_cname`, t4.`cname` `academic_era_cname`';
@@ -73,7 +73,7 @@ class AdminModel extends Model {
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
             $sql .= ' ORDER BY t1.`state` ASC, t1.`id` DESC';
-            return $this->dbSelect($sql);
+            return $this->dbSelect($sql, array());
             break;
         }
     }
