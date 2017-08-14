@@ -17,7 +17,7 @@
         mojo.sec = $('section').attr('id');
     }
 
-    console.log( mojo.errcode );
+    //console.log( mojo.errcode );
 
     /* ajax */
     mojo.ajax = function(key, val, params, data) {
@@ -193,6 +193,37 @@ console.log(res);
                     mojo.json = {'agency_id': $(tds[0]).html(), 'era_id': $(tds[1]).html(), 'academic_era_code': $(tds[2]).html(), 'administration': $(tds[3]).html(), 'subject': $(tds[4]).html(), 'adjunct': $(tds[5]).html(), 'reserve': $(tds[6]).html(), 'others': $(tds[7]).html(), 'note': $(tds[8]).html()};                                                                                                                                                                      
                     mojo.dialog_info('academic_agency_hr', 'mod', mojo.json);
                   }); 
+                  break;
+                }
+                break;
+              case 'academic_agency_report':
+                switch(params)
+                {
+                case 'search':
+                  if (res.data.summary) {
+      mojo.data.academic_agency_report_summary = res.data.summary;
+      mojo.data.academic_agency_report_summary_a = [];
+      mojo.data.academic_agency_report_summary_b = [];
+      mojo.data.academic_agency_report_summary_c = [];
+
+      for (var i=0; i<mojo.data.academic_agency_report_summary.length; i++) {
+        switch(mojo.data.academic_agency_report_summary[i].major_code)
+        {    
+        case 'A': 
+          mojo.data.academic_agency_report_summary_a.push(mojo.data.academic_agency_report_summary[i]);
+          break;
+        case 'B': 
+          mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
+          break;
+        case 'C': 
+          mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
+          break;
+        }    
+      }  
+      mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
+      mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
+      mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
+                  }
                   break;
                 }
                 break;

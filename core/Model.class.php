@@ -29,7 +29,7 @@ class Model
     public function dbInsert( $sql, $arr ) { 
         $str = $this->_pdo->prepare($sql);
         $str->execute($arr);
-        return $str->lastInsertId();
+        return $this->_pdo->lastInsertId();
     }   
 
     public function dbUpdate( $sql, $arr ) { 

@@ -1,4 +1,4 @@
-<section id="sec-report">
+<section id="sec-agency_report">
     <div class="container">
     <?php if ($_SESSION['agent']) : ?>
       <div id="grid-academic_agency_report_search">
@@ -26,6 +26,10 @@
             <div class="toolbar"></div>
           </script>
           <div id="grid-academic_agency_report_summary"></div>
+          <div id="grid-academic_agency_report_summary-a"></div>
+          <div id="grid-academic_agency_report_summary-b"></div>
+          <div id="grid-academic_agency_report_summary-c"></div>
+          <div id="grid-academic_agency_report_summary-summary"></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="academic_agency_report_detail">
           <script type="text/x-kendo-template" id="template-academic_agency_report_detail">
@@ -45,14 +49,14 @@
       <script>
         mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
         mojo.data.academic_era_quarter = [
-          {quarter: 1, cname: '第一季'}
+          {quarter: 1, cname: '第一季'},
+          {quarter: 2, cname: '第二季'}
         ];
         for (var i=0; i<mojo.data.academic_era.length; i++)
           $('#academic_agency_report-era').append('<option value="' + mojo.data.academic_era[i]['id'] + '">' + mojo.data.academic_era[i]['cname'] + '</option>');
-        for (var i=0; i<mojo.data.academic_era_quarter.length; i++) {
-console.log( mojo.data.academic_era_quarter[i]);
+        for (var i=0; i<mojo.data.academic_era_quarter.length; i++) 
           $('#academic_agency_report-quarter').append('<option value="' + mojo.data.academic_era_quarter[i]['quarter'] + '">' + mojo.data.academic_era_quarter[i]['cname'] + '</option>');
-        }
+        
       </script>
     <?php endif; ?>
     </div>

@@ -72,8 +72,8 @@ class AgentController extends Controller {
             }
             $this->assign('academic_agency_class', $academic_agency_class);
             $academic_agency_class_country = (new AgentModel)->dbQuery('academic_agency_class_country_query', array('class_id'=>$mojo));
-            foreach($acqdemic_agency_class_country as $key=>$val) {
-                $academic_agency_class_country[$key]['note'] = base64_encode($val['ntoe']);
+            foreach($academic_agency_class_country as $key=>$val) {
+                $academic_agency_class_country[$key]['note'] = base64_encode($val['note']);
             }
             $this->assign('academic_agency_class_country', $academic_agency_class_country);
             $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
@@ -162,7 +162,9 @@ class AgentController extends Controller {
         $html .=  '<ul>';
         $html .=   '<li class="'. $currents['fill'] .'"><a href="/agent/fill/">填報績效</a></li>';
         $html .=   '<li class="'. $currents['info'] .'"><a href="/agent/info/">機構資料</a></li>';
-        $html .=   '<li class="'. $currents['report'] .'"><a href="/agent/report/">機構報表</a></li>';
+        //if (isset($_SESSION['agent']) && ($_SESSION['agent']['agency_id'] == 81)) {
+            $html .=   '<li class="'. $currents['report'] .'"><a href="/agent/report/">機構報表</a></li>';
+        //}
         $html .=   '<li class="'. $currents['unlock'] .'"><a href="/agent/unlock/">修改申請</a></li>';
         //$html .=   '<li class="'. $currents['message'] .'"><a href="/agent/message/">留言板</a></li>';
         $html .=   '<li class=""><a href="/agent/logout/">系統登出</a></li>';

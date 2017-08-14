@@ -55,7 +55,8 @@
         'string255': /^(.){1,255}$/,
         'country_code': /[a-z0-9][\d]{2}/i
       },
-      refs: {}
+      refs: {},
+      tags: {}
     };
 
     /* ie indexof fix */
