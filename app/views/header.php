@@ -30,6 +30,8 @@
   <script src="/public/js/shim.js"></script>
   <script src="/public/js/jszip.js"></script>
   <script src="/public/js/xlsx.js"></script>
+  <script src="/public/js/Blob.js"></script>
+  <script src="/public/js/FileSaver.js"></script>
   <script src="/public/js/JQueryDatePickerTW.js"></script>
   <script src="/public/js/exceplus-2.5.min.js"></script>
   <script src="/public/js/webtoolkit.base64.js"></script>

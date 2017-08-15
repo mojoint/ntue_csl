@@ -376,51 +376,35 @@ console.log(res);
     };
 
     mojo.to_excel = function(grid_id) {
-/*
-      var uri = 'data:application/vnd.ms-excel;base64,', 
-      template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><?xml version="1.0" encoding="UTF-8" standalone="yes"?><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
-      base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
-      format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-    
-      var table_div = document.getElementById('grid-' + grid_id);
-      var table_div_a = document.getElementById('grid-' + grid_id + '-a');
-      var table_div_b = document.getElementById('grid-' + grid_id + '-a');
-      var table_div_c = document.getElementById('grid-' + grid_id + '-a');
-      var table_html = table_div.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_a.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_b.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_c.outerHTML.replace(/ /g, '%20');
-
-      $('body').append('<div id="toExcel"></div>');
-      $('#toExcel').html(table_html);
-      $('#toExcel').find("thead > tr > th:last-child").remove();
-      $('#toExcel').find("tbody > tr > td:last-child").remove();
-      var toExcel = $('#toExcel').html();
-      var ctx = {
-          worksheet: grid_id || '',
-          table: toExcel
-      };
-      $('#toExcel').remove();
-      window.open(uri + base64(format(template, ctx)));
-*/
-
-
-
-      var data_type = 'data:application/vnd.ms-excel';
-      var table_div = document.getElementById('grid-' + grid_id);
-      var table_div_a = document.getElementById('grid-' + grid_id + '-a');
-      var table_div_b = document.getElementById('grid-' + grid_id + '-b');
-      var table_div_c = document.getElementById('grid-' + grid_id + '-c');
-      var table_html = table_div.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_a.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_b.outerHTML.replace(/ /g, '%20');
-      table_html += table_div_c.outerHTML.replace(/ /g, '%20');
-      var a = document.createElement('a');
-      a.href = data_type + ', ' + table_html;
-      a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
-      a.click();
-
+      var filename = (grid_id == 'academic_agency_report_summary')? '機構報表-課程統計間表(四大類)' : '機構報表-課程明細詳表(含國別)';
+      $('body').append('<table id="table_export"></table>');
+      $('#table_export').html($('#grid-' + grid_id).html() + $('#grid-' + grid_id + '-a').html() + $('#grid-' + grid_id + '-b').html() + $('#grid-' + grid_id + '-c').html());
+      mojo.export_table_to_excel('table_export', filename);
+      $('#table_export').remove();
     };
+
+    mojo.s2ab = function(s) {
+      if(typeof ArrayBuffer !== 'undefined') {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+      } else {
+        var buf = new Array(s.length);
+        for (var i=0; i!=s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+      }
+    }
+
+    mojo.export_table_to_excel = function(id, fn) {
+      var wb = XLSX.utils.table_to_book(document.getElementById(id), {sheet:"Sheet JS"});
+      var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+      var fname = fn + '.xlsx';
+      try {
+        saveAs(new Blob([mojo.s2ab(wbout)],{type:"application/octet-stream"}), fname);
+      } catch(e) { if(typeof console != 'undefined') console.log(e, wbout); }
+      return wbout;
+    }
 
     /* =========================================== */
     /* ------------------ login ------------------ */
