@@ -3,13 +3,13 @@
     <?php if ($_SESSION['agent']) : ?>
       <div id="grid-academic_agency_report_search">
         <table role="grid">
-          <colgroup><col style="width: 25%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
-              <td>年度<select id="academic_agency_report-era"></select></td>
-              <td>季度<select id="academic_agency_report-quarter"></select></td>
-              <td><a href="#" class="btn btn-lg btn-block btn-primary" id="btn-academic_agency_report-search"><span class="fa fa-search"></span>查詢報表</a></td>
+              <td><select id="academic_agency_report-era"></select></td>
+              <td><select id="academic_agency_report-quarter"></select></td>
+              <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_agency_report-search"><span class="fa fa-search"></span>查詢報表</a></td>
             </tr>
           </tbody>
         </table>
@@ -37,6 +37,11 @@
             <div class="toolbar"></div>
           </script>
           <div id="dialog-academic_agency_report_detail"></div>
+          <div id="grid-academic_agency_report_detail"></div>
+          <div id="grid-academic_agency_report_detail-a"></div>
+          <div id="grid-academic_agency_report_detail-b"></div>
+          <div id="grid-academic_agency_report_detail-c"></div>
+          <div id="grid-academic_agency_report_detail-summary"></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="academic_agency_report_pdf">
           <script type="text/x-kendo-template" id="template-academic_agency_report_pdf">
@@ -44,6 +49,11 @@
             <div class="toolbar"></div>
           </script>
           <div id="dialog-academic_agency_report_pdf"></div>
+          <div id="grid-academic_agency_report_pdf"></div>
+          <div id="grid-academic_agency_report_pdf-a"></div>
+          <div id="grid-academic_agency_report_pdf-b"></div>
+          <div id="grid-academic_agency_report_pdf-c"></div>
+          <div id="grid-academic_agency_report_pdf-summary"></div>
         </div>
       </div>
       <script>

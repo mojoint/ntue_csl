@@ -330,7 +330,7 @@ console.log(res);
       mojo.country = JSON.parse(output);
     };
 
-    mojo.excel = function(e) {
+    mojo.from_excel = function(e) {
       var files = e.target.files;
       var i, f;
       for (i = 0, f = files[i]; i != files.length; ++i) {
@@ -347,6 +347,53 @@ console.log(res);
         };
         reader.readAsBinaryString(f);
       }  
+    };
+
+    mojo.to_excel = function(grid_id) {
+/*
+      var uri = 'data:application/vnd.ms-excel;base64,', 
+      template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><?xml version="1.0" encoding="UTF-8" standalone="yes"?><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+      base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
+      format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+    
+      var table_div = document.getElementById('grid-' + grid_id);
+      var table_div_a = document.getElementById('grid-' + grid_id + '-a');
+      var table_div_b = document.getElementById('grid-' + grid_id + '-a');
+      var table_div_c = document.getElementById('grid-' + grid_id + '-a');
+      var table_html = table_div.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_a.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_b.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_c.outerHTML.replace(/ /g, '%20');
+
+      $('body').append('<div id="toExcel"></div>');
+      $('#toExcel').html(table_html);
+      $('#toExcel').find("thead > tr > th:last-child").remove();
+      $('#toExcel').find("tbody > tr > td:last-child").remove();
+      var toExcel = $('#toExcel').html();
+      var ctx = {
+          worksheet: grid_id || '',
+          table: toExcel
+      };
+      $('#toExcel').remove();
+      window.open(uri + base64(format(template, ctx)));
+*/
+
+
+
+      var data_type = 'data:application/vnd.ms-excel';
+      var table_div = document.getElementById('grid-' + grid_id);
+      var table_div_a = document.getElementById('grid-' + grid_id + '-a');
+      var table_div_b = document.getElementById('grid-' + grid_id + '-a');
+      var table_div_c = document.getElementById('grid-' + grid_id + '-a');
+      var table_html = table_div.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_a.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_b.outerHTML.replace(/ /g, '%20');
+      table_html += table_div_c.outerHTML.replace(/ /g, '%20');
+      var a = document.createElement('a');
+      a.href = data_type + ', ' + table_html;
+      a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+      a.click();
+
     };
 
     /* =========================================== */
