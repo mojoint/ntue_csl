@@ -210,6 +210,41 @@ console.log(res);
                       var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
                       var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
                       var html_c = '<tr><th colspan="11">第三研習類別</th></tr>';
+                      mojo.summary = {
+                        a: {
+                          'new_people': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'hours': 0,
+                          'total_hours': 0,
+                          'turnover': 0,
+                          'classes': 0,
+                        },
+
+                        b: {
+                          'new_people': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'hours': 0,
+                          'total_hours': 0,
+                          'turnover': 0,
+                          'classes': 0,
+                        },
+
+                        c: {
+                          'new_people': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'hours': 0,
+                          'total_hours': 0,
+                          'turnover': 0,
+                          'classes': 0,
+                        }
+
+                      }
                       for (var i=0; i<mojo.data.academic_agency_report_summary.length; i++) {
                         switch(mojo.data.academic_agency_report_summary[i].major_code)
                         {    
@@ -220,7 +255,7 @@ console.log(res);
                           html_a += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                           html_a += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                           html_a += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
-                          html_a += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_a += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['avg_weekly'] + '</td>';
                           html_a += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
                           html_a += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
                           html_a += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
@@ -228,6 +263,14 @@ console.log(res);
                           html_a += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
                           html_a += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
                           html_a += '</tr>';
+                          mojo.summary.a.new_people += parseInt(mojo.data.academic_agency_report_summary[i]['new_people']);
+                          mojo.summary.a.people += parseInt(mojo.data.academic_agency_report_summary[i]['people']);
+                          mojo.summary.a.weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['weekly']);
+                          mojo.summary.a.avg_weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['avg_weekly']);
+                          mojo.summary.a.hours += parseFloat(mojo.data.academic_agency_report_summary[i]['hours']);
+                          mojo.summary.a.total_hours += parseFloat(mojo.data.academic_agency_report_summary[i]['total_hours']);
+                          mojo.summary.a.turnover += parseInt(mojo.data.academic_agency_report_summary[i]['turnover']);
+                          mojo.summary.a.classes += parseInt(mojo.data.academic_agency_report_summary[i]['classes']);
                           break;
                         case 'B': 
                           mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
@@ -236,7 +279,7 @@ console.log(res);
                           html_b += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                           html_b += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                           html_b += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
-                          html_b += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_b += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['avg_weekly'] + '</td>';
                           html_b += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
                           html_b += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
                           html_b += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
@@ -244,6 +287,14 @@ console.log(res);
                           html_b += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
                           html_b += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
                           html_b += '</tr>';
+                          mojo.summary.b.new_people += parseInt(mojo.data.academic_agency_report_summary[i]['new_people']);
+                          mojo.summary.b.people += parseInt(mojo.data.academic_agency_report_summary[i]['people']);
+                          mojo.summary.b.weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['weekly']);
+                          mojo.summary.b.avg_weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['avg_weekly']);
+                          mojo.summary.b.hours += parseFloat(mojo.data.academic_agency_report_summary[i]['hours']);
+                          mojo.summary.b.total_hours += parseFloat(mojo.data.academic_agency_report_summary[i]['total_hours']);
+                          mojo.summary.b.turnover += parseInt(mojo.data.academic_agency_report_summary[i]['turnover']);
+                          mojo.summary.b.classes += parseInt(mojo.data.academic_agency_report_summary[i]['classes']);
                           break;
                         case 'C': 
                           mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
@@ -252,7 +303,7 @@ console.log(res);
                           html_c += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                           html_c += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                           html_c += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
-                          html_c += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_c += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['avg_weekly'] + '</td>';
                           html_c += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
                           html_c += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
                           html_c += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
@@ -260,13 +311,48 @@ console.log(res);
                           html_c += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
                           html_c += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
                           html_c += '</tr>';
+                          mojo.summary.c.new_people += parseInt(mojo.data.academic_agency_report_summary[i]['new_people']);
+                          mojo.summary.c.people += parseInt(mojo.data.academic_agency_report_summary[i]['people']);
+                          mojo.summary.c.weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['weekly']);
+                          mojo.summary.c.avg_weekly += parseFloat(mojo.data.academic_agency_report_summary[i]['avg_weekly']);
+                          mojo.summary.c.hours += parseFloat(mojo.data.academic_agency_report_summary[i]['hours']);
+                          mojo.summary.c.total_hours += parseFloat(mojo.data.academic_agency_report_summary[i]['total_hours']);
+                          mojo.summary.c.turnover += parseInt(mojo.data.academic_agency_report_summary[i]['turnover']);
+                          mojo.summary.c.classes += parseInt(mojo.data.academic_agency_report_summary[i]['classes']);
                           break;
                         }    
                         
                       }  
-                      html_a += '<th>第一研習類別小計</th><th colspan="10"></th>';
-                      html_b += '<th>第二研習類別小計</th><th colspan="10"></th>';
-                      html_c += '<th>第三研習類別小計</th><th colspan="10"></th>';
+                      html_a += '<th>第一研習類別小計</th>';
+                      html_a += '<th>' + mojo.summary.a.new_people + '</th>';
+                      html_a += '<th>' + mojo.summary.a.people + '</th>';
+                      html_a += '<th>' + mojo.summary.a.weekly + '</th>';
+                      html_a += '<th>' + mojo.summary.a.avg_weekly + '</th>';
+                      html_a += '<th>' + mojo.summary.a.hours + '</th>';
+                      html_a += '<th>' + mojo.summary.a.total_hours + '</th>';
+                      html_a += '<th>' + mojo.summary.a.turnover + '</th>';
+                      html_a += '<th>' + mojo.summary.a.classes + '</th>';
+                      html_a += '<th></th><th></th>';
+                      html_b += '<th>第二研習類別小計</th>';
+                      html_b += '<th>' + mojo.summary.b.new_people + '</th>';
+                      html_b += '<th>' + mojo.summary.b.people + '</th>';
+                      html_b += '<th>' + mojo.summary.b.weekly + '</th>';
+                      html_b += '<th>' + mojo.summary.b.avg_weekly + '</th>';
+                      html_b += '<th>' + mojo.summary.b.hours + '</th>';
+                      html_b += '<th>' + mojo.summary.b.total_hours + '</th>';
+                      html_b += '<th>' + mojo.summary.b.turnover + '</th>';
+                      html_b += '<th>' + mojo.summary.b.classes + '</th>';
+                      html_b += '<th></th><th></th>';
+                      html_c += '<th>第三研習類別小計</th>';
+                      html_c += '<th>' + mojo.summary.c.new_people + '</th>';
+                      html_c += '<th>' + mojo.summary.c.people + '</th>';
+                      html_c += '<th>' + mojo.summary.c.weekly + '</th>';
+                      html_c += '<th>' + mojo.summary.c.avg_weekly + '</th>';
+                      html_c += '<th>' + mojo.summary.c.hours + '</th>';
+                      html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
+                      html_c += '<th>' + mojo.summary.c.turnover + '</th>';
+                      html_c += '<th>' + mojo.summary.c.classes + '</th>';
+                      html_c += '<th></th><th></th>';
                       mojo.html  = '';
                       mojo.html += html_a;
                       mojo.html += html_b;
