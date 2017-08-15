@@ -45,6 +45,7 @@
       mojo.data.academic_agency_report_summary_b = []; 
       mojo.data.academic_agency_report_summary_c = []; 
 
+      /*
       mojo.grid.academic_agency_report_summary_a.kendoGrid({
         dataSource: {
           data: mojo.data.academic_agency_report_summary_a,
@@ -81,24 +82,14 @@
           { field: "minor_code_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
           { field: "new_people", title: "&nbsp;", width: "80px" },
           { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "80px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px" },
-          { field: "hours", title: "&nbsp;", width: "80px" },
+          { field: "weekly", title: "&nbsp;", width: "100px" },
+          { field: "avg_weekly", title: "&nbsp;", width: "100px", format: "{0:0.00}" },
+          { field: "hours", title: "&nbsp;", width: "100px" },
           { field: "total_hours", title: "&nbsp;", width: "100px" },
           { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" }
-
-/*
-          { field: "minor_code_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
-          { field: "new_people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-new_people-a" } },
-          { field: "people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-a" } },
-          { field: "weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-weekly-a" } },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-avg_weekly-a" } },
-          { field: "hours", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-a" } },
-          { field: "total_hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-total_hours-a" } },
-          { field: "turnover", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-a" } },
-          { field: "classes", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-classes-a" } }
-*/
+          { field: "classes", title: "&nbsp;", width: "100px" },
+          { field: "info", title: "&nbsp;", width: "100px" },
+          { field: "note", title: "&nbsp;", width: "100px" }
         ]
       });
 
@@ -138,22 +129,14 @@
           { field: "minor_code_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
           { field: "new_people", title: "&nbsp;", width: "80px" },
           { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "80px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px" },
-          { field: "hours", title: "&nbsp;", width: "80px" },
+          { field: "weekly", title: "&nbsp;", width: "100px" },
+          { field: "avg_weekly", title: "&nbsp;", width: "100px" },
+          { field: "hours", title: "&nbsp;", width: "100px" },
           { field: "total_hours", title: "&nbsp;", width: "100px" },
           { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" }
-/*
-          { field: "new_people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-new_people-b" } },
-          { field: "people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-b" } },
-          { field: "weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-weekly-b" } },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-avg_weekly-b" } },
-          { field: "hours", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-b" } },
-          { field: "total_hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-total_hours-b" } },
-          { field: "turnover", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-b" } },
-          { field: "classes", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-classes-b" } }
-*/
+          { field: "classes", title: "&nbsp;", width: "100px" },
+          { field: "info", title: "&nbsp;", width: "100px" },
+          { field: "note", title: "&nbsp;", width: "100px" }
         ]
       });
 
@@ -193,24 +176,17 @@
           { field: "minor_code_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
           { field: "new_people", title: "&nbsp;", width: "80px" },
           { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "80px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px" },
-          { field: "hours", title: "&nbsp;", width: "80px" },
+          { field: "weekly", title: "&nbsp;", width: "100px" },
+          { field: "avg_weekly", title: "&nbsp;", width: "100px" },
+          { field: "hours", title: "&nbsp;", width: "100px" },
           { field: "total_hours", title: "&nbsp;", width: "100px" },
           { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" }
-/*
-          { field: "new_people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-new_people-c" } },
-          { field: "people", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-people-c" } },
-          { field: "weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-weekly-c" } },
-          { field: "avg_weekly", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-avg_weekly-c" } },
-          { field: "hours", title: "&nbsp;", width: "80px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-hours-c" } },
-          { field: "total_hours", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-total_hours-c" } },
-          { field: "turnover", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-turnover-c" } },
-          { field: "classes", title: "&nbsp;", width: "100px", footerTemplate: "#=sum#", footerAttributes: { "class": "summary-classes-c" } }
-*/
+          { field: "classes", title: "&nbsp;", width: "100px" },
+          { field: "info", title: "&nbsp;", width: "100px" },
+          { field: "note", title: "&nbsp;", width: "100px" }
         ]
       });
+      */
 
       /* detail tab */
       mojo.grid.academic_agency_report_detail = $('#grid-academic_agency_report_detail');
@@ -371,6 +347,8 @@
 
         ]
       });
+
+      
 
       /* pdf tab */
 

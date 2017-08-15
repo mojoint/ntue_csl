@@ -202,27 +202,80 @@ console.log(res);
                 case 'search':
                   if (res.data.summary) {
                       mojo.data.academic_agency_report_summary = res.data.summary;
+
                       mojo.data.academic_agency_report_summary_a = [];
                       mojo.data.academic_agency_report_summary_b = [];
                       mojo.data.academic_agency_report_summary_c = [];
                 
+                      var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
+                      var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
+                      var html_c = '<tr><th colspan="11">第三研習類別</th></tr>';
                       for (var i=0; i<mojo.data.academic_agency_report_summary.length; i++) {
                         switch(mojo.data.academic_agency_report_summary[i].major_code)
                         {    
                         case 'A': 
                           mojo.data.academic_agency_report_summary_a.push(mojo.data.academic_agency_report_summary[i]);
+                          html_a += '<tr>';
+                          html_a += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                          html_a += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
+                          html_a += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
+                          html_a += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_a += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_a += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
+                          html_a += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
+                          html_a += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
+                          html_a += '<td class="classes">' + mojo.data.academic_agency_report_summary[i]['classes'] + '</td>';
+                          html_a += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
+                          html_a += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
+                          html_a += '</tr>';
                           break;
                         case 'B': 
                           mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
+                          html_b += '<tr>';
+                          html_b += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                          html_b += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
+                          html_b += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
+                          html_b += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_b += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_b += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
+                          html_b += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
+                          html_b += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
+                          html_b += '<td class="classes">' + mojo.data.academic_agency_report_summary[i]['classes'] + '</td>';
+                          html_b += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
+                          html_b += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
+                          html_b += '</tr>';
                           break;
                         case 'C': 
                           mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
+                          html_c += '<tr>';
+                          html_c += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                          html_c += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
+                          html_c += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
+                          html_c += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_c += '<td class="avg_weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
+                          html_c += '<td class="hours">' + mojo.data.academic_agency_report_summary[i]['hours'] + '</td>';
+                          html_c += '<td class="total_hours">' + mojo.data.academic_agency_report_summary[i]['total_hours'] + '</td>';
+                          html_c += '<td class="turnover">' + mojo.data.academic_agency_report_summary[i]['turnover'] + '</td>';
+                          html_c += '<td class="classes">' + mojo.data.academic_agency_report_summary[i]['classes'] + '</td>';
+                          html_c += '<td class="info">' + (mojo.data.academic_agency_report_summary[i]['info'] || '') + '</td>';
+                          html_c += '<td class="note">' + (mojo.data.academic_agency_report_summary[i]['note'] || '') + '</td>';
+                          html_c += '</tr>';
                           break;
                         }    
+                        
                       }  
-                      mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
-                      mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
-                      mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
+                      html_a += '<th>第一研習類別小計</th><th colspan="10"></th>';
+                      html_b += '<th>第二研習類別小計</th><th colspan="10"></th>';
+                      html_c += '<th>第三研習類別小計</th><th colspan="10"></th>';
+                      mojo.html  = '';
+                      mojo.html += html_a;
+                      mojo.html += html_b;
+                      mojo.html += html_c;
+                      $('#grid-academic_agency_report_summary table tbody').append(mojo.html);
+
+                      //mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
+                      //mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
+                      //mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
                   }
 
                   if (res.data.detail) {
@@ -378,7 +431,8 @@ console.log(res);
     mojo.to_excel = function(grid_id) {
       var filename = (grid_id == 'academic_agency_report_summary')? '機構報表-課程統計間表(四大類)' : '機構報表-課程明細詳表(含國別)';
       $('body').append('<table id="table_export"></table>');
-      $('#table_export').html($('#grid-' + grid_id).html() + $('#grid-' + grid_id + '-a').html() + $('#grid-' + grid_id + '-b').html() + $('#grid-' + grid_id + '-c').html());
+      //$('#table_export').html($('#grid-' + grid_id).html() + $('#grid-' + grid_id + '-a').html() + $('#grid-' + grid_id + '-b').html() + $('#grid-' + grid_id + '-c').html());
+      $('#table_export').html($('#grid-' + grid_id).html());
       mojo.export_table_to_excel('table_export', filename);
       $('#table_export').remove();
     };
