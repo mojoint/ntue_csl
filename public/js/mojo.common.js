@@ -201,29 +201,55 @@ console.log(res);
                 {
                 case 'search':
                   if (res.data.summary) {
-      mojo.data.academic_agency_report_summary = res.data.summary;
-      mojo.data.academic_agency_report_summary_a = [];
-      mojo.data.academic_agency_report_summary_b = [];
-      mojo.data.academic_agency_report_summary_c = [];
-
-      for (var i=0; i<mojo.data.academic_agency_report_summary.length; i++) {
-        switch(mojo.data.academic_agency_report_summary[i].major_code)
-        {    
-        case 'A': 
-          mojo.data.academic_agency_report_summary_a.push(mojo.data.academic_agency_report_summary[i]);
-          break;
-        case 'B': 
-          mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
-          break;
-        case 'C': 
-          mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
-          break;
-        }    
-      }  
-      mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
-      mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
-      mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
+                      mojo.data.academic_agency_report_summary = res.data.summary;
+                      mojo.data.academic_agency_report_summary_a = [];
+                      mojo.data.academic_agency_report_summary_b = [];
+                      mojo.data.academic_agency_report_summary_c = [];
+                
+                      for (var i=0; i<mojo.data.academic_agency_report_summary.length; i++) {
+                        switch(mojo.data.academic_agency_report_summary[i].major_code)
+                        {    
+                        case 'A': 
+                          mojo.data.academic_agency_report_summary_a.push(mojo.data.academic_agency_report_summary[i]);
+                          break;
+                        case 'B': 
+                          mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
+                          break;
+                        case 'C': 
+                          mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
+                          break;
+                        }    
+                      }  
+                      mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
+                      mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
+                      mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
                   }
+
+                  if (res.data.detail) {
+                      mojo.data.academic_agency_report_detail = res.data.detail;
+                      mojo.data.academic_agency_report_detail_a = [];
+                      mojo.data.academic_agency_report_detail_b = [];
+                      mojo.data.academic_agency_report_detail_c = [];
+                
+                      for (var i=0; i<mojo.data.academic_agency_report_detail.length; i++) {
+                        switch(mojo.data.academic_agency_report_detail[i].major_code)
+                        {    
+                        case 'A': 
+                          mojo.data.academic_agency_report_detail_a.push(mojo.data.academic_agency_report_detail[i]);
+                          break;
+                        case 'B': 
+                          mojo.data.academic_agency_report_detail_b.push(mojo.data.academic_agency_report_detail[i]);
+                          break;
+                        case 'C': 
+                          mojo.data.academic_agency_report_detail_c.push(mojo.data.academic_agency_report_detail[i]);
+                          break;
+                        }    
+                      }  
+                      mojo.grid.academic_agency_report_detail_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_a }));
+                      mojo.grid.academic_agency_report_detail_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_b }));
+                      mojo.grid.academic_agency_report_detail_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_c }));
+                  }
+
                   break;
                 }
                 break;
@@ -383,8 +409,8 @@ console.log(res);
       var data_type = 'data:application/vnd.ms-excel';
       var table_div = document.getElementById('grid-' + grid_id);
       var table_div_a = document.getElementById('grid-' + grid_id + '-a');
-      var table_div_b = document.getElementById('grid-' + grid_id + '-a');
-      var table_div_c = document.getElementById('grid-' + grid_id + '-a');
+      var table_div_b = document.getElementById('grid-' + grid_id + '-b');
+      var table_div_c = document.getElementById('grid-' + grid_id + '-c');
       var table_html = table_div.outerHTML.replace(/ /g, '%20');
       table_html += table_div_a.outerHTML.replace(/ /g, '%20');
       table_html += table_div_b.outerHTML.replace(/ /g, '%20');

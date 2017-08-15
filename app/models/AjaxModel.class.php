@@ -310,20 +310,17 @@ class AjaxModel extends Model {
             $sql .= '   AND t1.`era_id` = :era_id';
             $sql .= '   AND t1.`quarter` = :quarter';
             $sql .= ' GROUP BY t1.`minor_code`';
-/*
-            $sql  = 'SELECT t1.`major_code` `academic_agency_class_major_code`, t1.`minor_code` `academic_agency_class_minor_code`, t1.`cname` `academic_agency_class_cname`, t2.*, t3.`cname` `academic_agency_class_country_cname`, t4.`cname` `academic_class_cname`';
-            $sql .= '  FROM `academic_agency_class` t1';
-            $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t1.`id` = t2.`class_id`';
-            $sql .= ' INNER JOIN `country_list` t3 ON t2.`country_code` = t3.`code`';
-            $sql .= ' INNER JOIN `academic_class` t4 ON t4.`minor_code` = t1.`minor_code` AND t4.`era_id` = t1.`era_id`';
-            $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
-*/
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_report_detail':
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
-
+            $sql  = 'SELECT t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.*';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t3 ON t1.`id` = t3.`class_id`';
+            $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_report_pdf':
             /* academic_agency_report_quarter */
