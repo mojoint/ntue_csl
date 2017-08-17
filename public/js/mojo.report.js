@@ -222,6 +222,11 @@
         toolbar: kendo.template($('#template-academic_agency_report_detail').html())
       });
 
+      $('#btn-academic_agency_report_detail-export').on('click', function(e) {
+        e.preventDefault();
+        mojo.to_excel('academic_agency_report_detail');
+      });
+/*
       mojo.grid.academic_agency_report_detail_a.kendoGrid({
         dataSource: {
           data: mojo.data.academic_agency_report_detail_a,
@@ -348,6 +353,7 @@
         ]
       });
 
+*/
       
 
       /* pdf tab */

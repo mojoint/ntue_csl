@@ -426,19 +426,21 @@
                         country_code = mojo.refs.country_code_list[j].code;
                       }
                     }
-                    html  = '<tr role="row">';
-                    html +=   '<td style="display:none" role="gridcell">' + country_code + '</td>';
-                    html +=   '<td role="girdcell">';
-                    html +=     mojo.refs.country_list[country_code].cname;
-                    html +=   '</td>';
-                    html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
-                    html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
-                    html +=   '<td role="girdcell" class="country_new_male">' + new_male + '</td>';
-                    html +=   '<td role="girdcell" class="country_new_female">' + new_female + '</td>';
-                    html +=   '<td role="girdcell" >' + note + '</td>';
-                    html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
-                    html += '</tr>';
-                    $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+                    if (country_code != "") {
+                      html  = '<tr role="row">';
+                      html +=   '<td style="display:none" role="gridcell">' + country_code + '</td>';
+                      html +=   '<td role="girdcell">';
+                      html +=     mojo.refs.country_list[country_code].cname;
+                      html +=   '</td>';
+                      html +=   '<td role="girdcell" class="country_male">' + male + '</td>';
+                      html +=   '<td role="girdcell" class="country_female">' + female + '</td>';
+                      html +=   '<td role="girdcell" class="country_new_male">' + new_male + '</td>';
+                      html +=   '<td role="girdcell" class="country_new_female">' + new_female + '</td>';
+                      html +=   '<td role="girdcell" >' + note + '</td>';
+                      html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
+                      html += '</tr>';
+                      $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+                    }
                   }
                 }
               }

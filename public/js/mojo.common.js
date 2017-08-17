@@ -202,10 +202,6 @@ console.log(res);
                 case 'search':
                   if (res.data.summary) {
                       mojo.data.academic_agency_report_summary = res.data.summary;
-
-                      mojo.data.academic_agency_report_summary_a = [];
-                      mojo.data.academic_agency_report_summary_b = [];
-                      mojo.data.academic_agency_report_summary_c = [];
                 
                       var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
                       var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
@@ -249,7 +245,6 @@ console.log(res);
                         switch(mojo.data.academic_agency_report_summary[i].major_code)
                         {    
                         case 'A': 
-                          mojo.data.academic_agency_report_summary_a.push(mojo.data.academic_agency_report_summary[i]);
                           html_a += '<tr>';
                           html_a += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                           html_a += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
@@ -273,7 +268,6 @@ console.log(res);
                           mojo.summary.a.classes += parseInt(mojo.data.academic_agency_report_summary[i]['classes']);
                           break;
                         case 'B': 
-                          mojo.data.academic_agency_report_summary_b.push(mojo.data.academic_agency_report_summary[i]);
                           html_b += '<tr>';
                           html_b += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                           html_b += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
@@ -297,7 +291,6 @@ console.log(res);
                           mojo.summary.b.classes += parseInt(mojo.data.academic_agency_report_summary[i]['classes']);
                           break;
                         case 'C': 
-                          mojo.data.academic_agency_report_summary_c.push(mojo.data.academic_agency_report_summary[i]);
                           html_c += '<tr>';
                           html_c += '<td class="minor_code_cname">' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                           html_c += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
@@ -357,19 +350,53 @@ console.log(res);
                       mojo.html += html_a;
                       mojo.html += html_b;
                       mojo.html += html_c;
-                      $('#grid-academic_agency_report_summary table tbody').append(mojo.html);
+                      $('#grid-academic_agency_report_summary table tbody').html(mojo.html);
 
-                      //mojo.grid.academic_agency_report_summary_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_a }));
-                      //mojo.grid.academic_agency_report_summary_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_b }));
-                      //mojo.grid.academic_agency_report_summary_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_summary_c }));
                   }
 
                   if (res.data.detail) {
+
                       mojo.data.academic_agency_report_detail = res.data.detail;
-                      mojo.data.academic_agency_report_detail_a = [];
-                      mojo.data.academic_agency_report_detail_b = [];
-                      mojo.data.academic_agency_report_detail_c = [];
                 
+                      var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
+                      var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
+                      var html_c = '<tr><th colspan="11">第三研習類別</th></tr>';
+                      mojo.detail = {
+                        a: {
+                          'country': 0,
+                          'new_male': 0,
+                          'new_female': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'total_hours': 0,
+                          'turnover': 0
+                        },
+
+                        b: {
+                          'new_people': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'total_hours': 0,
+                          'turnover': 0
+                        },
+
+                        c: {
+                          'new_people': 0,
+                          'people': 0,
+                          'weekly': 0,
+                          'avg_weekly': 0,
+                          'total_hours': 0,
+                          'turnover': 0
+                        }
+
+                      }
+
+                      mojo.data.academic_agency_report_detail_a = []; 
+                      mojo.data.academic_agency_report_detail_b = []; 
+                      mojo.data.academic_agency_report_detail_c = []; 
+
                       for (var i=0; i<mojo.data.academic_agency_report_detail.length; i++) {
                         switch(mojo.data.academic_agency_report_detail[i].major_code)
                         {    
@@ -382,11 +409,195 @@ console.log(res);
                         case 'C': 
                           mojo.data.academic_agency_report_detail_c.push(mojo.data.academic_agency_report_detail[i]);
                           break;
-                        }    
-                      }  
-                      mojo.grid.academic_agency_report_detail_a.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_a }));
-                      mojo.grid.academic_agency_report_detail_b.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_b }));
-                      mojo.grid.academic_agency_report_detail_c.data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_report_detail_c }));
+                        }
+                      }
+
+                      for (var i=0; i<mojo.data.academic_agency_report_detail_a.length; i++) {
+                        for (var j=0, jsize=mojo.data.academic_agency_report_detail_a[i]['country'].length-1; j<mojo.data.academic_agency_report_detail_a[i]['country'].length; j++) {
+                          html_a += '<tr>';
+                          html_a += '<td class="minor_code_cname">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['minor_code_cname'];
+                          html_a += '</td>';
+                          html_a += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['country_code_cname'] + '</td>';
+                          html_a += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['new_male'] + '</td>';
+                          html_a += '<td class="country_new_female">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['new_female'] + '</td>';
+                          html_a += '<td class="new_people">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['new_people'];
+                          html_a += '</td>';
+                          html_a += '<td class="country_people">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['people'] + '</td>';
+                          html_a += '<td class="people">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['people'];
+                          html_a += '</td>';
+                          html_a += '<td class="weekly">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['weekly'];
+                          html_a += '</td>';
+                          html_a += '<td class="avg_weekly">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['avg_weekly'];
+                          html_a += '</td>';
+                          html_a += '<td class="total_hours">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['total_hours'];
+                          html_a += '</td>';
+                          html_a += '<td class="turnover">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['turnover'];
+                          html_a += '</td>';
+                          html_a += '<td class="info">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['info'];
+                          html_a += '</td>';
+                          html_a += '<td class="note">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['note'];
+                          html_a += '</td>';
+                          html_a += '<td class="latest">';
+                          if (j == jsize)
+                            html_a += mojo.data.academic_agency_report_detail_a[i]['latest'];
+                          html_a += '</td>';
+                          html_a += '</tr>';
+                        }
+                      }
+                          
+                      for (var i=0; i<mojo.data.academic_agency_report_detail_b.length; i++) {
+                        for (var j=0, jsize=mojo.data.academic_agency_report_detail_b[i]['country'].length-1; j<mojo.data.academic_agency_report_detail_b[i]['country'].length; j++) {
+                          html_b += '<tr>';
+                          html_b += '<td class="minor_code_cname">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['minor_code_cname'];
+                          html_b += '</td>';
+                          html_b += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['country_code_cname'] + '</td>';
+                          html_b += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['new_male'] + '</td>';
+                          html_b += '<td class="country_new_female">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['new_female'] + '</td>';
+                          html_b += '<td class="new_people">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['new_people'];
+                          html_b += '</td>';
+                          html_b += '<td class="country_people">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['people'] + '</td>';
+                          html_b += '<td class="people">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['people'];
+                          html_b += '</td>';
+                          html_b += '<td class="weekly">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['weekly'];
+                          html_b += '</td>';
+                          html_b += '<td class="avg_weekly">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['avg_weekly'];
+                          html_b += '</td>';
+                          html_b += '<td class="total_hours">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['total_hours'];
+                          html_b += '</td>';
+                          html_b += '<td class="turnover">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['turnover'];
+                          html_b += '</td>';
+                          html_b += '<td class="info">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['info'];
+                          html_b += '</td>';
+                          html_b += '<td class="note">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['note'];
+                          html_b += '</td>';
+                          html_b += '<td class="latest">';
+                          if (j == jsize)
+                            html_b += mojo.data.academic_agency_report_detail_b[i]['latest'];
+                          html_b += '</td>';
+                          html_b += '</tr>';
+                        }
+                      }
+                          
+                      for (var i=0; i<mojo.data.academic_agency_report_detail_c.length; i++) {
+                        for (var j=0, jsize=mojo.data.academic_agency_report_detail_c[i]['country'].length-1; j<mojo.data.academic_agency_report_detail_c[i]['country'].length; j++) {
+                          html_c += '<tr>';
+                          html_c += '<td class="minor_code_cname">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['minor_code_cname'];
+                          html_c += '</td>';
+                          html_c += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['country_code_cname'] + '</td>';
+                          html_c += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['new_male'] + '</td>';
+                          html_c += '<td class="country_new_female">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['new_female'] + '</td>';
+                          html_c += '<td class="new_people">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['new_people'];
+                          html_c += '</td>';
+                          html_c += '<td class="country_people">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['people'] + '</td>';
+                          html_c += '<td class="people">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['people'];
+                          html_c += '</td>';
+                          html_c += '<td class="weekly">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['weekly'];
+                          html_c += '</td>';
+                          html_c += '<td class="avg_weekly">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['avg_weekly'];
+                          html_c += '</td>';
+                          html_c += '<td class="total_hours">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['total_hours'];
+                          html_c += '</td>';
+                          html_c += '<td class="turnover">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['turnover'];
+                          html_c += '</td>';
+                          html_c += '<td class="info">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['info'];
+                          html_c += '</td>';
+                          html_c += '<td class="note">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['note'];
+                          html_c += '</td>';
+                          html_c += '<td class="latest">';
+                          if (j == jsize)
+                            html_c += mojo.data.academic_agency_report_detail_c[i]['latest'];
+                          html_c += '</td>';
+                          html_c += '</tr>';
+                        }
+                      }
+                          
+                      mojo.html  = '';
+
+                      html_a += '<th>第一研習類別小計</th>';
+                      html_a += '<th>' + mojo.summary.a.new_people + '</th>';
+                      html_a += '<th>' + mojo.summary.a.people + '</th>';
+                      html_a += '<th>' + mojo.summary.a.weekly + '</th>';
+                      html_a += '<th>' + mojo.summary.a.avg_weekly + '</th>';
+                      html_a += '<th>' + mojo.summary.a.hours + '</th>';
+                      html_a += '<th>' + mojo.summary.a.total_hours + '</th>';
+                      html_a += '<th>' + mojo.summary.a.turnover + '</th>';
+                      html_a += '<th></th><th></th>';
+                      html_b += '<th>第二研習類別小計</th>';
+                      html_b += '<th>' + mojo.summary.b.new_people + '</th>';
+                      html_b += '<th>' + mojo.summary.b.people + '</th>';
+                      html_b += '<th>' + mojo.summary.b.weekly + '</th>';
+                      html_b += '<th>' + mojo.summary.b.avg_weekly + '</th>';
+                      html_b += '<th>' + mojo.summary.b.hours + '</th>';
+                      html_b += '<th>' + mojo.summary.b.total_hours + '</th>';
+                      html_b += '<th>' + mojo.summary.b.turnover + '</th>';
+                      html_b += '<th></th><th></th>';
+                      html_c += '<th>第三研習類別小計</th>';
+                      html_c += '<th>' + mojo.summary.c.new_people + '</th>';
+                      html_c += '<th>' + mojo.summary.c.people + '</th>';
+                      html_c += '<th>' + mojo.summary.c.weekly + '</th>';
+                      html_c += '<th>' + mojo.summary.c.avg_weekly + '</th>';
+                      html_c += '<th>' + mojo.summary.c.hours + '</th>';
+                      html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
+                      html_c += '<th>' + mojo.summary.c.turnover + '</th>';
+                      html_c += '<th></th><th></th>';
+                      mojo.html += html_a;
+                      mojo.html += html_b;
+                      mojo.html += html_c;
+                      $('#grid-academic_agency_report_detail table tbody').html(mojo.html);
                   }
 
                   break;
@@ -515,9 +726,8 @@ console.log(res);
     };
 
     mojo.to_excel = function(grid_id) {
-      var filename = (grid_id == 'academic_agency_report_summary')? '機構報表-課程統計間表(四大類)' : '機構報表-課程明細詳表(含國別)';
+      var filename = (grid_id == 'academic_agency_report_summary')? '機構報表-課程統計簡表(四大類)' : '機構報表-課程明細詳表(含國別)';
       $('body').append('<table id="table_export"></table>');
-      //$('#table_export').html($('#grid-' + grid_id).html() + $('#grid-' + grid_id + '-a').html() + $('#grid-' + grid_id + '-b').html() + $('#grid-' + grid_id + '-c').html());
       $('#table_export').html($('#grid-' + grid_id).html());
       mojo.export_table_to_excel('table_export', filename);
       $('#table_export').remove();
