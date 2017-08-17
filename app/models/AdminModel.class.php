@@ -12,26 +12,28 @@ class AdminModel extends Model {
             $sql .= '  FROM `academic_agency` t1 ';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code` ';
             $sql .= '  LEFT JOIN ( SELECT t4.`agency_id`, t4.`administration`, t4.`subject`, t4.`adjunct`, t4.`reserve` FROM `academic_agency_hr` t4 INNER JOIN `academic_era` t5 ON t4.`era_id` = t5.id AND t5.`state` = 1 ) t3 ON t1.`id` = t3.`agency_id` ';
-            return $this->dbSelect($sql);
+            $sql .= ' WHERE "NTUE" = :ntue';
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             break;
         case 'academic_agency_agent':
             $sql  = 'SELECT t1.*, t2.`cname` AS `academic_agency_cname` , t3.cname AS `academic_institution_cname` ';
             $sql .= '  FROM `academic_agency_agent` t1 ';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id` ';
             $sql .= ' INNER JOIN `academic_institution` t3 on t2.`institution_code` = t3.code ';
-            return $this->dbSelect($sql);
+            $sql .= ' WHERE "NTUE" = :ntue';
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             break;
         case 'academic_class':
             $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'academic_era':
-            $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC';
-            return $this->dbSelect($sql, array());
+            $sql = 'SELECT * FROM `academic_era` WHERE "NTUE" = :ntue ORDER BY `id` DESC';
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             break;
         case 'academic_era_add':
-            $sql = 'SELECT * FROM `academic_era` ORDER BY `id` DESC LIMIT 1';
-            $res = $this->dbSelect($sql, array());
+            $sql = 'SELECT * FROM `academic_era` WHERE "NTUE" = :ntue ORDER BY `id` DESC LIMIT 1';
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             $sql  = 'INSERT INTO `academic_era` (`id`, `common`, `roc`, `code`, `cname`, `state`)';
             $sql .= ' VALUES (0, :common, :roc, :code, :cname, 0)';
             $common = intval($res[0]['common']) + 1;
@@ -72,8 +74,9 @@ class AdminModel extends Model {
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
+            $sql .= ' WHERE "NTUE" = :ntue';
             $sql .= ' ORDER BY t1.`state` ASC, t1.`id` DESC';
-            return $this->dbSelect($sql, array());
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             break;
         }
     }

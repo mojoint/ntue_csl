@@ -162,11 +162,9 @@ class AgentController extends Controller {
         $html .=  '<ul>';
         $html .=   '<li class="'. $currents['fill'] .'"><a href="/agent/fill/">填報績效</a></li>';
         $html .=   '<li class="'. $currents['info'] .'"><a href="/agent/info/">機構資料</a></li>';
-        //if (isset($_SESSION['agent']) && ($_SESSION['agent']['agency_id'] == 81)) {
-            $html .=   '<li class="'. $currents['report'] .'"><a href="/agent/report/">機構報表</a></li>';
-        //}
+        $html .=   '<li class="'. $currents['report'] .'"><a href="/agent/report/">機構報表</a></li>';
         $html .=   '<li class="'. $currents['unlock'] .'"><a href="/agent/unlock/">修改申請</a></li>';
-        //$html .=   '<li class="'. $currents['message'] .'"><a href="/agent/message/">留言板</a></li>';
+        $html .=   '<li class="'. $currents['message'] .'"><a href="/agent/message/">留言板</a></li>';
         $html .=   '<li class=""><a href="/agent/logout/">系統登出</a></li>';
 		$html .=  '</ul>';
 		$html .= '</nav>';

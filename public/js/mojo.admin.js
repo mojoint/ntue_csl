@@ -397,5 +397,12 @@
 
     if (mojo.mojo_if('sec-settings'))
       mojo.watch_settings(); 
+
+    mojo.watch_admin_report = function() {
+      
+    };
+
+    if (mojo.mojo_if('sec-admin_report'))
+      mojo.watch_admin_report();
   })
 })(jQuery);

@@ -92,6 +92,32 @@ console.log(res);
                     break;
                 }
                 break;
+              case 'academic_admin_report':
+                switch(params)
+                {
+                case 'era_detail':
+                    
+                  break;
+                case 'era_summary':
+
+                  break;
+                case 'quarter_detail':
+
+                  break;
+                case 'quarter_summary':
+
+                  break;
+                case 'manager':
+
+                  break;
+                case 'statistics':
+
+                  break;
+                case 'major_b':
+
+                  break;
+                }
+                break;
               case 'academic_agency_unlock':
                 switch(params)
                 {

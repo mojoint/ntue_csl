@@ -28,6 +28,7 @@ class AdminController extends Controller {
             $this->assign('title', '華語文-管理者');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('report'));
+            $this->assign('academic_era', (new AdminModel)->dbQuery('academic_era'));
             $this->render();
         } else {
             $this->redirect();
@@ -117,13 +118,13 @@ class AdminController extends Controller {
         $html  = '<h2 id="logo"><a href="#">管理者</a></h2>';
         $html .= '<nav id="nav">';
         $html .=  '<ul>';
-        //$html .=   '<li class="'. $currents['status'] .'"><a href="/admin/status/">填報狀況</a></li>';
-        //$html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
-        //$html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
+        $html .=   '<li class="'. $currents['status'] .'"><a href="/admin/status/">填報狀況</a></li>';
+        $html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
+        $html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
         $html .=   '<li class="'. $currents['maintain'] .'"><a href="/admin/maintain/">資料維護</a></li>';
         $html .=   '<li class="'. $currents['unlock'] .'"><a href="/admin/unlock/">解鎖管理</a></li>';
         $html .=   '<li class="'. $currents['settings'] .'"><a href="/admin/settings/">系統設定</a></li>';
-        //$html .=   '<li class="'. $currents['message'] .'"><a href="/admin/message/">留言回覆</a></li>';
+        $html .=   '<li class="'. $currents['message'] .'"><a href="/admin/message/">留言回覆</a></li>';
         $html .=   '<li class=""><a href="/admin/logout/">系統登出</a></li>';
 		$html .=  '</ul>';
 		$html .= '</nav>';

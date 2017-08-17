@@ -155,6 +155,27 @@ class AjaxModel extends Model {
             $sql = 'SELECT count(*) `cnt` FROM `academic_agency_agent` where `username` = :username ';
             return $this->dbSelect($sql, array(':username'=>$data['username']));
             break;
+        case 'admin_academic_admin_report_era_detail':
+
+            break;
+        case 'admin_academic_admin_report_era_summary':
+
+            break;
+        case 'admin_academic_admin_report_quarter_detail':
+
+            break;
+        case 'admin_academic_admin_report_quarter_summary':
+
+            break;
+        case 'admin_academic_admin_report_manager':
+
+            break;
+        case 'admin_academic_admin_report_statisics':
+
+            break;
+        case 'admin_academic_admin_report_major_b':
+
+            break;
         /* agent */
         case 'agent_academic_agency':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`';

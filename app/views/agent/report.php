@@ -26,34 +26,20 @@
             <div class="toolbar"></div>
           </script>
           <div id="grid-academic_agency_report_summary"></div>
-          <div id="grid-academic_agency_report_summary-a"></div>
-          <div id="grid-academic_agency_report_summary-b"></div>
-          <div id="grid-academic_agency_report_summary-c"></div>
-          <div id="grid-academic_agency_report_summary-summary"></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="academic_agency_report_detail">
           <script type="text/x-kendo-template" id="template-academic_agency_report_detail">
             <div class="createBtnContainer"><a href="\\#" class="k-button" id="btn-academic_agency_report_detail-export"><span class="fa fa-file-excel-o"></span>&nbsp;</a></div>
             <div class="toolbar"></div>
           </script>
-          <div id="dialog-academic_agency_report_detail"></div>
           <div id="grid-academic_agency_report_detail"></div>
-          <div id="grid-academic_agency_report_detail-a"></div>
-          <div id="grid-academic_agency_report_detail-b"></div>
-          <div id="grid-academic_agency_report_detail-c"></div>
-          <div id="grid-academic_agency_report_detail-summary"></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="academic_agency_report_pdf">
           <script type="text/x-kendo-template" id="template-academic_agency_report_pdf">
             <div class="createBtnContainer"><a href="\\#" class="k-button" id="btn-academic_agency_report_pdf-export"><span class="fa fa-file-pdf-o"></span>&nbsp</a></div>
             <div class="toolbar"></div>
           </script>
-          <div id="dialog-academic_agency_report_pdf"></div>
           <div id="grid-academic_agency_report_pdf"></div>
-          <div id="grid-academic_agency_report_pdf-a"></div>
-          <div id="grid-academic_agency_report_pdf-b"></div>
-          <div id="grid-academic_agency_report_pdf-c"></div>
-          <div id="grid-academic_agency_report_pdf-summary"></div>
         </div>
       </div>
       <script>
