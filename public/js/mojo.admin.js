@@ -399,7 +399,41 @@
       mojo.watch_settings(); 
 
     mojo.watch_admin_report = function() {
-      
+      $('#btn-academic_admin_report_era_detail-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/era_detail/' + $('#academic_admin_report_era_detail-era').val());
+      });
+
+      $('#btn-academic_admin_report_era_summary-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/era_summary/' + $('#academic_admin_report_era_summary-era').val());
+      });
+
+      $('#btn-academic_admin_report_quarter_detail-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/quarter_detail/' + $('#academic_admin_report_quarter_detail-era').val() + '/' + $('#academic_admin_report_quarter_detail-quarter').val());
+      });
+
+      $('#btn-academic_admin_report_quarter_summary-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/quarter_summary/' + $('#academic_admin_report_quarter_summary-era').val() + '/' + $('#academic_admin_report_quarter_summary-quarter').val());
+      });
+
+      $('#btn-academic_admin_report_manager-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/manager/' + $('#academic_admin_report_manager-era').val());
+      });
+
+      $('#btn-academic_admin_report_statistics-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/statistics/' + $('#academic_admin_report_statistics-era').val());
+      });
+
+      $('#btn-academic_admin_report_major_b-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/major_b/' + $('#academic_admin_report_major_b-era').val());
+      });
+
     };
 
     if (mojo.mojo_if('sec-admin_report'))
