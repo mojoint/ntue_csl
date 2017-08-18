@@ -53,9 +53,9 @@
               <thead></thead>
               <tbody>
                 <tr>
-                  <td><select id="academic_agency_report_history-era" class="academic_agency_report-era"></select></td>
                   <td></td>
-                  <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_admin_report_era_summary-export"><span class="fa fa-file-excel-o"></span>&nbsp;年度機構報表</a></td>
+                  <td></td>
+                  <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_admin_report_era_summary-export"><span class="fa fa-file-excel-o"></span>&nbsp;匯出105年度機構報表</a></td>
                 </tr>
               </tbody>
             </table>
