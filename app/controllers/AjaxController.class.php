@@ -354,6 +354,65 @@ class AjaxController extends Controller {
         echo json_encode($json);
     }
 
+    public function reporter($key, $val, $era, $quarter=0) {
+        switch($key) 
+        {
+        case 'academic_admin_report':
+            error_reporting(E_ALL);
+            ini_set('display_errors', TRUE);
+            ini_set('display_startup_errors', TRUE);
+            date_default_timezone_set('Asia/Taipei');
+            define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objActSheet = $objPHPExcel->getActiveSheet();
+            switch( $val )
+            {
+            case 'era_detail':
+                $objActSheet->setTitle( $val );
+                $filename = '年度機構詳表';
+                break;
+            case 'era_summary':
+                $objActSheet->setTitle( $val );
+                $filename = '年度機構簡表';
+
+                break;
+            case 'quarter_detail':
+                $objActSheet->setTitle( $val );
+                $filename = '季度機構詳表';
+
+                break;
+            case 'quarter_summary':
+                $objActSheet->setTitle( $val );
+                $filename = '季度機構簡表';
+
+                break;
+            case 'manager':
+                $objActSheet->setTitle( $val );
+                $filename = '管理報表';
+
+                break;
+            case 'statistics':
+                $objActSheet->setTitle( $val );
+                $filename = '統計處報表';
+
+                break;
+            case 'major_b':
+                $objActSheet->setTitle( $val );
+                $filename = 'B類年度總表';
+
+                break;
+            }
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
+            header('Cache-Control: max-age=0');
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+            exit;
+            break;
+        }
+    }
+
     public function mailer($type, $username, $email, $url) {
         $official = (new AjaxModel)->dbQuery('mailer_official_get')[0];
 
