@@ -375,12 +375,37 @@ class AjaxController extends Controller {
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt);
                     $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['cname'] );
-
-                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_era_detail', array('agency_id'=>$target['id'], 'era_id'=>$era, 'quarter'=>$quarter));
-print_r($res);
+                    $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$target['id'], 'era_id'=>$era, 'quarter'=>$quarter));
                     if (sizeof($res)) {
-                        foreach( $res as $r ) {
-                            print_r( $r );
+                        $knt = 0;
+                        foreach($res as $r) {
+                            $count = 0;
+                            $size = sizeof($r['country']);
+                            foreach($r['country'] as $country) {
+                                $knt++;
+                                $count++;
+                                if ($size == $count) {
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['weekly']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
+                                } else {
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, "");
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, "");
+                                }
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $country['country_code_cname']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $country['new_male']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $country['new_female']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $country['people']);
+                            } 
                         }
                     }
 
@@ -455,13 +480,11 @@ print_r($res);
 
             $objPHPExcel->setActiveSheetIndex(0);
 
-/*
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
             header('Cache-Control: max-age=0');
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save('php://output');
-*/
             exit;
             break;
         }
