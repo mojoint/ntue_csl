@@ -15,6 +15,7 @@ class IndexModel extends Model {
             return $this->dbUpdate($sql, array(':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
             break;
         case 'admin':
+
             $sql = 'SELECT `username` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
             $res = $this->dbSelect($sql, array(':username'=>$data['username'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
             if (1 == sizeof($res)) {
