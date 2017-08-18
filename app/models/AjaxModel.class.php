@@ -155,8 +155,15 @@ class AjaxModel extends Model {
             $sql = 'SELECT count(*) `cnt` FROM `academic_agency_agent` where `username` = :username ';
             return $this->dbSelect($sql, array(':username'=>$data['username']));
             break;
-        case 'admin_academic_admin_report_era_detail':
-
+        case 'admin_academic_agency_report_targets':
+            $sql  = 'SELECT t1.`institution_code`, t1.`cname`, t2.`cname` `institution_cname`, t1.`id`';
+            $sql .= '  FROM `academic_agency` t1';
+            $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
+            $sql .= ' WHERE t1.`agent` > :agent';
+            $sql .= '   AND t1.`id` < :id '; // exclue test 
+            return $this->dbSelect($sql, array(':agent'=>0, ':id'=>999));
+            break;
+        case 'admin_academic_agency_report_era_detail':
             $sql  = 'SELECT t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
             $sql .= 'SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
@@ -193,7 +200,7 @@ class AjaxModel extends Model {
                 }
             }
             break;
-        case 'admin_academic_admin_report_era_summary':
+        case 'admin_academic_agency_report_era_summary':
 
             $sql  = 'SELECT t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
             $sql .= 'SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `avg_weekly`, ';
@@ -224,19 +231,19 @@ class AjaxModel extends Model {
 
             return $res; //$this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
-        case 'admin_academic_admin_report_quarter_detail':
+        case 'admin_academic_agency_report_quarter_detail':
 
             break;
-        case 'admin_academic_admin_report_quarter_summary':
+        case 'admin_academic_agency_report_quarter_summary':
 
             break;
-        case 'admin_academic_admin_report_manager':
+        case 'admin_academic_agency_report_manager':
 
             break;
-        case 'admin_academic_admin_report_statisics':
+        case 'admin_academic_agency_report_statisics':
 
             break;
-        case 'admin_academic_admin_report_major_b':
+        case 'admin_academic_agency_report_major_b':
 
             break;
         /* agent */

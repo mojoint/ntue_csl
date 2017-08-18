@@ -316,7 +316,7 @@ class AjaxController extends Controller {
         echo json_encode($json);
     }
 
-    public function reporter($key, $val, $era, $quarter=0) {
+    public function reporter($key, $val, $era, $quarter=1) {
         switch($key) 
         {
         case 'academic_admin_report':
@@ -326,26 +326,75 @@ class AjaxController extends Controller {
             date_default_timezone_set('Asia/Taipei');
             define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
             $objPHPExcel = new PHPExcel();
-            $objPHPExcel->setActiveSheetIndex(0);
-            $objActSheet = $objPHPExcel->getActiveSheet();
+            $targets = (new AjaxModel)->dbQuery('admin_academic_agency_report_targets');
             switch( $val )
             {
             case 'era_detail':
-                $objActSheet->setTitle( $val );
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        $objPHPExcel->createSheet();
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt);
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['cname'] );
+
+                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_era_detail', array('agency_id'=>$target['id'], 'era_id'=>$era, 'quarter'=>$quarter));
+print_r($res);
+                    if (sizeof($res)) {
+                        foreach( $res as $r ) {
+                            print_r( $r );
+                        }
+                    }
+
+                    $cnt++;
+                }
                 $filename = '年度機構詳表';
                 break;
             case 'era_summary':
-                $objActSheet->setTitle( $val );
+
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        $objPHPExcel->createSheet();
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt);
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+
+
+                    $cnt++;
+                }
                 $filename = '年度機構簡表';
 
                 break;
             case 'quarter_detail':
-                $objActSheet->setTitle( $val );
+
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        $objPHPExcel->createSheet();
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt);
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+
+
+                    $cnt++;
+                }
                 $filename = '季度機構詳表';
 
                 break;
             case 'quarter_summary':
-                $objActSheet->setTitle( $val );
+
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        $objPHPExcel->createSheet();
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt);
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+
+
+                    $cnt++;
+                }
                 $filename = '季度機構簡表';
 
                 break;
@@ -365,11 +414,16 @@ class AjaxController extends Controller {
 
                 break;
             }
+
+            $objPHPExcel->setActiveSheetIndex(0);
+
+/*
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
             header('Cache-Control: max-age=0');
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save('php://output');
+*/
             exit;
             break;
         }
