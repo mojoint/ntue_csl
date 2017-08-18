@@ -412,11 +412,6 @@ class AjaxModel extends Model {
             }
             return $res;
             break;
-        case 'agent_academic_agency_report_pdf':
-            /* academic_agency_report_quarter */
-            /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
-
-            break;
         case 'agent_academic_agency_unlock':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));

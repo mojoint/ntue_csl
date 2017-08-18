@@ -25,7 +25,7 @@
           { title: "總人數", width: "80px" },
           { title: "總人次", width: "80px" },
           { title: "每週平均上課時數", width: "100px" },
-          { title: "每週平均上課時數", width: "100px" },
+          { title: "每週平均上課時數(每班平均)", width: "100px" },
           { title: "每期上課時數", width: "100px" },
           { title: "總人時數", width: "100px" },
           { title: "營收額度", width: "100px" },
@@ -44,149 +44,6 @@
       mojo.data.academic_agency_report_summary_a = []; 
       mojo.data.academic_agency_report_summary_b = []; 
       mojo.data.academic_agency_report_summary_c = []; 
-
-      /*
-      mojo.grid.academic_agency_report_summary_a.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_summary_a,
-          schema: {
-            model: {
-              id: "minor_code_cname",
-              fields: {
-                minor_code_cname: { type: "string" },
-                new_people: { type: "number" },
-                people: { type: "number" },
-                weekly: { type: "number" },
-                avg_weekly: { type: "number" },
-                hours: { type: "number" },
-                total_hours: { type: "number" },
-                turnover: { type: "number" },
-                classes: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_people", aggregate: "sum" },
-            { field: "people", aggregate: "sum" },
-            { field: "weekly", aggregate: "sum" },
-            { field: "avg_weekly", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
-            { field: "total_hours", aggregate: "sum" },
-            { field: "turnover", aggregate: "sum" },
-            { field: "classes", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { field: "minor_code_cname", title: "第一類研習類別", width: "240px", footerTemplate: "第一類研習類別小計" },
-          { field: "new_people", title: "&nbsp;", width: "80px" },
-          { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "100px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "100px", format: "{0:0.00}" },
-          { field: "hours", title: "&nbsp;", width: "100px" },
-          { field: "total_hours", title: "&nbsp;", width: "100px" },
-          { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" },
-          { field: "info", title: "&nbsp;", width: "100px" },
-          { field: "note", title: "&nbsp;", width: "100px" }
-        ]
-      });
-
-      mojo.grid.academic_agency_report_summary_b.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_summary_b,
-          schema: {
-            model: {
-              id: "minor_code_cname",
-              fields: {
-                minor_code_cname: { type: "string" },
-                new_people: { type: "number" },
-                people: { type: "number" },
-                weekly: { type: "number" },
-                avg_weekly: { type: "number" },
-                hours: { type: "number" },
-                total_hours: { type: "number" },
-                turnover: { type: "number" },
-                classes: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_people", aggregate: "sum" },
-            { field: "people", aggregate: "sum" },
-            { field: "weekly", aggregate: "sum" },
-            { field: "avg_weekly", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
-            { field: "total_hours", aggregate: "sum" },
-            { field: "turnover", aggregate: "sum" },
-            { field: "classes", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { field: "minor_code_cname", title: "第二類研習類別", width: "240px", footerTemplate: "第二類研習類別小計" },
-          { field: "new_people", title: "&nbsp;", width: "80px" },
-          { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "100px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "100px" },
-          { field: "hours", title: "&nbsp;", width: "100px" },
-          { field: "total_hours", title: "&nbsp;", width: "100px" },
-          { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" },
-          { field: "info", title: "&nbsp;", width: "100px" },
-          { field: "note", title: "&nbsp;", width: "100px" }
-        ]
-      });
-
-      mojo.grid.academic_agency_report_summary_c.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_summary_c,
-          schema: {
-            model: {
-              id: "minor_code_cname",
-              fields: {
-                minor_code_cname: { type: "string" },
-                new_people: { type: "number" },
-                people: { type: "number" },
-                weekly: { type: "number" },
-                avg_weekly: { type: "number" },
-                hours: { type: "number" },
-                total_hours: { type: "number" },
-                turnover: { type: "number" },
-                classes: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_people", aggregate: "sum" },
-            { field: "people", aggregate: "sum" },
-            { field: "weekly", aggregate: "sum" },
-            { field: "avg_weekly", aggregate: "sum" },
-            { field: "hours", aggregate: "sum" },
-            { field: "total_hours", aggregate: "sum" },
-            { field: "turnover", aggregate: "sum" },
-            { field: "classes", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { field: "minor_code_cname", title: "第三類研習類別", width: "240px", footerTemplate: "第三類研習類別小計" },
-          { field: "new_people", title: "&nbsp;", width: "80px" },
-          { field: "people", title: "&nbsp;", width: "80px" },
-          { field: "weekly", title: "&nbsp;", width: "100px" },
-          { field: "avg_weekly", title: "&nbsp;", width: "100px" },
-          { field: "hours", title: "&nbsp;", width: "100px" },
-          { field: "total_hours", title: "&nbsp;", width: "100px" },
-          { field: "turnover", title: "&nbsp;", width: "100px" },
-          { field: "classes", title: "&nbsp;", width: "100px" },
-          { field: "info", title: "&nbsp;", width: "100px" },
-          { field: "note", title: "&nbsp;", width: "100px" }
-        ]
-      });
-      */
 
       /* detail tab */
       mojo.grid.academic_agency_report_detail = $('#grid-academic_agency_report_detail');
@@ -226,137 +83,41 @@
         e.preventDefault();
         mojo.to_excel('academic_agency_report_detail');
       });
-/*
-      mojo.grid.academic_agency_report_detail_a.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_detail_a,
-          schema: {
-            model: {
-              id: "country_code",
-              fields: {
-                country_code: { type: "string" },
-                new_male: { type: "number" },
-                new_female: { type: "number" },
-                new_people: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_male", aggregate: "sum" },
-            { field: "new_female", aggregate: "sum" },
-            { field: "new_people", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { title: "第一類研習類別", width: "200px", footerTemplate: "第一類研習類別小計" },
-          { field: "country_code", title: "&nbsp;" },
-          { field: "country_cname", title: "&nbsp;", width: "120px" },
-          { field: "new_male", title: "&nbsp;", width: "80px" },
-          { field: "new_female", title: "&nbsp;", width: "80px" },
-          { title: "&nbsp;", width: "100px" },
-          { field: "people", title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" }
-
-        ]
-      });
-
-      mojo.grid.academic_agency_report_detail_b.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_detail_b,
-          schema: {
-            model: {
-              id: "country_code",
-              fields: {
-                coountry_code: { type: "string" },
-                new_male: { type: "number" },
-                new_female: { type: "number" },
-                new_people: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_male", aggregate: "sum" },
-            { field: "new_female", aggregate: "sum" },
-            { field: "new_people", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { title: "第二類研習類別", width: "200px", footerTemplate: "第二類研習類別小計" },
-          { field: "country_code", title: "&nbsp;" },
-          { field: "country_cname", title: "&nbsp;", width: "120px" },
-          { field: "new_male", title: "&nbsp;", width: "80px" },
-          { field: "new_female", title: "&nbsp;", width: "80px" },
-          { title: "&nbsp;", width: "100px" },
-          { field: "people", title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" }
-
-        ]
-      });
-
-      mojo.grid.academic_agency_report_detail_c.kendoGrid({
-        dataSource: {
-          data: mojo.data.academic_agency_report_detail_c,
-          schema: {
-            model: {
-              id: "country_code",
-              fields: {
-                country_code: { type: "string" },
-                new_male: { type: "number" },
-                new_female: { type: "number" },
-                new_people: { type: "number" }
-              }    
-            }    
-          },
-          aggregate: [
-            { field: "new_male", aggregate: "sum" },
-            { field: "new_female", aggregate: "sum" },
-            { field: "new_people", aggregate: "sum" }
-          ]    
-        },   
-        pageable: false,
-        resizable: true,
-        columns: [
-          { title: "第三類研習類別", width: "200px", footerTemplate: "第三類研習類別小計" },
-          { field: "country_code", title: "&nbsp;" },
-          { field: "country_cname", title: "&nbsp;", width: "120px" },
-          { field: "new_male", title: "&nbsp;", width: "80px" },
-          { field: "new_female", title: "&nbsp;", width: "80px" },
-          { title: "&nbsp;", width: "100px" },
-          { field: "people", title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" },
-          { title: "&nbsp;", width: "100px" }
-
-        ]
-      });
-
-*/
-      
 
       /* pdf tab */
+
+      mojo.grid.academic_agency_report_pdf = $('#grid-academic_agency_report_pdf');
+      mojo.grid.academic_agency_report_pdf_a = $('#grid-academic_agency_report_pdf-a');
+      mojo.grid.academic_agency_report_pdf_b = $('#grid-academic_agency_report_pdf-b');
+      mojo.grid.academic_agency_report_pdf_c = $('#grid-academic_agency_report_pdf-c');
+      mojo.grid.academic_agency_report_pdf_pdf = $('#grid-academic_agency_report_pdf-pdf');
+
+      mojo.data.academic_agency_report_pdf_a = []; 
+      mojo.data.academic_agency_report_pdf_b = []; 
+      mojo.data.academic_agency_report_pdf_c = []; 
+
+      mojo.grid.academic_agency_report_pdf.kendoGrid({
+        pageable: false,
+        resizable: true,
+        height: 0,
+        columns: [
+          { title: "研習類別", width: "200px" },
+          { title: "總人數", width: "100px" },
+          { title: "總人次", width: "100px" },
+          { title: "每週平均上課時數(班平均)", width: "100px" },
+          { title: "每期上課時數", width: "100px" },
+          { title: "總人時數", width: "100px" },
+          { title: "營收額度", width: "100px" },
+          { title: "已組合班數", width: "100px" },
+          { title: "備註", width: "100px" },
+        ],
+        toolbar: kendo.template($('#template-academic_agency_report_pdf').html())
+      });
+
+      $('#btn-academic_agency_report_pdf-export').on('click', function(e) {
+        e.preventDefault();
+        mojo.to_pdf('academic_agency_report_pdf');
+      });
 
       mojo.tags.report = false;
       $('#btn-academic_agency_report-search').on('click', function(e) {
