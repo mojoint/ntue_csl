@@ -176,6 +176,28 @@ class AjaxModel extends Model {
         case 'admin_academic_admin_report_major_b':
 
             break;
+        case 'admin_board_unreply_query_bk':
+            $sql  = 'SELECT t.* ';
+            $sql .= '  FROM `academic_board` t';
+            return $this->dbSelect('SELECT count(*) `cnt` FROM `academic_board` ',array(':ntue'=>'NTUE'));
+            break;
+        case 'admin_board_unreply_query':
+            $sql  = 'SELECT t.* , a.`username`,g.`cname`, n.`cname` as ins_cname ';
+            $sql .= '  FROM `academic_board` t INNER JOIN `academic_agency_agent` a ';
+            $sql .= '       ON t.`agent_id` = a.`id` INNER JOIN `academic_agency` g ';
+            $sql .= '       ON a.`agency_id` = g.`id` INNER JOIN `academic_institution` n ';
+            $sql .= '       ON g.`institution_code` = n.`code` ';
+            $sql .= ' WHERE "NTUE" = :ntue ';
+            $sql .= '   AND t.`insert_date`  > now() - 3600*24*60';
+            $sql .= '   AND t.`reply_yn` = "0"'; 
+            $sql .= ' ORDER BY t.`insert_date` ';
+            return $this->dbSelect($sql,array(':ntue'=>'NTUE'));
+            break;
+        case 'admin_board_save_reply':
+            $sql = 'UPDATE `academic_board` SET reply_content = :reply_content ,admin_id = :admin_id,reply_date = now(), reply_yn = "1" WHERE message_id = :message_id ';
+            $cnt = $this->dbUpdate($sql, array(':reply_content'=>$data['reply_content'],':admin_id'=>$data['admin_id'],':message_id'=>$data['message_id']));
+            return ['cnt'=>$cnt];
+            break;						
         /* agent */
         case 'agent_academic_agency':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`';
@@ -421,7 +443,18 @@ class AjaxModel extends Model {
             $sql = 'UPDATE `academic_agency_agent` SET `userpass` = MD5(:userpass) WHERE agency_id = :agency_id AND username = :username';
             return $this->dbUpdate($sql, array(':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix, ':agency_id'=>$data['agency_id'], ':username'=>$data['username']));
             break;
-
+        case 'agent_board_question_add':
+            $sql = 'INSERT INTO `academic_board` (`agent_id`,`question_content`,`insert_date`) values(:agent_id,:question_content,NOW() ) ';
+            return $this->dbInsert($sql, array(':agent_id'=>$data['agent_id'], ':question_content'=>$data['question_content']));
+            break;
+        case 'agent_board_reply_query':
+            $sql = 'SELECT t.*, a.`username` FROM `academic_board` t LEFT JOIN `admin` a on t.`admin_id` = a.`id` where t.`agent_id` = :agent_id ORDER BY t.`insert_date` DESC';
+            /*
+            $res = $this->dbSelect($sql, array(':agent_id'=>$data['agent_id']));
+            echo json_encode($res);
+            */
+            return $this->dbSelect($sql, array(':agent_id'=>$data['agent_id']));
+            break;
         /* mailer */
         case 'mailer_official_get':
             $sql = 'SELECT * FROM `official` WHERE "NTUE" = :ntue ';

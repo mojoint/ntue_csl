@@ -126,6 +126,25 @@ class AjaxController extends Controller {
                 break;
             }
             break;
+        case 'message':
+            switch($val)
+            {
+            case 'noReplyMsgQry':
+                if (isset($_SESSION['admin'])) {
+                    $res = (new AjaxModel)->dbQuery('admin_board_unreply_query');
+                    $json = array("code"=>1, "data"=>$res);
+                    //$json = array("code"=>1, "data"=>"GOOD");
+                }
+    
+                break;
+            case 'replyMsgSave':
+                if (isset($_SESSION['admin'])) {
+                    $res = (new AjaxModel)->dbQuery('admin_board_save_reply',array('message_id'=>$_POST['msgid'],'admin_id'=>$_SESSION['admin']['id'],'reply_content'=>$_POST['replyContent']));
+                    $json = array("code"=>1, "data"=>$res);
+                }
+                break;
+            }
+            break;
         } 
         echo json_encode($json);
     } 
@@ -257,6 +276,25 @@ class AjaxController extends Controller {
                     }
                     $json = array("code"=>1, "data"=>$res);
                 }
+                break;
+            }
+            break;
+        case 'message':
+            switch( $val )
+            {
+            case 'histMsgQry':
+                if (isset($_SESSION['agent'])) {
+                    $res = (new AjaxModel)->dbQuery('agent_board_reply_query', array('agent_id'=>$_SESSION['agent']['id']));
+                    $json = array("code"=>1, "data"=>$res);
+
+                }
+                break;
+            case 'quesSave':
+                if (isset($_SESSION['agent'])) {
+                    $res = (new AjaxModel)->dbQuery('agent_board_question_add', array('agent_id'=>$_SESSION['agent']['id'],'question_content'=>$_POST['questionContent']));
+                    $json = array("code"=>1, "data"=>$res);
+                }
+    
                 break;
             }
             break;

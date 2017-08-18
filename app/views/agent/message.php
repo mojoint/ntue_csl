@@ -5,14 +5,14 @@
     <?php if ($_SESSION['agent']) : ?>
       <div class="container">
         <label>過往提問</label>
-        <div id="message-list" style="width:75%;height:300px;border:solid;overflow:auto">
+        <div id="message-list" style="width:95%;height:300px;border:solid;overflow:auto">
         </div>
         <div id="message-form">
-          <div style="width:75%">
+          <div style="width:95%">
             <label>我要提問</label>
             <textarea style="width:100%;height:60px;"></textarea>
           </div>
-          <div style="width:75%;text-align:center">
+          <div style="width:95%;text-align:center">
             <button id="message-cancel">取消</button>
             <button id="message-save" orgtxt="確認提出">確認提出</button>
           </div>
