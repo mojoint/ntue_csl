@@ -554,17 +554,113 @@ class AjaxController extends Controller {
 
                 break;
             case 'manager':
-                $objActSheet->setTitle( $val );
+                $objActSheet->setTitle( '明細' );
+                $objPHPExcel->setActiveSheetIndex(0);
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        
+                    }
+
+                    $cnt++;
+                }
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex(1);
+                $objPHPExcel->getActiveSheet()->setTitle( '聯絡人' );
+
+
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex(2);
+                $objPHPExcel->getActiveSheet()->setTitle( '差異' );
 
                 $filename = '管理報表';
                 break;
             case 'statistics':
-                $objActSheet->setTitle( $val );
+
+                $objActSheet->setTitle( '明細' );
+                $objPHPExcel->setActiveSheetIndex(0);
+                $cnt = 0;
+                foreach ($targets as $target) {
+                    if ($cnt > 0) {
+                        
+                    }
+
+                    $cnt++;
+                }
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex(1);
+                $objPHPExcel->getActiveSheet()->setTitle( '聯絡人' );
+
+
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex(2);
+                $objPHPExcel->getActiveSheet()->setTitle( '差異' );
 
                 $filename = '統計處報表';
                 break;
             case 'major_b':
-                $objActSheet->setTitle( $val );
+                $major_b = (new AjaxModel)->dbQuery('admin_academic_agency_report_major_b', array('era_id'=>$era));
+                $cnt = 0;
+                foreach ($major_b as $b) {
+                    if ($cnt > 0) {
+                        $objPHPExcel->createSheet();
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt);
+                    $cname = preg_replace("/\(/", "|", $b['cname']);
+                    $cname = preg_replace("/\)/", "|", $cname);
+                    $cname = preg_replace("/\:/", "-", $cname);
+                    $objPHPExcel->getActiveSheet()->setTitle( $cname );
+                    
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A0', '學校代碼');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B0', '單位名稱');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C0', '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D0', '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E0', '總時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F0', '總營收');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G0', '小註');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H0', '備註');
+
+                    $new_people = 0;
+                    $people = 0;
+                    $hours = 0;
+                    $turnover = 0;
+                    $info = '';
+                    $note = '';
+                    
+                    $knt = 2;
+                    foreach ($targets as $target) {
+                        $minor_b = (new AjaxModel)->dbQuery('admin_academic_agency_report_minor_b', array('agency_id'=>$target['id'], 'era_id'=>$era, 'minor_code'=>$b['minor_code']));
+                        if (sizeof($minor_b)) {
+                            $minor = $minor_b[0];
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $minor['new_people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $minor['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $minor['hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $minor['turnover']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $minor['info']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $minor['note']);
+                            
+                            $new_people += intval( $minor['new_people'] );
+                            $people += intval( $minor['people'] );
+                            $hours += floatval( $minor['hours'] );
+                            $turnover += floatval( $minor['turnover'] );
+                        }
+                        $knt++;
+                    }
+
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A1', '合計');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B1', '');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C1', $new_people);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D1', $people);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E1', $hours);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F1', $turnover);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G1', $info);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H1', $note);
+
+                    $cnt++;
+                }
+
 
                 $filename = 'B類年度總表';
                 break;
