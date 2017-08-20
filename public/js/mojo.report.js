@@ -38,7 +38,8 @@
 
       $('#btn-academic_agency_report_summary-export').on('click', function(e) {
         e.preventDefault();
-        mojo.to_excel('academic_agency_report_summary');
+        //mojo.to_excel('academic_agency_report_summary');
+        window.open('/ajax/reporter/academic_agency_report/summary/' + $('#academic_agency_report-era').val() + '/' + $('#academic_agency_report-quarter').val() + '/' + mojo.mojos[2]);
       });
 
       mojo.data.academic_agency_report_summary_a = []; 
@@ -81,7 +82,8 @@
 
       $('#btn-academic_agency_report_detail-export').on('click', function(e) {
         e.preventDefault();
-        mojo.to_excel('academic_agency_report_detail');
+        //mojo.to_excel('academic_agency_report_detail');
+        window.open('/ajax/reporter/academic_agency_report/detail/' + $('#academic_agency_report-era').val() + '/' + $('#academic_agency_report-quarter').val() + '/' + mojo.mojos[2]);
       });
 
       /* pdf tab */
@@ -116,7 +118,7 @@
 
       $('#btn-academic_agency_report_pdf-export').on('click', function(e) {
         e.preventDefault();
-        mojo.to_pdf('academic_agency_report_pdf');
+        window.open('/ajax/reporter/academic_agency_report/pdf/' + $('#academic_agency_report-era').val() + '/' + $('#academic_agency_report-quarter').val() + '/' + mojo.mojos[2]);
       });
 
       mojo.tags.report = false;

@@ -102,6 +102,10 @@ class AjaxModel extends Model {
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
             return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
+        case 'admin_academic_era':
+            $sql = 'SELECT * FROM `academic_era` WHERE `id` = :era_id';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            break;
         case 'admin_academic_era_add':
             $sql = 'SELECT * FROM `academic_era` WHERE "NTUE" = :ntue ORDER BY `id` DESC LIMIT 1';
             $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
@@ -166,8 +170,14 @@ class AjaxModel extends Model {
         case 'admin_academic_agency_report_manager':
 
             break;
-        case 'admin_academic_agency_report_statisics':
-
+        case 'admin_academic_agency_report_statistics':
+            $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t1.`id` = t2.`class_id`';
+            $sql .= ' INNER JOIN `country_list` t3 ON t3.`code` = t2.`country_code`';
+            $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id';
+            $sql .= ' GROUP BY t2.`country_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_major_b':
             $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id AND `major_code` = :major_b';
@@ -270,17 +280,29 @@ class AjaxModel extends Model {
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
         case 'agent_academic_agency_contact':
-            $sql = 'SELECT * FROM `academic_agency_contact` WHERE `agency_id` = :agency_id ORDER by `id` DESC';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            $sql = 'SELECT `id` FROM `academic_era` WHERE `state` = :state';
+            $era = $this->dbSelect($sql, array(':state'=>1));
+            $sql = 'SELECT * FROM `academic_agency_contact` WHERE `agency_id` = :agency_id AND `era_id` = :era_id ORDER by `manager` DESC, `id` DESC';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id']));
             break;
         case 'agent_academic_agency_contact_add':
+            $sql = 'SELECT `id` FROM `academic_era` WHERE `state` = :state';
+            $era = $this->dbSelect($sql, array(':state'=>1));
+            
             if (1 == $data['primary']) {
-                $sql = 'UPDATE `academic_agency_contact` SET primary = 0 WHERE `agency_id` = :agency_id';
-                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
+                $sql = 'UPDATE `academic_agency_contact` SET `primary` = 0 WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], 'era_id'=>$era[0]['id']));
             }
-            $staff = ($data['manager'] == 1)? $data['staff'] : 1;
-            $sql = 'INSERT INTO `academic_agency_contact` (`id`, `agency_id`, `cname`, `title`, `manager`, `staff`, `role`, `area_code`, `phone`, `ext`, `email`, `spare_email`, `primary`) VALUES (0, :agency_id, :cname, :title, :manager, :staff, :role, :area_code, :phone, :ext, :email, :spare_email, :primary)';
-            $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$data['manager'], ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary']));
+            $manager = 0;
+            $staff = 1;
+            if (1 == $data['manager']) {
+                $sql = 'UPDATE `academic_agency_contact` SET `manager` = 0, `staff` = 1 WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id']));
+                $manager = 1;
+                $staff = $data['staff'];
+            }
+            $sql = 'INSERT INTO `academic_agency_contact` (`id`, `agency_id`, `era_id`, `cname`, `title`, `manager`, `staff`, `role`, `area_code`, `phone`, `ext`, `email`, `spare_email`, `primary`) VALUES (0, :agency_id, :era_id, :cname, :title, :manager, :staff, :role, :area_code, :phone, :ext, :email, :spare_email, :primary)';
+            $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id'], ':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$manager, ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary']));
             return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_contact_del':
@@ -289,13 +311,23 @@ class AjaxModel extends Model {
             return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_contact_mod':
+            $sql = 'SELECT `id` FROM `academic_era` WHERE `state` = :state';
+            $era = $this->dbSelect($sql, array(':state'=>1));
+
             if (1 == $data['primary']) {
-                $sql = 'UPDATE `academic_agency_contact` SET primary = 0 WHERE `agency_id` = :agency_id';
-                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
+                $sql = 'UPDATE `academic_agency_contact` SET `primary` = 0 WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id']));
             }
-            $staff = ($data['manager'] == 1)? $data['staff'] : 1;
+            $manager = 0;
+            $staff = 1;
+            if (1 == $data['manager']) {
+                $sql = 'UPDATE `academic_agency_contact` SET `manager` = 0, `staff` = 1 WHERE `agency_id` = :agency_id AND era_id = :era_id';
+                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id']));
+                $manager = 1;
+                $staff = $data['staff'];
+            }
             $sql = 'UPDATE `academic_agency_contact` SET `cname` = :cname, `title` = :title, `manager` = :manager, `staff` = :staff, `role` = :role, `area_code` = :area_code, `phone` = :phone, `ext` = :ext, `email` = :email, `spare_email` = :spare_email, `primary` = :primary WHERE `agency_id` = :agency_id AND `id` = :id';
-            $cnt = $this->dbUpdate($sql, array(':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$data['manager'], ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':cname'=>$data['cname'], ':title'=>$data['title'], ':manager'=>$manager, ':staff'=>$staff, ':role'=>$data['role'], ':area_code'=>$data['area_code'], ':phone'=>$data['phone'], ':ext'=>$data['ext'], ':email'=>$data['email'], ':spare_email'=>$data['spare_email'], ':primary'=>$data['primary'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             return $this->dbQuery('agent_academic_agency_contact', array('agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_class_country':

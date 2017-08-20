@@ -8,5 +8,6 @@ require_once CORE_PATH . 'lib/recapthcalib.php';
 require_once CORE_PATH . 'lib/pub_func.php';
 require_once CORE_PATH . 'lib/Kendo/Autoload.php';
 require_once CORE_PATH . 'lib/PHPExcel.php';
+require_once CORE_PATH . 'lib/TCPDF/tcpdf.php';
 $init = new Core;
 $init->run();
