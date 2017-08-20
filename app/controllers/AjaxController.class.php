@@ -763,7 +763,6 @@ class AjaxController extends Controller {
                     }
                 }
 
-
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
                 header('Cache-Control: max-age=0');
@@ -829,12 +828,12 @@ class AjaxController extends Controller {
                 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
                 // set document information
                 $pdf->SetCreator(PDF_CREATOR);
-                $pdf->SetAuthor('Nicola Asuni');
-                $pdf->SetTitle('TCPDF Example 001');
-                $pdf->SetSubject('TCPDF Tutorial');
-                $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+                $pdf->SetAuthor('華語文機構績效報表');
+                $pdf->SetTitle('績效報表');
+                $pdf->SetSubject('績效報表');
+                $pdf->SetKeywords('績效報表');
                 // set default header data
-                $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+                $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
                 $pdf->setFooterData(array(0,64,0), array(0,64,128));
                 // set header and footer fonts
                 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -868,13 +867,53 @@ class AjaxController extends Controller {
                 // set text shadow effect
                 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
                 // Set some content to print
-$html = 'helo world';
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+
+                if (sizeof($res)) {
+                    $html  = '<table>';
+                    $html .=   '<thead>';
+                    $html .=     '<tr>';
+                    $html .=       '<th>研習類別</th>';
+                    $html .=       '<th>總人數</th>';
+                    $html .=       '<th>總人次</th>';
+                    $html .=       '<th>每週平均上課時數</th>';
+                    $html .=       '<th>每週平均上課時數(每班平均)</th>';
+                    $html .=       '<th>每期上課時數</th>';
+                    $html .=       '<th>總人時數</th>';
+                    $html .=       '<th>營收額度</th>';
+                    $html .=       '<th>已組合班數</th>';
+                    $html .=       '<th>小註(課程名稱)</th>';
+                    $html .=       '<th>備註</th>';
+                    $html .=     '</tr>';
+                    $html .=   '</thead>';
+                    $html .=   '<tbody>';
+
+                    foreach($res as $r) {
+                        $html .= '<tr>';
+                        $html .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
+                        $html .=  '<td class="">' . $r['new_people'] . '</td>';
+                        $html .=  '<td class="">' . $r['people'] . '</td>';
+                        $html .=  '<td class="">' . $r['weekly'] . '</td>';
+                        $html .=  '<td class="">' . $r['avg_weekly'] . '</td>';
+                        $html .=  '<td class="">' . $r['hours'] . '</td>';
+                        $html .=  '<td class="">' . $r['total_hours'] . '</td>';
+                        $html .=  '<td class="">' . $r['turnover'] . '</td>';
+                        $html .=  '<td class="">' . $r['classes'] . '</td>';
+                        $html .=  '<td class="">' . $r['info'] . '</td>';
+                        $html .=  '<td class="">' . $r['note'] . '</td>';
+                        $html .= '</tr>';
+                        $knt++;
+                    }
+
+                    $html .=   '</tbody>';
+                }
+
                 // Print text using writeHTMLCell()
                 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
                 // ---------------------------------------------------------
                 // Close and output PDF document
                 // This method has several options, check the source code documentation for more information.
-                $pdf->Output('example_001.pdf', 'I');
+                $pdf->Output('績效報表.pdf', 'I');
                 break;
             }
             break;
