@@ -882,7 +882,7 @@ class AjaxController extends Controller {
                 // print standard ASCII chars, you can use core fonts like
                 // helvetica or times to reduce file size.
                 //$pdf->SetFont('dejavusans', '', 14, '', true);
-                $pdf->SetFont('msungstdlight', '', 14);
+                $pdf->SetFont('msungstdlight', '', 12);
                 // Add a page
                 // This method has several options, check the source code documentation for more information.
                 $pdf->AddPage();
@@ -890,48 +890,122 @@ class AjaxController extends Controller {
                 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
                 // Set some content to print
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                $majors = (new AjaxModel)->dbQuery('refs_major_list');
+                $major_head = array();
+                $major_foot = array();
+                $major_tag = array();
+                $major_sum = array('S'=>array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0));
+                foreach( $majors as $major ) {
+                    switch( $major['code'] ) 
+                    {
+                    case 'A':
+                        $major_head[ $major['code'] ] = '第一類研習類別';
+                        $major_foot[ $major['code'] ] = '第一類研習類別小計';
+                        break;
+                    case 'B':
+                        $major_head[ $major['code'] ] = '第二類研習類別';
+                        $major_foot[ $major['code'] ] = '第二類研習類別小計';
+                        break;
+                    case 'C':
+                        $major_head[ $major['code'] ] = '第三類研習類別';
+                        $major_foot[ $major['code'] ] = '第三類研習類別小計';
+                        break;
+                    }
+                    $major_sum[ $major['code'] ] = array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0);
+                   
+                    $major_tag[ $major['code'] ] = true;
+                }
 
-                if (sizeof($res)) {
-                    $html  = '<table>';
+                $size = sizeof($res);
+                if ($size) {
+                    $html  = '<table border="1">';
                     $html .=   '<thead>';
                     $html .=     '<tr>';
                     $html .=       '<th>研習類別</th>';
                     $html .=       '<th>總人數</th>';
                     $html .=       '<th>總人次</th>';
-                    $html .=       '<th>每週平均上課時數</th>';
                     $html .=       '<th>每週平均上課時數(每班平均)</th>';
                     $html .=       '<th>每期上課時數</th>';
                     $html .=       '<th>總人時數</th>';
                     $html .=       '<th>營收額度</th>';
                     $html .=       '<th>已組合班數</th>';
-                    $html .=       '<th>小註(課程名稱)</th>';
                     $html .=       '<th>備註</th>';
                     $html .=     '</tr>';
                     $html .=   '</thead>';
                     $html .=   '<tbody>';
-
+                    
+                    $major_cache = 'A';
+                    $knt = 1;
                     foreach($res as $r) {
+                        if ($major_tag[ $r['major_code'] ]) {
+                            $major_tag[ $r['major_code'] ] = false;
+                            $html .= '<tr><th colspan="10">'. $major_head[ $r['major_code'] ] .'</th></tr>'; 
+                        }
+                        
                         $html .= '<tr>';
                         $html .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
                         $html .=  '<td class="">' . $r['new_people'] . '</td>';
                         $html .=  '<td class="">' . $r['people'] . '</td>';
-                        $html .=  '<td class="">' . $r['weekly'] . '</td>';
                         $html .=  '<td class="">' . $r['avg_weekly'] . '</td>';
                         $html .=  '<td class="">' . $r['hours'] . '</td>';
                         $html .=  '<td class="">' . $r['total_hours'] . '</td>';
                         $html .=  '<td class="">' . $r['turnover'] . '</td>';
                         $html .=  '<td class="">' . $r['classes'] . '</td>';
-                        $html .=  '<td class="">' . $r['info'] . '</td>';
-                        $html .=  '<td class="">' . $r['note'] . '</td>';
+                        $html .=  '<td class=""></td>';
                         $html .= '</tr>';
+
+                        $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
+                        $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
+                        $major_sum[ $r['major_code'] ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
+                        $major_sum[ $r['major_code'] ][ 'hours' ] += floatval( $r['hours'] );
+                        $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
+                        $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
+                        $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
+
+                        if (($major_cache != $r['major_code']) || ($knt == $size)) {
+                            $html .= '<tr>';
+                            $html .=   '<th>'. $major_foot[ $major_cache ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'new_people' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'people' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'avg_weekly' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'hours' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'total_hours' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'turnover' ] .'</th>';
+                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'classes' ] .'</th>';
+                            $html .= '</tr>';
+                        }
+
+                        $major_cache = $r['major_code'];
                         $knt++;
                     }
 
+                    $html .= '<tr>';
+                    $html .=   '<th>合計</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'new_people' ] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'people' ] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'avg_weekly' ] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'hours' ] + $major_sum[ 'B' ][ 'hours' ] + $major_sum[ 'C' ][ 'hours' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'total_hours' ] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'turnover' ] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ] ) .'</th>';
+                    $html .=   '<th>'. ( $major_sum[ 'A' ][ 'classes' ] + $major_sum[ 'B' ][ 'classes' ] + $major_sum[ 'C' ][ 'classes' ] ) .'</th>';
+                    $html .= '</tr>';
+
+
                     $html .=   '</tbody>';
+                    $html .= '</table>';
+                    $html .= '<div height="100"></div>';
+                    $html .= '<table>';
+                    $html .=   '<thead>';
+                    $html .=     '<tr width="200"><th>註冊並繳費人數:</th><th></th></tr>';
+                    $html .=     '<tr width="200"><th>免費人數:</th><th></th></tr>';
+                    $html .=     '<tr width="200"><th>填報人簽章:</th><th>申請單位主管簽章:</th></tr>';
+                    $html .=   '</thead>';
+                    $html .= '</table>';
                 }
 
                 // Print text using writeHTMLCell()
-                $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+                //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+                $pdf->writeHTML($html, true, false, false, false, '');
                 // ---------------------------------------------------------
                 // Close and output PDF document
                 // This method has several options, check the source code documentation for more information.
