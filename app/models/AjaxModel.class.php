@@ -94,6 +94,25 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':userpass'=>$data['userpass'], ':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
+        case 'admin_academic_agency_status':
+            $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `institution_cname`, t1.`era_id`, t3.`cname` `era_cname`, t1.`quarter`, t1.`state`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
+            $sql .= ' INNER JOIN `academic_era` t3 ON t1.`era_id` = t3.`id`';
+            $sql .= ' WHERE t1.`agency_id` != :agency_id';
+            $sql .= ' GROUP BY t1.`agency_id`, t1.`era_id`, t1.`quarter`';
+            $sql .= ' ORDER BY t1.`institution_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>999));
+            break;
+        case 'admin_academic_agency_status_byid':
+            $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `institution_cname`, t1.`era_id`, t3.`cname` `era_cname`, t1.`quarter`, t1.`state`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
+            $sql .= ' INNER JOIN `academic_era` t3 ON t1.`era_id` = t3.`id`';
+            $sql .= ' WHERE t1.`agency_id` = :agency_id';
+            $sql .= ' GROUP BY t1.`era_id`, t1.`quarter`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            break;
         case 'admin_academic_agency_unlock_yes':
             $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
             return $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));

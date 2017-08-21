@@ -63,6 +63,17 @@ class AjaxController extends Controller {
                 break;
             } 
             break;
+        case 'academic_agency_status':
+            switch( $val ) 
+            {
+            case 0: 
+                $res = (new AjaxModel)->dbQuery('academic_agency_status_all', array('agency_id'=>$val));
+                break;
+            default:
+                $res = (new AjaxModel)->dbQuery('academic_agency_status', array('agency_id'=>$val));
+            }
+            $json = array("code"=>1, "data"=>$res);
+            break;
         case 'academic_agency_unlock':
             switch( $val )
             {
