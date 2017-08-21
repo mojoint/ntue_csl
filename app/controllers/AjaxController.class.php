@@ -559,38 +559,47 @@ class AjaxController extends Controller {
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '人時數營收總簡表' );
 
                 $cnt = 1;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人數簡表' );
 
                 $cnt = 2;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人次簡表' );
 
                 $cnt = 3;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人時數簡表' );
 
                 $cnt = 4;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總營收簡表' );
 
                 $cnt = 5;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人數詳表' );
 
                 $cnt = 6;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人次詳表' );
 
                 $cnt = 7;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總時數詳表' );
 
                 $cnt = 8;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總營收詳表' );
 
                 $cnt = 9;
+                $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '大學附設華語中心人數(次)一覽表(交叉總表)' );
 
@@ -718,6 +727,8 @@ class AjaxController extends Controller {
             exit;
             break;
         case 'academic_agency_report':
+            $agency = (new AjaxModel)->dbQuery('agent_academic_agency', array('id'=>$agency_id));
+            $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
             switch($val)
             {
             case 'summary':
@@ -855,6 +866,7 @@ class AjaxController extends Controller {
                 $pdf->SetKeywords('績效報表');
                 // set default header data
                 //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+                $pdf->SetHeaderData('', 0, $era[0]['cname'] . ' 績效報表', $agency[0]['academic_institution_cname'] . ' ' . $agency[0]['cname'], '', array(0,64,255), array(0,64,128));
                 $pdf->setFooterData(array(0,64,0), array(0,64,128));
                 // set header and footer fonts
                 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));

@@ -401,7 +401,7 @@ class AjaxModel extends Model {
                     $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
-                    $str .= ' INNER JOIN `content_list` t3 ON t1.`target_code` = t3.`code`';               
+                    $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
                     $str .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`minor_code` = :minor_code';
                     $str .= ' GROUP BY t1.`minor_code`';
                     $r = $this->dbSelect($str, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minor_code'=>$res[$key]['minor_code']));
@@ -435,7 +435,7 @@ class AjaxModel extends Model {
                     $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
-                    $str .= ' INNER JOIN `content_list` t3 ON t1.`target_code` = t3.`code`';               
+                    $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
                     $str .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`minor_code` = :minor_code';
                     $str .= ' GROUP BY t1.`minor_code`';
                     $r = $this->dbSelect($str, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minor_code'=>$res[$key]['minor_code']));
