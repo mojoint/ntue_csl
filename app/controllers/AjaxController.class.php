@@ -833,7 +833,7 @@ class AjaxController extends Controller {
                 $pdf->SetSubject('績效報表');
                 $pdf->SetKeywords('績效報表');
                 // set default header data
-                $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+                //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
                 $pdf->setFooterData(array(0,64,0), array(0,64,128));
                 // set header and footer fonts
                 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -860,7 +860,8 @@ class AjaxController extends Controller {
                 // dejavusans is a UTF-8 Unicode font, if you only need to
                 // print standard ASCII chars, you can use core fonts like
                 // helvetica or times to reduce file size.
-                $pdf->SetFont('dejavusans', '', 14, '', true);
+                //$pdf->SetFont('dejavusans', '', 14, '', true);
+                $pdf->SetFont('msungstdlight', '', 14);
                 // Add a page
                 // This method has several options, check the source code documentation for more information.
                 $pdf->AddPage();
