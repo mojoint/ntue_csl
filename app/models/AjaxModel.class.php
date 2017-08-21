@@ -233,6 +233,30 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':reply_content'=>$data['reply_content'],':admin_id'=>$data['admin_id'],':message_id'=>$data['message_id']));
             return ['cnt'=>$cnt];
             break;						
+        case 'admin_postman_receverlist':
+            $sql  = 'SELECT cname,email ';
+            $sql .= '  FROM `academic_agency_contact` ';
+            $sql .= ' WHERE "NTUE" = :ntue ';
+            $sql .= '   AND `email` IS NOT NULL ';
+            $sql .= '   AND `email` != "" ';
+            switch($data['rcpttotype']){
+                /* 所有單位人員 */
+                case '1':
+                    break;
+                /* 所有單位主管 */
+                case '2':
+                    $sql .= 'and `manager` = "1"';
+                    break;
+                /* 所有單位職員 */
+                case '3':
+                    $sql .= 'and `staff` = "1"';
+                    break;
+                /* 所有未填報單位聯絡人 */
+                case '4':
+                    break;
+            }
+            return $this->dbSelect($sql,array(':ntue'=>MD5Prefix));
+            break;
         /* agent */
         case 'agent_academic_agency':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`';
