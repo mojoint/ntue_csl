@@ -1021,7 +1021,8 @@ class AjaxController extends Controller {
                 // ---------------------------------------------------------
                 // Close and output PDF document
                 // This method has several options, check the source code documentation for more information.
-                $pdf->Output('績效報表.pdf', 'I');
+                $pdf->SetHeaderData('', 0, $era[0]['cname'] . ' 績效報表', $agency[0]['academic_institution_cname'] . ' ' . $agency[0]['cname'], '', array(0,64,255), array(0,64,128));
+                $pdf->Output( $era[0]['cname'] . '績效報表-' . $agency[0]['academic_institution_cname'] . '-' . $agency[0]['cname'] . '.pdf', 'D');
                 break;
             }
             break;
