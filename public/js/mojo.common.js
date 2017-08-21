@@ -449,7 +449,7 @@ console.log(res);
                     pdf_c += '<th></th><th></th>';
                     pdf_c += '</tr>';
 
-                    mojo.html += html_a;
+                    mojo.html  = html_a;
                     mojo.html += html_b;
                     mojo.html += html_c;
                     $('#grid-academic_agency_report_summary table tbody').html(mojo.html);
@@ -663,8 +663,6 @@ console.log(res);
                       }
                     }
                            
-                    mojo.html  = '';
-  
                     html_a += '<th>第一研習類別小計</th>';
                     html_a += '<th>' + mojo.summary.a.new_people + '</th>';
                     html_a += '<th>' + mojo.summary.a.people + '</th>';
@@ -692,7 +690,8 @@ console.log(res);
                     html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.turnover + '</th>';
                     html_c += '<th></th><th></th>';
-                    mojo.html += html_a;
+
+                    mojo.html  = html_a;
                     mojo.html += html_b;
                     mojo.html += html_c;
                     $('#grid-academic_agency_report_detail table tbody').html(mojo.html);
