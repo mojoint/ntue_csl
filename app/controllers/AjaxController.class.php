@@ -740,6 +740,32 @@ class AjaxController extends Controller {
         case 'academic_agency_report':
             $agency = (new AjaxModel)->dbQuery('agent_academic_agency', array('id'=>$agency_id));
             $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
+            $majors = (new AjaxModel)->dbQuery('refs_major_list');
+            $major_head = array();
+            $major_foot = array('S'=>'合計');
+            $major_tag = array();
+            $major_sum = array('S'=>array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0));
+            $major_cache = 'A';
+            foreach( $majors as $major ) {
+                switch( $major['code'] ) 
+                {
+                case 'A':
+                    $major_head[ $major['code'] ] = '第一類研習類別';
+                    $major_foot[ $major['code'] ] = '第一類研習類別小計';
+                    break;
+                case 'B':
+                    $major_head[ $major['code'] ] = '第二類研習類別';
+                    $major_foot[ $major['code'] ] = '第二類研習類別小計';
+                    break;
+                case 'C':
+                    $major_head[ $major['code'] ] = '第三類研習類別';
+                    $major_foot[ $major['code'] ] = '第三類研習類別小計';
+                    break;
+                }
+                $major_sum[ $major['code'] ] = array('new_people'=>0, 'people'=>0, 'weekly'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0);
+               
+                $major_tag[ $major['code'] ] = true;
+            }
             switch($val)
             {
             case 'summary':
@@ -750,13 +776,16 @@ class AjaxController extends Controller {
                 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
                 $objPHPExcel = new PHPExcel();
                 $cnt = 0;
-                $filename = '課程統計簡表(四大類)';
+                $filename = $era[0]['cname'] . $agency[0]['institution_code'] . $agency[0]['academic_institution_cname'] . '課程明細簡表(四大類)';
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $filename );
 
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
-                if (sizeof($res)) {
+                $size = sizeof($res);
+                if ($size) {
                     $knt = 1;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $filename);
+                    $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
@@ -768,8 +797,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
-
+                    $count = 0;
                     foreach($res as $r) {
+                        $count++;
+                        if ($major_tag[ $r['major_code'] ]) {
+                            $major_tag[ $r['major_code'] ] = false;
+                            $knt++;
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
+                        }
+
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $r['new_people']);
@@ -782,7 +818,45 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['classes']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['info']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['note']);
+
+                        $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
+                        $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
+                        $major_sum[ $r['major_code'] ][ 'weekly' ] += floatval( $r['weekly'] );
+                        $major_sum[ $r['major_code'] ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
+                        $major_sum[ $r['major_code'] ][ 'hours' ] += floatval( $r['hours'] );
+                        $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
+                        $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
+                        $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
+
+
+                        if (($major_cache != $r['major_code']) || ($count == $size)) {
+                            $knt++;
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['classes']);
+                        }
+                        $major_cache = $r['major_code'];
+
                     }
+
+
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'A' ]['new_people'] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'A' ]['weekly'] + $major_sum[ 'B' ][ 'weekly' ] + $major_sum[ 'C' ][ 'weekly' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'A' ]['hours'] + $major_sum[ 'B' ][ 'hours' ] + $major_sum[ 'C' ][ 'hours' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['classes'] + $major_sum[ 'B' ][ 'classes' ] + $major_sum[ 'C' ][ 'classes' ]);
+
                 }
 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -800,14 +874,17 @@ class AjaxController extends Controller {
                 define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
                 $objPHPExcel = new PHPExcel();
 
-                $filename = '課程明細詳表(含國別)';
+                $filename = $era[0]['cname'] . $agency[0]['institution_code'] . $agency[0]['academic_institution_cname'] . '課程明細詳表(含國別)';
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $filename );
 
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
-                if (sizeof($res)) {
+                $size = sizeof($res);
+                if ($size) {
                     $knt = 1;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $filename);
+                    $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '國別(地區)');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '男新生人數');
@@ -823,13 +900,19 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, '備註');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, '最後修改時間');
 
+                    $count = 0;
                     foreach($res as $r) {
-                        $size = sizeof($r['country']);
-                        $count = 0;
+                        $count++;
+                        if ($major_tag[ $r['major_code'] ]) {
+                            $major_tag[ $r['major_code'] ] = false;
+                            $knt++;
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
+                        }
+                        $countries = sizeof($r['country']);
+                        $kount = 0;
                         foreach($r['country'] as $country) {
                             $knt++;
-                            $count++;
-                            if ($size == $count) {
+                            if ($countries == $kount) {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
@@ -913,31 +996,6 @@ class AjaxController extends Controller {
                 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
                 // Set some content to print
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
-                $majors = (new AjaxModel)->dbQuery('refs_major_list');
-                $major_head = array();
-                $major_foot = array();
-                $major_tag = array();
-                $major_sum = array('S'=>array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0));
-                foreach( $majors as $major ) {
-                    switch( $major['code'] ) 
-                    {
-                    case 'A':
-                        $major_head[ $major['code'] ] = '第一類研習類別';
-                        $major_foot[ $major['code'] ] = '第一類研習類別小計';
-                        break;
-                    case 'B':
-                        $major_head[ $major['code'] ] = '第二類研習類別';
-                        $major_foot[ $major['code'] ] = '第二類研習類別小計';
-                        break;
-                    case 'C':
-                        $major_head[ $major['code'] ] = '第三類研習類別';
-                        $major_foot[ $major['code'] ] = '第三類研習類別小計';
-                        break;
-                    }
-                    $major_sum[ $major['code'] ] = array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0);
-                   
-                    $major_tag[ $major['code'] ] = true;
-                }
 
                 $size = sizeof($res);
                 if ($size) {
@@ -957,7 +1015,6 @@ class AjaxController extends Controller {
                     $html .=   '</thead>';
                     $html .=   '<tbody>';
                     
-                    $major_cache = 'A';
                     $knt = 1;
                     foreach($res as $r) {
                         if ($major_tag[ $r['major_code'] ]) {
