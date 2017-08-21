@@ -155,6 +155,14 @@ console.log(res);
                   break;
                 }
               break;
+              case 'postman':
+                switch(params)
+                {
+                case 'emailSend':
+                  $.postmanSend(res.data);
+                  break;
+                }
+              break;
               }
             case 'agent':
               switch(val)
