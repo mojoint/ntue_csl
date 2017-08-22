@@ -108,11 +108,10 @@
           { title: "總人數", width: "100px" },
           { title: "總人次", width: "100px" },
           { title: "每週平均上課時數(班平均)", width: "100px" },
-          { title: "每期上課時數", width: "100px" },
-          { title: "總人時數", width: "100px" },
-          { title: "營收額度", width: "100px" },
-          { title: "已組合班數", width: "100px" },
-          { title: "備註", width: "100px" },
+          { title: "每期上課時數", width: "150px" },
+          { title: "總人時數", width: "200px" },
+          { title: "營收額度", width: "200px" },
+          { title: "已組合班數", width: "150px" }
         ],
         toolbar: kendo.template($('#template-academic_agency_report_pdf').html())
       });
