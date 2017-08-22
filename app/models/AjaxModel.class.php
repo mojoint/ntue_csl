@@ -424,6 +424,13 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':administration'=>$data['administration'], ':subject'=>$data['subject'], ':adjunct'=>$data['adjunct'], ':reserve'=>$data['reserve'], ':others'=>$data['others'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             return $this->dbQuery('agent_academic_agency_hr', array('agency_id'=>$data['agency_id']));
             break;
+        case 'agent_academic_agency_report_countries':
+            $sql  = 'SELECT IFNULL(COUNT(DISTINCT t2.`country_code`), 0) `countries`, t1.`minor_code`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+            $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            break;
         case 'agent_academic_agency_report_summary':
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
