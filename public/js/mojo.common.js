@@ -222,9 +222,9 @@ console.log(res);
                   if (res.data.summary) {
                     mojo.data.academic_agency_report_summary = res.data.summary;
 
-                    var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
-                    var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
-                    var html_c = '<tr><th colspan="11">第三研習類別</th></tr>';
+                    var html_a = '<tr class="active"><th  colspan="11">第一研習類別</th></tr>';
+                    var html_b = '<tr class="active"><th  colspan="11">第二研習類別</th></tr>';
+                    var html_c = '<tr class="active"><th  colspan="11">第三研習類別</th></tr>';
 
                     var pdf_a = html_a;
                     var pdf_b = html_b;
@@ -379,8 +379,8 @@ console.log(res);
                       }
                     }
 
-                    html_a += '<tr>';
-                    html_a += '<th>第一研習類別小計</th>';
+                    html_a += '<tr class="active">';
+                    html_a += '<th >第一研習類別小計</th>';
                     html_a += '<th>' + mojo.summary.a.new_people + '</th>';
                     html_a += '<th>' + mojo.summary.a.people + '</th>';
                     html_a += '<th>' + mojo.summary.a.weekly + '</th>';
@@ -392,7 +392,7 @@ console.log(res);
                     html_a += '<th></th><th></th>';
                     html_a += '</tr>';
 
-                    html_a += '<tr>';
+                    pdf_a += '<tr class="active">';
                     pdf_a += '<th>第一研習類別小計</th>';
                     pdf_a += '<th>' + mojo.summary.a.new_people + '</th>';
                     pdf_a += '<th>' + mojo.summary.a.people + '</th>';
@@ -405,8 +405,8 @@ console.log(res);
                     pdf_a += '<th></th><th></th>';
                     pdf_a += '</tr>';
 
-                    html_b += '<tr>';
-                    html_b += '<th>第二研習類別小計</th>';
+                    html_b += '<tr class="active">';
+                    html_b += '<th >第二研習類別小計</th>';
                     html_b += '<th>' + mojo.summary.b.new_people + '</th>';
                     html_b += '<th>' + mojo.summary.b.people + '</th>';
                     html_b += '<th>' + mojo.summary.b.weekly + '</th>';
@@ -418,7 +418,7 @@ console.log(res);
                     html_b += '<th></th><th></th>';
                     html_b += '</tr>';
 
-                    pdf_b += '<tr>';
+                    pdf_b += '<tr class="active">';
                     pdf_b += '<th>第二研習類別小計</th>';
                     pdf_b += '<th>' + mojo.summary.b.new_people + '</th>';
                     pdf_b += '<th>' + mojo.summary.b.people + '</th>';
@@ -431,8 +431,8 @@ console.log(res);
                     pdf_b += '<th></th><th></th>';
                     pdf_b += '</tr>';
 
-                    html_c += '<tr>';
-                    html_c += '<th>第三研習類別小計</th>';
+                    html_c += '<tr class="active">';
+                    html_c += '<th >第三研習類別小計</th>';
                     html_c += '<th>' + mojo.summary.c.new_people + '</th>';
                     html_c += '<th>' + mojo.summary.c.people + '</th>';
                     html_c += '<th>' + mojo.summary.c.weekly + '</th>';
@@ -444,7 +444,7 @@ console.log(res);
                     html_c += '<th></th><th></th>';
                     html_c += '</tr>';
 
-                    pdf_c += '<tr>';
+                    pdf_c += '<tr class="active">';
                     pdf_c += '<th>第三研習類別小計</th>';
                     pdf_c += '<th>' + mojo.summary.c.new_people + '</th>';
                     pdf_c += '<th>' + mojo.summary.c.people + '</th>';
@@ -461,13 +461,17 @@ console.log(res);
                     mojo.html += html_b;
                     mojo.html += html_c;
                     $('#grid-academic_agency_report_summary table tbody').html(mojo.html);
+                    mojo.html  = pdf_a;
+                    mojo.html += pdf_b;
+                    mojo.html += pdf_c;
+                    $('#grid-academic_agency_report_pdf table tbody').html(mojo.html);
                   }
 
                   if (res.data.detail) {
                     mojo.data.academic_agency_report_detail = res.data.detail;
-                    var html_a = '<tr><th colspan="11">第一研習類別</th></tr>';
-                    var html_b = '<tr><th colspan="11">第二研習類別</th></tr>';
-                    var html_c = '<tr><th colspan="11">第三研習類別</th></tr>';
+                    var html_a = '<tr class="active"><th  colspan="11">第一研習類別</th></tr>';
+                    var html_b = '<tr class="active"><th  colspan="11">第二研習類別</th></tr>';
+                    var html_c = '<tr class="active"><th  colspan="11">第三研習類別</th></tr>';
                     mojo.detail = {
                       a: {
                         'country': 0,
@@ -671,7 +675,8 @@ console.log(res);
                       }
                     }
                            
-                    html_a += '<th>第一研習類別小計</th>';
+                    html_a += '<tr class="active">';
+                    html_a += '<th >第一研習類別小計</th>';
                     html_a += '<th>' + mojo.summary.a.new_people + '</th>';
                     html_a += '<th>' + mojo.summary.a.people + '</th>';
                     html_a += '<th>' + mojo.summary.a.weekly + '</th>';
@@ -680,7 +685,9 @@ console.log(res);
                     html_a += '<th>' + mojo.summary.a.total_hours + '</th>';
                     html_a += '<th>' + mojo.summary.a.turnover + '</th>';
                     html_a += '<th></th><th></th>';
-                    html_b += '<th>第二研習類別小計</th>';
+                    html_a += '</tr>';
+                    html_b += '<tr class="active">';
+                    html_b += '<th >第二研習類別小計</th>';
                     html_b += '<th>' + mojo.summary.b.new_people + '</th>';
                     html_b += '<th>' + mojo.summary.b.people + '</th>';
                     html_b += '<th>' + mojo.summary.b.weekly + '</th>';
@@ -689,7 +696,9 @@ console.log(res);
                     html_b += '<th>' + mojo.summary.b.total_hours + '</th>';
                     html_b += '<th>' + mojo.summary.b.turnover + '</th>';
                     html_b += '<th></th><th></th>';
-                    html_c += '<th>第三研習類別小計</th>';
+                    html_b += '</tr>';
+                    html_c += '<tr class="active">';
+                    html_c += '<th >第三研習類別小計</th>';
                     html_c += '<th>' + mojo.summary.c.new_people + '</th>';
                     html_c += '<th>' + mojo.summary.c.people + '</th>';
                     html_c += '<th>' + mojo.summary.c.weekly + '</th>';
@@ -698,6 +707,7 @@ console.log(res);
                     html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.turnover + '</th>';
                     html_c += '<th></th><th></th>';
+                    html_c += '</tr>';
 
                     mojo.html  = html_a;
                     mojo.html += html_b;
