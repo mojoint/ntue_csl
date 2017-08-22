@@ -259,7 +259,7 @@ class AjaxModel extends Model {
             break;
         /* agent */
         case 'agent_academic_agency':
-            $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`';
+            $sql  = 'SELECT t1.*, t2.`cname` `academic_institution_cname`, t2.`aka`';
             $sql .= '  FROM `academic_agency` t1';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t2.`code` = t1.`institution_code`';
             $sql .= ' WHERE t1.`id` = :id';

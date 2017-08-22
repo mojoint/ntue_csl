@@ -933,6 +933,7 @@ class AjaxController extends Controller {
                         $countries = sizeof($r['country']);
                         $kount = 0;
                         foreach($r['country'] as $country) {
+                            $kount++;
                             $knt++;
                             if ($countries == $kount) {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
@@ -1064,7 +1065,7 @@ class AjaxController extends Controller {
 
                 $size = sizeof($res);
                 if ($size) {
-                    $html  = '<table border="1">';
+                    $html  = '<table border="1" align="center" cellpadding="2">';
                     $html .=   '<thead>';
                     $html .=     '<tr>';
                     $html .=       '<th>研習類別</th>';
@@ -1117,6 +1118,7 @@ class AjaxController extends Controller {
                             $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'total_hours' ] .'</th>';
                             $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'turnover' ] .'</th>';
                             $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'classes' ] .'</th>';
+                            $html .=   '<th></th>';
                             $html .= '</tr>';
                         }
 
@@ -1133,6 +1135,7 @@ class AjaxController extends Controller {
                     $html .=   '<th>'. ( $major_sum[ 'A' ][ 'total_hours' ] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ] ) .'</th>';
                     $html .=   '<th>'. ( $major_sum[ 'A' ][ 'turnover' ] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ] ) .'</th>';
                     $html .=   '<th>'. ( $major_sum[ 'A' ][ 'classes' ] + $major_sum[ 'B' ][ 'classes' ] + $major_sum[ 'C' ][ 'classes' ] ) .'</th>';
+                    $html .=   '<th></th>';
                     $html .= '</tr>';
 
 
@@ -1155,7 +1158,8 @@ class AjaxController extends Controller {
                 // Close and output PDF document
                 // This method has several options, check the source code documentation for more information.
                 $pdf->SetHeaderData('', 0, $era[0]['cname'] . ' 績效報表', $agency[0]['academic_institution_cname'] . ' ' . $agency[0]['cname'], '', array(0,64,255), array(0,64,128));
-                $pdf->Output( $era[0]['cname'] . '績效報表-' . $agency[0]['academic_institution_cname'] . '-' . $agency[0]['cname'] . '.pdf', 'D');
+                //$pdf->Output( $era[0]['cname'] . '績效報表-' . $agency[0]['academic_institution_cname'] . '-' . $agency[0]['aka'] . '.pdf', 'D');
+                $pdf->Output( $era[0]['cname'] . '-' . $agency[0]['institution_code'] . '-' . trim($agency[0]['aka'], " ") . '.pdf', 'D');
                 break;
             }
             break;
