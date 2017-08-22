@@ -27,7 +27,8 @@
             <label for="editor-academic_class-note">修改理由說明</label>
             <input type="text" id="editor-academic_class-note" />
             <label for="editor-academic_class-days">修改天數</label>
-            <input type="text" id="editor-academic_class-work_days" />
+            <!--<input type="text" id="editor-academic_class-work_days" />-->
+            <select id="editor-academic_class-work_days"></select>
             <a href="\\#" class="k-button" id="btn-academic_class-unlock"><span class="fa fa-save"></span>&nbsp;確認提出</a>
           </div>
           <div class="toolbar"></div>
@@ -35,6 +36,7 @@
         <div id="grid-academic_class-footer" class="col-xs-12"></div>
         <script>
           mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
+console.log( mojo.data.academic_agency_unlock.length );
           var academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
           var academic_class = JSON.parse('<?php echo json_encode($academic_class); ?>');
           $('#grid-academic_class').kendoGrid({

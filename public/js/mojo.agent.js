@@ -33,8 +33,8 @@
         ]
       });
       mojo.html = '';
-      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">信箱</label><input type="text" id="dialog-email" placeholder="需要修改的話請填入" /></div>';
-      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">密碼</label><input type="text" id="dialog-userpass" placeholder="需要修改的話請填入" /></div>';
+      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-email">信箱(需要修改才需填入)</label><input type="text" id="dialog-email" placeholder="規則: email " /></div>';
+      mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-userpass">密碼(需要修改才需填入)</label><input type="text" id="dialog-userpass" placeholder="規則: 長度3~80 的 大小寫英數字或`~!@#$%^&*-_=+" /></div>';
       $('#dialog').data('kendoDialog').content(mojo.html).open().center();
     }
     
@@ -1341,11 +1341,23 @@
       mojo.watch_info();
 
     /* unlock */
+    mojo.check_unlock = function() {
+      var pass = true;
+      if (!mojo.reg.string255.test($('#editor-academic_class-note').val())) {
+        pass = false;
+        kendo.alert('請填寫修改理由說明！');
+      }   
+      return pass;
+    }
+
     mojo.dialog_agency_unlock = function(key, val, params) {
 
     }
 
     mojo.watch_agency_unlock = function() {
+      for (var i=1; i<15; i++)
+        $('#editor-academic_class-work_days').append('<option value="' + i + '">' + i + '天</option>');
+
       if (mojo.data.academic_agency_unlock.length) {
         $('#editor-academic_era').val(mojo.data.academic_agency_unlock[0]['era_id']);
         $('#editor-academic_era_quarter').val(mojo.data.academic_agency_unlock[0]['quarter']);

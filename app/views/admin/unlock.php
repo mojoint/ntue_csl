@@ -16,7 +16,8 @@
               { title: '機構名稱', field: 'academic_agency_cname' },
               { title: '申請年度', field: 'academic_era_cname' },
               { title: '申請季度', field: 'quarter' },
-              { title: '申請類別', field: 'minors' },
+              { title: '&nbsp;', field: 'minors' },
+              { title: '申請類別', field: 'minors_code' },
               { title: '申請天數', field: 'work_days' },
               { title: '修改原因', field: 'note' },
               { title: '&nbsp;', field: 'state' },
@@ -36,7 +37,8 @@
           });
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(0);
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(1);
-          $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(9);
+          $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(6)
+          $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(10);
           $('#grid-academic_agency_unlock').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_unlock, page: 1, pageSize: 10 }));  
         </script>
     <?php endif; ?>
