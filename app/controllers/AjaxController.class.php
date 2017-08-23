@@ -799,7 +799,7 @@ class AjaxController extends Controller {
             $sharedStyle->applyFromArray(
                 array(
                     'borders' => array(
-                        'bottom'    => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                        'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
                     )
                 )
             );
@@ -839,8 +839,23 @@ class AjaxController extends Controller {
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $major_cache ]);
                     foreach($res as $r) {
-                        $count++;
                         $knt++;
+                        if ($major_cache != $r['major_code']) {
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['classes']);
+                            $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
+
+                            $knt++;
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
+                            $knt++;
+                        }
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $r['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['people']);
@@ -862,28 +877,10 @@ class AjaxController extends Controller {
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
                         $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
 
-                        if (($major_cache != $r['major_code']) || ($count == $size)) {
-                            $knt++;
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['hours']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['classes']);
-
-                            $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
-
-                            if ($count < $size) {
-                                $knt++;
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
-                            }
-                        }
                         $major_cache = $r['major_code'];
-
                     }
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
 
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
@@ -947,6 +944,26 @@ class AjaxController extends Controller {
                     foreach($res as $r) {
                         $count++;
                         $countries = sizeof($r['country']);
+                        if ($major_cache != $r['major_code']) {
+                            $knt++;
+                            $kountry = (new AjaxModel)->dbQuery('agent_academic_agency_report_countries', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                            $major_sum[ $r['major_code'] ][ 'countries' ] = intval($kountry[0]['countries']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['countries']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['new_male']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['new_female']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
+                            $knt++;
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
+                        }
                         $kount = 0;
                         foreach($r['country'] as $country) {
                             $kount++;
@@ -962,6 +979,7 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $r['info']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, $r['note']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, $r['latest']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                             } else {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, "");
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, "");
@@ -989,30 +1007,11 @@ class AjaxController extends Controller {
                         $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
 
-                        if (($major_cache != $r['major_code']) || ($count == $size)) {
-                            $knt++;
-                            $kountry = (new AjaxModel)->dbQuery('agent_academic_agency_report_countries', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
-                            $major_sum[ $r['major_code'] ][ 'countries' ] = intval($kountry[0]['countries']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['countries']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['new_male']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['new_female']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
-                            if ($count < $size) {
-                                $knt++;
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
-                            }
-                        }
                         $major_cache = $r['major_code'];
                     }
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $major_cache ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'A' ]['countries'] + $major_sum[ 'B' ][ 'countries' ] + $major_sum[ 'C' ][ 'countries' ]);
@@ -1099,24 +1098,53 @@ class AjaxController extends Controller {
                     $html .=   '</thead>';
                     $html .=   '<tbody>';
                     
-                    $knt = 1;
+                    $html_a = '<tr><th colspan="9">'. $major_head[ 'A' ] .'</th></tr>'; 
+                    $html_b = '<tr><th colspan="9">'. $major_head[ 'B' ] .'</th></tr>'; 
+                    $html_c = '<tr><th colspan="9">'. $major_head[ 'C' ] .'</th></tr>'; 
+                    
                     foreach($res as $r) {
-                        if ($major_tag[ $r['major_code'] ]) {
-                            $major_tag[ $r['major_code'] ] = false;
-                            $html .= '<tr><th colspan="10">'. $major_head[ $r['major_code'] ] .'</th></tr>'; 
+                        switch( $r['major_code'] )
+                        {
+                        case 'A':
+                            $html_a .= '<tr>';
+                            $html_a .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['new_people'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['people'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['avg_weekly'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['hours'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['total_hours'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['turnover'] . '</td>';
+                            $html_a .=  '<td class="">' . $r['classes'] . '</td>';
+                            $html_a .=  '<td class=""></td>';
+                            $html_a .= '</tr>';
+                            break;
+                        case 'B':
+                            $html_b .= '<tr>';
+                            $html_b .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['new_people'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['people'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['avg_weekly'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['hours'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['total_hours'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['turnover'] . '</td>';
+                            $html_b .=  '<td class="">' . $r['classes'] . '</td>';
+                            $html_b .=  '<td class=""></td>';
+                            $html_b .= '</tr>';
+                            break;
+                        case 'C':
+                            $html_c .= '<tr>';
+                            $html_c .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['new_people'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['people'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['avg_weekly'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['hours'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['total_hours'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['turnover'] . '</td>';
+                            $html_c .=  '<td class="">' . $r['classes'] . '</td>';
+                            $html_c .=  '<td class=""></td>';
+                            $html_c .= '</tr>';
+                            break;
                         }
-                        
-                        $html .= '<tr>';
-                        $html .=  '<td class="">' . $r['minor_code_cname'] . '</td>';
-                        $html .=  '<td class="">' . $r['new_people'] . '</td>';
-                        $html .=  '<td class="">' . $r['people'] . '</td>';
-                        $html .=  '<td class="">' . $r['avg_weekly'] . '</td>';
-                        $html .=  '<td class="">' . $r['hours'] . '</td>';
-                        $html .=  '<td class="">' . $r['total_hours'] . '</td>';
-                        $html .=  '<td class="">' . $r['turnover'] . '</td>';
-                        $html .=  '<td class="">' . $r['classes'] . '</td>';
-                        $html .=  '<td class=""></td>';
-                        $html .= '</tr>';
 
                         $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
                         $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
@@ -1125,24 +1153,45 @@ class AjaxController extends Controller {
                         $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
                         $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
-
-                        if (($major_cache != $r['major_code']) || ($knt == $size)) {
-                            $html .= '<tr>';
-                            $html .=   '<th>'. $major_foot[ $major_cache ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'new_people' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'people' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'avg_weekly' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'hours' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'total_hours' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'turnover' ] .'</th>';
-                            $html .=   '<th>'. $major_sum[ $r['major_code'] ][ 'classes' ] .'</th>';
-                            $html .=   '<th></th>';
-                            $html .= '</tr>';
-                        }
-
-                        $major_cache = $r['major_code'];
-                        $knt++;
                     }
+
+                    $html_a .= '<tr>';
+                    $html_a .=   '<th>'. $major_foot[ 'A' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'new_people' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'people' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'avg_weekly' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'hours' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'total_hours' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'turnover' ] .'</th>';
+                    $html_a .=   '<th>'. $major_sum[ 'A' ][ 'classes' ] .'</th>';
+                    $html_a .=   '<th></th>';
+                    $html_a .= '</tr>';
+
+                    $html_b .= '<tr>';
+                    $html_b .=   '<th>'. $major_foot[ 'B' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'new_people' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'people' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'avg_weekly' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'hours' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'total_hours' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'turnover' ] .'</th>';
+                    $html_b .=   '<th>'. $major_sum[ 'B' ][ 'classes' ] .'</th>';
+                    $html_b .=   '<th></th>';
+                    $html_b .= '</tr>';
+
+                    $html_c .= '<tr>';
+                    $html_c .=   '<th>'. $major_foot[ 'C' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'new_people' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'people' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'avg_weekly' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'hours' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'total_hours' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'turnover' ] .'</th>';
+                    $html_c .=   '<th>'. $major_sum[ 'C' ][ 'classes' ] .'</th>';
+                    $html_c .=   '<th></th>';
+                    $html_c .= '</tr>';
+
+                    $html .= $html_a . $html_b . $html_c;
 
                     $html .= '<tr>';
                     $html .=   '<th>合計</th>';

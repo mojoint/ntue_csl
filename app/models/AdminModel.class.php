@@ -74,9 +74,9 @@ class AdminModel extends Model {
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
-            $sql .= ' WHERE "NTUE" = :ntue';
+            $sql .= ' WHERE t1.`state` = :state AND "NTUE" = :ntue';
             $sql .= ' ORDER BY t1.`state` ASC, t1.`id` DESC';
-            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
+            return $this->dbSelect($sql, array(':state'=>0, ':ntue'=>"NTUE"));
             break;
         }
     }

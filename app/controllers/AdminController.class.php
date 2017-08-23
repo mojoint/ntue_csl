@@ -12,11 +12,13 @@ class AdminController extends Controller {
         }
     }
 
-    function status() {
+    function statistics() {
         if (isset($_SESSION['admin'])) {
             $this->assign('title', '華語文-管理者');
             $this->assign('header', $this->headers());
-            $this->assign('sidebar', $this->sidebars('status'));
+            $this->assign('sidebar', $this->sidebars('statistics'));
+            $this->assign('academic_era', (new AdminModel)->dbQuery('academic_era'));
+            $this->assign('academic_agency_class_statistics', (new AdminModel)->dbQuery('academic_agency_class_statistics'));
             $this->render();
         } else {
             $this->redirect();
@@ -112,13 +114,13 @@ class AdminController extends Controller {
     }
 
     function sidebars( $current ) {
-        $currents = array('status'=>'', 'postman'=>'', 'report'=>'', 'maintain'=>'', 'unlock'=>'', 'settings'=>'', 'message'=>'');
+        $currents = array('statistics'=>'', 'postman'=>'', 'report'=>'', 'maintain'=>'', 'unlock'=>'', 'settings'=>'', 'message'=>'');
         $currents[$current] = 'current';
      
         $html  = '<h2 id="logo"><a href="#">管理者</a></h2>';
         $html .= '<nav id="nav">';
         $html .=  '<ul>';
-        $html .=   '<li class="'. $currents['status'] .'"><a href="/admin/status/">填報狀況</a></li>';
+        $html .=   '<li class="'. $currents['statistics'] .'"><a href="/admin/statistics/">填報狀況</a></li>';
         $html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
         $html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';
         $html .=   '<li class="'. $currents['maintain'] .'"><a href="/admin/maintain/">資料維護</a></li>';
