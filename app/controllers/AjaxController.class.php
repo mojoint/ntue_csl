@@ -835,6 +835,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A1". $knt .":K" . $knt);
                     $count = 0;
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $major_cache ]);
@@ -855,6 +856,7 @@ class AjaxController extends Controller {
 
                             $knt++;
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
+                            $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
                             $knt++;
                         }
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
@@ -943,7 +945,7 @@ class AjaxController extends Controller {
                     $count = 0;
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $major_cache ]);
-                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A1". $knt .":K" . $knt);
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A1". $knt .":N" . $knt);
                     foreach($res as $r) {
                         $count++;
                         $countries = sizeof($r['country']);
@@ -1027,7 +1029,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
-                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A1". $knt .":K" . $knt);
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A1". $knt .":N" . $knt);
                 }
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
