@@ -461,9 +461,9 @@ console.log(res);
 
                   if (res.data.detail) {
                     mojo.data.academic_agency_report_detail = res.data.detail;
-                    var html_a = '<tr class="active"><th  colspan="11">第一研習類別</th></tr>';
-                    var html_b = '<tr class="active"><th  colspan="11">第二研習類別</th></tr>';
-                    var html_c = '<tr class="active"><th  colspan="11">第三研習類別</th></tr>';
+                    var html_a = '<tr class="active"><th  colspan="14">第一研習類別</th></tr>';
+                    var html_b = '<tr class="active"><th  colspan="14">第二研習類別</th></tr>';
+                    var html_c = '<tr class="active"><th  colspan="14">第三研習類別</th></tr>';
                     mojo.detail = {
                       a: {
                         'country': 0,
@@ -676,7 +676,12 @@ console.log(res);
                     html_a += '<th>' + mojo.summary.a.hours + '</th>';
                     html_a += '<th>' + mojo.summary.a.total_hours + '</th>';
                     html_a += '<th>' + mojo.summary.a.turnover + '</th>';
-                    html_a += '<th></th><th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
                     html_a += '</tr>';
                     html_b += '<tr class="active">';
                     html_b += '<th >第二研習類別小計</th>';
@@ -687,7 +692,12 @@ console.log(res);
                     html_b += '<th>' + mojo.summary.b.hours + '</th>';
                     html_b += '<th>' + mojo.summary.b.total_hours + '</th>';
                     html_b += '<th>' + mojo.summary.b.turnover + '</th>';
-                    html_b += '<th></th><th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
                     html_b += '</tr>';
                     html_c += '<tr class="active">';
                     html_c += '<th >第三研習類別小計</th>';
@@ -698,7 +708,12 @@ console.log(res);
                     html_c += '<th>' + mojo.summary.c.hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.turnover + '</th>';
-                    html_c += '<th></th><th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
                     html_c += '</tr>';
 
                     mojo.html  = html_a;
