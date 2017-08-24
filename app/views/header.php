@@ -122,10 +122,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.common.js"></script>
-  <script src="/public/js/mojo.admin.js"></script>
-  <script src="/public/js/mojo.agent.js"></script>
-  <script src="/public/js/mojo.report.js"></script>
+  <script src="/public/js/mojo.combo.v1.js"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 
