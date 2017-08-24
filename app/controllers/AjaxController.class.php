@@ -159,30 +159,36 @@ class AjaxController extends Controller {
         case 'postman':
             switch($val)
             {                                                                             
-             case 'emailSend':
-                if (isset($_SESSION['admin'])) {
- 
-                     $receverList = (new AjaxModel)->dbQuery('admin_postman_receverlist',array('rcpttotype'=>$_POST['emailRcptTo']));
-                     $receverCnt = 0;
-                     foreach($receverList as $recever){
-                         $receverCnt++;
-                         $email = $recever['email'];
-                         $emailName = $recever['cname'];
-                         /* $email = 'thucop@gmail.com'; */
-                         $subject = $_POST['emailSubject'];
-                         $message = $_POST['emailBody']."\n";
-                         $from = 'wenyu0421@tea.ntue.edu.tw';
-                         $headers = 'From: 許文諭<' . $from . "> \r\n".
-                         'Reply-To: ' . $from . " \r\n".
-                         'X-Mailer: PHP/'. phpversion();
-                         mail( $email, $subject, $message, $headers );
-                     }
-                     $json = array("code"=>1, "data"=>$receverCnt);
-                 }
-     
-                 break;
-             }
-             break;
+            case 'emailSend':
+               if (isset($_SESSION['admin'])) {
+
+                    $receverList = (new AjaxModel)->dbQuery('admin_postman_receverlist',array('rcpttotype'=>$_POST['emailRcptTo']));
+                    $receverCnt = 0;
+                    debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t".$_POST['emailSubject']."\tTotal mail count:".count($receverList));
+                    foreach($receverList as $recever){
+                        $receverCnt++;
+                        $email = $recever['email'];
+                        $emailName = $recever['cname'];
+                        debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t". $receverCnt."\t".$_POST['emailSubject']."\t".$email."\t".$emailName);
+                        /* $email = 'thucop@gmail.com'; */
+                        $subject = $_POST['emailSubject'];
+                        $message = $_POST['emailBody']."\n";
+                        $from = 'wenyu0421@tea.ntue.edu.tw';
+                        $headers = "Content-type: text/html; charset=UTF-8\r\n";
+                        $headers = 'From: 許文諭<' . $from . "> \r\n".
+                        'Reply-To: ' . $from . " \r\n".
+                        'X-Mailer: PHP/'. phpversion();
+                        mail( $email, $subject, $message, $headers );
+                        if($receverCnt == 5) {
+                           //break;
+                        }
+                    }
+                    $json = array("code"=>1, "data"=>$receverCnt);
+                }
+                    
+                break;
+            }
+            break;
         } 
         echo json_encode($json);
     } 
