@@ -27,7 +27,7 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_fill':
-            $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND CURDATE() BETWEEN `online` AND `offline`';
+            $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND NOW() BETWEEN CONCAT(`online`, ' 00:00:00')  AND CONCAT(`offline`, ' 23:59:59')';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             if (1 == sizeof($res)) {
                 $sql  = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
