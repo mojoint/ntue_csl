@@ -176,8 +176,8 @@ class AgentController extends Controller {
         $html  = '<nav id="topbar">';
         $html .=  '<ul>';
         $html .=   '<li><a id="btn-agent-profile" href="#">'. $agent .'&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i></a></li>';
-        $html .=   '<li><a id="btn-agent-help" href="#">&nbsp;<i class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;</a></li>';
-        $html .=   '<li><a id="btn-agent-manual" href="#">&nbsp;<i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;</a></li>';
+        $html .=   '<li><a id="btn-agent-help" href="#"><i class="fa fa-question-circle-o" aria-hidden="true"></i></a></li>';
+        $html .=   '<li><a id="btn-agent-manual" href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i></a></li>';
         $html .=  '</ul>';
         $html .= '</nav>';
         return $html;

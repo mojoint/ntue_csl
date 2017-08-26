@@ -972,6 +972,25 @@ console.log(res);
     if (mojo.mojo_if('sec-activate'))
       mojo.watch_activate();
 
+    /* manual download */
+    $('#btn-agent-manual').on('click', function(e) {
+      e.preventDefault();
+      window.open('/ajax/downloader/pdf/user_manual/agent', '_blank');
+      //window.open('/public/template/user_manual.pdf?download', '_blank');
+      //return true;
+      /*
+      var pdf = '/public/template/user_manual.pdf';
+      $.ajax({
+        url: pdf,
+        type: 'POST',
+        success: function() {
+          window.location = pdf;
+        }
+      });
+      */
+      
+    });
+
     /* =========================================== */
     /* ------------------- admin ------------------- */
     /* status */

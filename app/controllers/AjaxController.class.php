@@ -1239,11 +1239,11 @@ class AjaxController extends Controller {
         }
     }
 
-    public function mailer($type, $username, $email, $url) {
+    public function mailer($key, $username, $email, $url) {
         $official = (new AjaxModel)->dbQuery('mailer_official_get')[0];
 
         if ($official) {
-            switch($type)
+            switch($key)
             {
             case 'add':
                 $subject = $official['subject_agent_add'];
@@ -1268,4 +1268,69 @@ class AjaxController extends Controller {
         }
         mail( $email, $subject, $message, $headers );
     }
+
+    public function downloader( $key, $val, $param="" ) {
+        ignore_user_abort(true);
+        set_time_limit(0); // disable the time limit for this script
+         
+        $path = "/var/www/html/ntue/public/template/"; // change the path to fit your websites document structure
+         
+        switch( $key ) 
+        {
+        case 'pdf':
+            switch( $val )
+            {
+            case 'user_manual':
+                $dl_file = $val . '.pdf';
+                $full_path = $path . $dl_file;
+//echo $full_path;
+                if (file_exists($full_path)) {
+                    $fs = filesize($fullPath);
+                    $path_info = pathinfo($fullPath);
+                    header("Content-type: application/pdf");
+                    header("Content-Disposition: attachment; filename=\"".$path_info["basename"]."\""); // use 'attachment' to force a file download
+                    header("Content-length: $fs");
+                    header("Cache-control: private"); //use this to open files directly
+                    while(!feof($fd)) {
+                        $bf = fread($fd, 2048);
+                        echo $bf;
+                    }
+                }
+                fclose($fd);
+                break;
+            }
+            break;
+        case 'y105':
+            if (preg_match("/^(\w){2,7}$/", $param)) {
+                $path .= $key . '_' . $val;
+                $aka = (new AjaxModel)->dbQuery('agent_academic_institution_aka', $param);
+                if (sizeof($aka)) {
+                    $dl_file = $param .'-'. $aka[0]['aka'] . '.xls';
+                    $full_path = $path . $dl_file;
+                    if (file_exists($full_path)) {
+                        if ($fd = fopen($full_path, "r")) {
+                            $fs = filesize($full_path);
+                            $path_info = pathinfo($full_path);
+                            header("Content-type: application/octet-stream");
+                            header("Content-Disposition: filename=\"".$path_info["basename"]."\"");
+                            header("Content-length: $fs");
+                            header("Cache-control: private"); //use this to open files directly
+                            while(!feof($fd)) {
+                                $bf = fread($fd, 2048);
+                                echo $bf;
+                            }
+                        }
+                        fclose($fd);
+                    }
+                }
+            }
+            break;
+        }
+        exit;
+    }
+
+    public function uploader() {
+
+    }
+
 }

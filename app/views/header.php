@@ -6,6 +6,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex,nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="/public/css/jquery-ui.min.css"/> 
@@ -122,7 +123,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.combo.v1.js"></script>
+  <script src="/public/js/mojo.combo.v1.1.js"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 

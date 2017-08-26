@@ -510,6 +510,10 @@ class AjaxModel extends Model {
             $sql = 'INSERT INTO `academic_agency_unlock` (`id`, `agency_id`, `era_id`, `quarter`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :minors, :work_days, "", "", :note, 0)';
             return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
             break;
+        case 'agent_academic_institution_aka':
+            $sql = 'SELECT `aka` FROM `academic_institution` WHERE `code` = :code';
+            return $this->dbSelect($sql, array(':code'=>$data['code']));
+            break;
         case 'admin_profile_email_mod':
             $sql = 'UPDATE `admin` SET `email` = :email WHERE username = :username AND session= :session ';
             return $this->dbUpdate($sql, array(':email'=>$data['email'], ':username'=>$data['username'],':session'=>$data['session']));
