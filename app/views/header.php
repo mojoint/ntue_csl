@@ -54,9 +54,12 @@
         'float32': /^(\d){1,3}(\.(\d){1,2})?$/,
         'float51': /^(-)?(\d){1,5}(\.\d)?$/,
         'float111': /^(\d){1,11}(\.\d)?$/,
-        'int11': /^[\d]{1,11}$/,
+        'int11': /^(\d){1,11}$/,
+        'phone': /^(\d){6,8}$/,
+        'tel': /^(\d){3,4}-(\d){3,4}$/,
         'string255': /^(.){1,255}$/,
-        'country_code': /[a-z0-9][\d]{2}/i
+        'country_code': /[a-z0-9][\d]{2}/i,
+        'zipcode': /^(\d){3,5$/
       },
       refs: {},
       tags: {}
@@ -123,7 +126,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.combo.v1.1.js"></script>
+  <script src="/public/js/mojo.combo.v1.2.js"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 

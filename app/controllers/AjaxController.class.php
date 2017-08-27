@@ -1276,8 +1276,8 @@ class AjaxController extends Controller {
     }
 
     public function downloader( $key, $val, $param="" ) {
-        ignore_user_abort(true);
-        set_time_limit(0); // disable the time limit for this script
+        //ignore_user_abort(true);
+        //set_time_limit(0); // disable the time limit for this script
          
         $path = "/var/www/html/ntue/public/template/"; // change the path to fit your websites document structure
          
@@ -1289,17 +1289,20 @@ class AjaxController extends Controller {
             case 'user_manual':
                 $dl_file = $val . '.pdf';
                 $full_path = $path . $dl_file;
-//echo $full_path;
                 if (file_exists($full_path)) {
                     $fs = filesize($fullPath);
-                    $path_info = pathinfo($fullPath);
-                    header("Content-type: application/pdf");
-                    header("Content-Disposition: attachment; filename=\"".$path_info["basename"]."\""); // use 'attachment' to force a file download
-                    header("Content-length: $fs");
-                    header("Cache-control: private"); //use this to open files directly
-                    while(!feof($fd)) {
-                        $bf = fread($fd, 2048);
-                        echo $bf;
+                    $path_info = pathinfo($full_path);
+                    if ($fd = fopen($full_path, "r")) {
+                        header("Content-type: application/pdf");
+                        header("Content-Disposition: attachment; filename=\"".$path_info["basename"]."\""); // use 'attachment' to force a file download
+                        header("Content-length: $fs");
+                        header("Cache-control: private"); //use this to open files directly
+
+                        while(!feof($fd)) {
+                            $bf = fread($fd, 2048);
+                            echo $bf;
+                        }
+
                     }
                 }
                 fclose($fd);
@@ -1307,13 +1310,15 @@ class AjaxController extends Controller {
             }
             break;
         case 'y105':
+
             if (preg_match("/^(\w){2,7}$/", $param)) {
-                $path .= $key . '_' . $val;
-                $aka = (new AjaxModel)->dbQuery('agent_academic_institution_aka', $param);
+                $path .= preg_replace("/y/", "", $key) . '_' . $val . '/';
+                $aka = (new AjaxModel)->dbQuery('agent_academic_institution_aka', array('code'=>$param));
                 if (sizeof($aka)) {
                     $dl_file = $param .'-'. $aka[0]['aka'] . '.xls';
                     $full_path = $path . $dl_file;
                     if (file_exists($full_path)) {
+
                         if ($fd = fopen($full_path, "r")) {
                             $fs = filesize($full_path);
                             $path_info = pathinfo($full_path);
@@ -1327,6 +1332,7 @@ class AjaxController extends Controller {
                             }
                         }
                         fclose($fd);
+
                     }
                 }
             }

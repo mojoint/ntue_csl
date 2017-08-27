@@ -107,6 +107,7 @@ class AgentController extends Controller {
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('report'));
             $this->assign('academic_era', (new AgentModel)->dbQuery('academic_era'));
+            $this->assign('institution_code', $_SESSION['agent']['institution_code']);
            
             $this->render();
         } else {
