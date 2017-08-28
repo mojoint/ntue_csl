@@ -253,6 +253,24 @@ class AjaxModel extends Model {
                     break;
                 /* 所有未填報單位聯絡人 */
                 case '4':
+                    $sql .= 'AND `agency_id` IN ( ';
+					$sql .= 'SELECT DISTINCT t6.`id` ';
+					$sql .= '  FROM `academic_agency` t6 ';
+					$sql .= ' WHERE t6.id NOT IN ( ';
+					$sql .= '       SELECT DISTINCT t5.`agency_id` ';
+					$sql .= '         FROM ( ';
+					$sql .= '              SELECT t3.* ';
+					$sql .= '                FROM `academic_era_quarter` t3 ';
+					$sql .= '               WHERE t3.`offline` in ( ';
+					$sql .= '                     SELECT max(t2.`offline`) era_quarter_max_offline ';
+					$sql .= '                       FROM `academic_era` t1 INNER JOIN `academic_era_quarter` t2 ';
+					$sql .= '                             ON t2.`era_id` = t1.`id` ';
+					$sql .= '                      WHERE t1.`state` = "1" ';
+					$sql .= '                    ) ';
+					$sql .= '              ) t4 INNER JOIN `academic_agency_class` t5 ';
+					$sql .= '                   ON t5.`era_id` = t4.`era_id` AND t5.`quarter` = t4.`quarter` ';
+					$sql .= '     ) ';   
+                    $sql .= ')' ;
                     break;
             }
             return $this->dbSelect($sql,array(':ntue'=>MD5Prefix));
