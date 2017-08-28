@@ -13,7 +13,7 @@ for admin message function
                 _tpl = ['',
                 '<ul style="background-color:#efe9e9">',
                   '<li>提問內容<pre style="font-weight:bold;background-color:#efe9e9"><%=this.question_content%></pre></li>',
-                  '<li style="text-align:right">提問者：<%=this.ins_cname%>/<%=this.cname%>/<%=this.username%> 提問時間：<%=this.insert_date%><button msgid="<%=this.message_id%>">回覆</button></li>',
+                  '<li style="text-align:right">提問者：<%=this.ins_cname%><%=this.cname%><%=this.username%> 提問時間：<%=this.insert_date%><button msgid="<%=this.message_id%>">回覆</button></li>',
                 '</ul>'
                 ].join('');
                 $('#message-list').jqotesub(_tpl,data);
