@@ -1444,6 +1444,7 @@ console.log( res );
       if(typeof _self.id != 'undefined' && _self.id.indexOf('admin')>-1){
         _type = 'admin';
       }
+      $('#dialog').data('loginID',$.trim($(_self).text()));
       $('#dialog').kendoDialog({
         minWidth: 480,
         title: "帳號維護",
@@ -1458,6 +1459,11 @@ console.log( res );
               mojo.json.email = $('#dialog-email').val();
             if (mojo.reg.userpass.test($('#dialog-userpass').val()))
               mojo.json.userpass = $('#dialog-userpass').val();
+            if ( $('#dialog').data('loginID') == mojo.json.userpass ){
+                alert('密碼不可與登入ID一樣！');
+                $('#dialog-userpass').val('');
+                return false;
+            }
             if(_type == 'admin') {
               mojo.ajax('admin', 'profile', 'mod', mojo.json);
             }else{

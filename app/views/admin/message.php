@@ -1,5 +1,5 @@
 <script src="/public/js/jquery.jqote2.min.js"></script>
-<script src="/public/js/message.adm.js"></script>
+<script src="/public/js/message.adm.js?_=2017082802"></script>
 <section id="sec-message">
   <div class="container">
     <?php if ($_SESSION['admin']) : ?>
