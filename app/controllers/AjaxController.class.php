@@ -66,11 +66,12 @@ class AjaxController extends Controller {
         case 'academic_agency_status':
             switch( $val ) 
             {
-            case 0: 
-                $res = (new AjaxModel)->dbQuery('academic_agency_status_all', array('agency_id'=>$val));
+            case 'list': 
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_status', array('era_id'=>$_POST['era_id']));
                 break;
-            default:
-                $res = (new AjaxModel)->dbQuery('academic_agency_status', array('agency_id'=>$val));
+            case 'agency':
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_status_byid', array('agency_id'=>$_POST['agency_id']));
+                break;
             }
             $json = array("code"=>1, "data"=>$res);
             break;
@@ -179,9 +180,9 @@ class AjaxController extends Controller {
                         'Reply-To: ' . $from . " \r\n".
                         'X-Mailer: PHP/'. phpversion();
                         mail( $email, $subject, $message, $headers );
-                        if($receverCnt == 5) {
+                        //if($receverCnt == 5) {
                            //break;
-                        }
+                        //}
                     }
                     $json = array("code"=>1, "data"=>$receverCnt);
                 }
@@ -599,9 +600,50 @@ class AjaxController extends Controller {
                 break;
             case 'manager':
                 $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
+                $academic_class = (new AjaxModel)->dbQuery('academic_class', array('era_id'=>$era_id));
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '人時數營收總簡表' );
+
+                $turnover_summary = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_summary', array('era_id'=>$era_id));
+
+                $knt = 1;
+                $qnt = 0;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語中心(人時數營收總表)');
+                $knt++;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '序號');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '學校代碼');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '單位機構名稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '總人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '總人次');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '總人時數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '營收額度');
+
+                foreach( $turnover_summary as $summary ) {
+                    $knt++;
+                    $qnt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $summary['institution_code']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $summary['institution_cname'] . $summary['academic_agency_cname']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $summary['new_people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $summary['people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $summary['total_hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $summary['turnover']);
+                }
+
+                // columns array
+/*
+                for ($i = 68; $i<=90; $i++) {
+echo "$i @ ". chr($i);
+echo "<hr>";
+                }
+exit;
+                // academic_class array
+                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                foreach ($academic_classes as $class) {
+                    
+                }
+*/
 
                 $cnt = 1;
                 $objPHPExcel->createSheet();

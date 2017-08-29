@@ -17,13 +17,10 @@
         mojo.sec = $('section').attr('id');
     }
 
-    //console.log( mojo.errcode );
-
     /* ajax */
     mojo.ajax = function(key, val, params, data) {
       data = (!data)? {} : data;
       mojo.ajaxurl = '/ajax/' + key + '/' + val + '/' + params + '/';
-console.log(mojo.ajaxurl);
       $.ajax({
         url: mojo.ajaxurl,
         type: 'post',
@@ -31,7 +28,6 @@ console.log(mojo.ajaxurl);
         data: data,
         success: function(res) {
           if (1 == parseInt(res.code)) {
-console.log(res);
             switch(key)
             {
             case 'admin':
@@ -123,9 +119,9 @@ console.log(res);
                     var tds = $(tr).find("td");
                     mojo.dialog_settings( 'academic_era', 'mod', {'id': $(tds[0]).html(), 'era_id': $(tds[1]).html(), 'quarter': $(tds[2]).html(), 'cname': $(tds[3]).html(), 'online': $(tds[4]).html(), 'offline': $(tds[5]).html() } );
                   });
+                  break;
                 }
                 break;
-              //}
               case 'profile':
                 switch(params) 
                 {
@@ -976,19 +972,6 @@ console.log(res);
     $('#btn-agent-manual').on('click', function(e) {
       e.preventDefault();
       window.open('/ajax/downloader/pdf/user_manual/agent', '_blank');
-      //window.open('/public/template/user_manual.pdf?download', '_blank');
-      //return true;
-      /*
-      var pdf = '/public/template/user_manual.pdf';
-      $.ajax({
-        url: pdf,
-        type: 'POST',
-        success: function() {
-          window.location = pdf;
-        }
-      });
-      */
-      
     });
 
     /* =========================================== */
@@ -1835,6 +1818,7 @@ console.log(res);
             case 'import':
               var html = '';
               $('#grid-academic_agency_class_country .k-grid-content table tbody').empty();
+              var errmsg = '';
               for (var x in mojo.country ) {
                 for (var i=0; i<mojo.country[x].length; i++) {
                   if (typeof(mojo.country[x][i]) === 'object') {
@@ -1852,6 +1836,8 @@ console.log(res);
                         country_code = mojo.refs.country_code_list[j].code;
                       } else if (country.toLowerCase() == mojo.refs.country_code_list[j].ename.toLowerCase()) {
                         country_code = mojo.refs.country_code_list[j].code;
+                      } else {
+                         errmsg += country + ' ';
                       }
                     }
                     if (country_code != "") {
@@ -1868,6 +1854,9 @@ console.log(res);
                       html +=   '<td role="gridcell"><a class="k-button k-blank k-grid-edit btn-academic_agency_class_country-mod" title="修改"><i class="fa fa-edit"></i></a><a class="k-button k-blank k-grid-delete btn-academic_agency_class_country-del" title="刪除"><i class="fa fa-trash"></i></a></td>';
                       html += '</tr>';
                       $('#grid-academic_agency_class_country .k-grid-content table tbody').append(html);
+                    }
+                    if (errmsg.length) {
+                      kendo.alert( errmsg + ' 系統無此國別(地區)');
                     }
                   }
                 }
@@ -2595,6 +2584,22 @@ console.log(res);
     if (mojo.mojo_if('sec-fillmod'))
       mojo.watch_fillmod();
     /* info */
+    mojo.check_contact = function() {
+      var pass = true;
+      mojo.errmsg = '';
+      if (!mojo.reg.phone.test($('#dialog-phone').val()) && !mojo.reg.tel.test($('#dialog-phone').val())) {
+        mojo.errmsg .= '<p>請填寫聯絡電話</p>';
+        pass = false;
+      }
+
+      if (!mojo.reg.email.test($('#dialog-email').val())) {
+        mojo.errmsg .= '<p>請填寫電子郵件信箱</p>';
+        pass = false;
+      }
+
+      return pass;
+    }
+
     mojo.dialog_info = function(key, val, params) {
       switch(key) 
       {   
@@ -2656,13 +2661,19 @@ console.log(res);
               {   
               case 'add':
               case 'mod':
-                mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id, 'cname': $('#dialog-cname').val(), 'title': $('#dialog-title').val(), 'manager': ($('#dialog-manager').is(':checked'))? 1 : 0, 'staff': ($('#dialog-staff').is(':checked'))? 1 : 0, 'role': $('#dialog-role').val(), 'area_code': $('#dialog-area_code').val(), 'phone': $('#dialog-phone').val(), 'ext': $('#dialog-ext').val(), 'email': $('#dialog-email').val(), 'spare_email': $('#dialog-spare_email').val(), 'primary': ($('#dialog-primary').is(':checked'))? 1 : 0};  
+                if (mojo.check_contact()) {
+                  mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id, 'cname': $('#dialog-cname').val(), 'title': $('#dialog-title').val(), 'manager': ($('#dialog-manager').is(':checked'))? 1 : 0, 'staff': ($('#dialog-staff').is(':checked'))? 1 : 0, 'role': $('#dialog-role').val(), 'area_code': $('#dialog-area_code').val(), 'phone': $('#dialog-phone').val(), 'ext': $('#dialog-ext').val(), 'email': $('#dialog-email').val(), 'spare_email': $('#dialog-spare_email').val(), 'primary': ($('#dialog-primary').is(':checked'))? 1 : 0};  
+                  mojo.ajax('agent', key, val, mojo.json);
+                } else {
+                    kendo.alert( mojo.errmsg );
+                    return false;
+                }
                 break;
               case 'del':
                 mojo.json = {'agency_id': mojo.mojos[2], 'id': params.id};
+                mojo.ajax('agent', key, val, mojo.json);
                 break;
               }   
-              mojo.ajax('agent', key, val, mojo.json);
             }}, 
             { text: '取消'}
           ],  
@@ -2671,14 +2682,14 @@ console.log(res);
         switch(val)
         {   
         case 'add':
-          mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" /></div>';
+          mojo.html  = '<div class="col-xs-12" ><label for="dialog-cname">姓名</label><input type="text" id="dialog-cname" class="form-control" required /></div>';
           mojo.html += '<div class="col-xs-12" ><label for="dialog-title">職稱</label><input type="text" id="dialog-title" class="form-control" /></div>';
           mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-manager" class="form-control mini-chkbox" /><label for="dialog-manager">單位主管</label></div>';
           mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
           mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
-          mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
-          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
-          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" required />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" required /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用電子郵件信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
           mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
           $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
           for (var x in mojo.refs.area_list)
@@ -2691,8 +2702,8 @@ console.log(res);
           mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-staff" class="form-control mini-chkbox" /><label for="dialog-staff">單位職員</label></div>';
           mojo.html += '<div class="col-xs-12" ><label for="dialog-role">聘用身份</label><input type="text" id="dialog-role" class="form-control" /></div>';
           mojo.html += '<div class="col-xs-12" ><label>電話</label>&nbsp;<select id="dialog-area_code"></select>&nbsp;<input type="text" id="dialog-phone" class="" placeholder="電話" size="10" />&nbsp;<input type="text" id="dialog-ext" class="" placeholder="分機" size="6" /></div>';
-          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
-          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-email">電子郵件信箱</label><input type="text" id="dialog-email" class="form-control" /></div>';
+          mojo.html += '<div class="col-xs-12" ><label for="dialog-spare_email">備用電子郵件信箱</label><input type="text" id="dialog-spare_email" class="form-control" /></div>';
           mojo.html += '<div class="col-xs-12" ><input type="checkbox" id="dialog-primary" class="form-control mini-chkbox" /><label for="dialog-primary">主要聯絡人</label></div>';
           $('#dialog-academic_agency_contact').data('kendoDialog').content(mojo.html).open().center();
           for (var x in mojo.refs.area_list)
@@ -2986,6 +2997,16 @@ console.log(res);
       $('#btn-academic_agency_report_pdf-export').on('click', function(e) {
         e.preventDefault();
         window.open('/ajax/reporter/academic_agency_report/pdf/' + $('#academic_agency_report-era').val() + '/' + $('#academic_agency_report-quarter').val() + '/' + mojo.mojos[2]);
+      });
+
+      $('#btn-academic_agency_report_history_summary-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/downloader/y105/summary/' + mojo.data.institution_code, '_blank');
+      });
+
+      $('#btn-academic_agency_report_history_detail-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/downloader/y105/detail/' + mojo.data.institution_code, '_blank');
       });
 
       mojo.tags.report = false;

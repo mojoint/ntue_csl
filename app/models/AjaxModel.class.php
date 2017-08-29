@@ -98,12 +98,13 @@ class AjaxModel extends Model {
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
-            $sql .= ' INNER JOIN `academic_institution` t2 ON t2.`institution_code` = t3.`code`';
+            $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
             $sql .= ' WHERE t1.`agency_id` != :agency_id';
+            $sql .= '   AND t1.`era_id` = :era_id';
             $sql .= ' GROUP BY t1.`agency_id`, t1.`era_id`, t1.`quarter`';
-            $sql .= ' ORDER BY t2.`institution_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>999));
+            $sql .= ' ORDER BY t2.`institution_code`, t1.`quarter`';
+            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_status_byid':
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`';
@@ -163,12 +164,20 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_era_quarter` t1';
             $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id` AND t2.`state` < :state';
             $sql .= ' ORDER BY t1.`era_id` DESC, t1.`id` ASC';
-            return $this->dbSelect($sql, array(':state'=>2));
+            return $this->dbSelect($sql, array(':state'=>3));
             break;
         case 'admin_academic_era_quarter_mod':
-            $sql = 'UPDATE `academic_era_quarter` SET `online` = :online, `offline` = :offline WHERE `id` = :id';
-            $cnt = $this->dbUpdate($sql, array(':id'=>$data['id'], ':online'=>$data['online'], ':offline'=>$data['offline']));
+            // update previous quarter to be offline
+            $sql = 'UPDATE `academic_era_quarter` SET `state` = :state WHERE `state` = :state_org';
+            $cnt = $this->dbUpdate($sql, array(':state'=>2, ':state_orig'=>1));
+            // update the setting one to be online
+            $sql = 'UPDATE `academic_era_quarter` SET `online` = :online, `offline` = :offline, `state` = :state WHERE `id` = :id';
+            $cnt = $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':state'=>1, ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_era_quarter');
+            break;
+        case 'admin_academic_class':
+            $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_class_mod':
             for ($i=0; $i<sizeof($data['checks']); $i++) {
@@ -190,6 +199,19 @@ class AjaxModel extends Model {
             break;
         case 'admin_academic_agency_report_manager':
 
+            break;
+        case 'admin_academic_agency_report_manager_summary':
+            $sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
+            $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
+            $sql .= ' WHERE t1.`era_id` = :era_id';
+            $sql .= '   AND t2.`id` != :agency_id';
+            $sql .= ' GROUP BY t1.`agency_id`';
+            $sql .= ' ORDER BY t2.`institution_code`';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>999));
+            break;
+        case 'admin_academic_agency_report_manager_summary':
             break;
         case 'admin_academic_agency_report_statistics':
             $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
