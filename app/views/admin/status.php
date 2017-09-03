@@ -17,7 +17,7 @@
               $('#grid-academic_agency_status').kendoGrid({
                 pageable: true,
                 columns: [
-                  { field: 'institution_code', title: '機構代碼' },
+                  { field: 'institution_code', title: '學校代碼' },
                   { field: 'institution_cname', title: '學校名稱'  },
                   { field: 'academic_agency_cname', title: '機構名稱'  },
                   { field: 'state', title: '填報狀態'  },
