@@ -67,7 +67,37 @@ class AjaxController extends Controller {
             switch( $val ) 
             {
             case 'list': 
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_status', array('era_id'=>$_POST['era_id']));
+                $era_quarter = (new AjaxModel)->dbQuery('admin_academic_era_quarter_get', array('era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+                $rs = (new AjaxModel)->dbQuery('admin_academic_agency_status', array('era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+                $res = array();
+                foreach ($rs as $r) {
+                    switch( intval($r['state']) ) 
+                    {
+                    case 0:
+                        if (strlen($r['offline'])) {
+                            if (strtotime($r['offline'] . ' 23:59:59') - time() > 0) {
+                                $r['state'] = '延長填報期限';
+                            } else {
+                                $r['state'] = '填報截止';
+                            }
+                        } else {
+                            if (strtotime($era_quarter[0]['offline'] . ' 23:59:59') - time() > 0) {
+                                if ($r['cnt']) {
+                                    $r['state'] = '填報中'; 
+                                } else {
+                                    $r['state'] = '尚未填報';
+                                }
+                            } else {
+                                $r['state'] = '填報截止';
+                            }
+                        }
+                        break;
+                    case 1:
+                        $r['state'] = '完成送件';
+                        break;
+                    }
+                    array_push( $res, $r );
+                }
                 break;
             case 'agency':
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_status_byid', array('agency_id'=>$_POST['agency_id']));
@@ -632,18 +662,138 @@ class AjaxController extends Controller {
                 }
 
                 // columns array
+                $cols = array();
+                $col_min = 65;
+                $col_ini = 68;
+                $col_max = 90;
+                $col_tag = 0;
+                $col_idx = $col_ini;
+                $sum_a = 0;
+                $sum_b = 0;
+                $sum_c = 0;
+                $sum_t = 0;
+
 /*
                 for ($i = 68; $i<=90; $i++) {
+                    array_push(
 echo "$i @ ". chr($i);
 echo "<hr>";
                 }
-exit;
+*/
                 // academic_class array
                 $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
-                foreach ($academic_classes as $class) {
-                    
+                $acs = array();
+                $cols_a = array();
+                $cols_b = array();
+                $cols_c = array();
+                foreach ($academic_classes as $ac) {
+                    switch( $ac['major_code'] )
+                    {
+                    case 'A':
+                        array_push($cols_a, $ac['minor_code']);
+                        break;
+                    case 'B':
+                        array_push($cols_b, $ac['minor_code']);
+                        break;
+                    case 'C':
+                        array_push($cols_c, $ac['minor_code']);
+                        break;
+                    }
+                    $acs[$ac['minor_code']] = true;
                 }
-*/
+
+                for ($i=0; $i<sizeof($cols_a); $i++) {
+                    array_push($cols, $cols_a[$i]);
+                }
+                array_push($cols, 'ASUM');
+                for ($i=0; $i<sizeof($cols_b); $i++) {
+                    array_push($cols, $cols_b[$i]);
+                }
+                array_push($cols, 'BSUM');
+                for ($i=0; $i<sizeof($cols_c); $i++) {
+                    array_push($cols, $cols_c[$i]);
+                }
+                array_push($cols, 'CSUM');
+                array_push($cols, 'TSUM');
+
+                $qnt = 0;
+                foreach ($targets as $target) {
+                    $qnt++;
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+print_r( $classes );
+print_r('<hr>');
+
+                    $cs = array();
+                    $sum_a = 0;
+                    $sum_b = 0;
+                    $sum_c = 0;
+                    foreach ($classes as $c) {
+                        $cs[$c]['minor_code'] = $c['new_people'];
+                        if (strpos($c['minor_code'], 'A') !== false) {
+                            $sum_a += $c['new_people'];
+                        } else if (strpos($c['minor_code'], 'B') !== false) {
+                            $sum_b += $c['new_people'];
+                        } else if (strpos($c['minor_code'], 'C') !== false) {
+                            $sum_c += $c['new_people'];
+                        }
+                    }
+
+                    $sum_t = $sum_a + $sum_b + $sum_c;
+
+                    $col_idx = $col_ini;
+                    foreach ( $cols as $col ) {
+                        switch($col_tag) 
+                        {
+                        case 0:
+                            switch( $col )
+                            {
+                            case 'ASUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'BSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'CSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'TSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            default:
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                            }
+                            break;
+                        case 1:
+                            switch( $col )
+                            {
+                            case 'ASUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'BSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'CSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            case 'TSUM':
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                                break;
+                            default:
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
+                            }
+                            break;
+                        }
+                        $col_idx++;
+                        if ($col_idx > $col_max) {
+                            $col_tag = 1;
+                            $col_idx = $col_min;
+                        }
+                    }
+                }
 
                 $cnt = 1;
                 $objPHPExcel->createSheet();
