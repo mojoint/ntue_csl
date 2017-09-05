@@ -594,7 +594,7 @@ class AjaxController extends Controller {
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
                     if (sizeof($res)) {
-                        $knt = 0;
+                        $knt = 1;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
@@ -661,6 +661,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $summary['turnover']);
                 }
 
+                $cnt = 1;
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex($cnt);
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人數簡表' );
+
+                $knt = 1;
+                $qnt = 0;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '各類研習總人數簡表' );
+                $knt++;
                 // columns array
                 $cols = array();
                 $col_min = 65;
@@ -673,16 +682,10 @@ class AjaxController extends Controller {
                 $sum_c = 0;
                 $sum_t = 0;
 
-/*
-                for ($i = 68; $i<=90; $i++) {
-                    array_push(
-echo "$i @ ". chr($i);
-echo "<hr>";
-                }
-*/
                 // academic_class array
                 $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 $acs = array();
+                $acn = array();
                 $cols_a = array();
                 $cols_b = array();
                 $cols_c = array();
@@ -699,7 +702,7 @@ echo "<hr>";
                         array_push($cols_c, $ac['minor_code']);
                         break;
                     }
-                    $acs[$ac['minor_code']] = true;
+                    $acs[$ac['minor_code']] = $ac['cname'];
                 }
 
                 for ($i=0; $i<sizeof($cols_a); $i++) {
@@ -716,6 +719,46 @@ echo "<hr>";
                 array_push($cols, 'CSUM');
                 array_push($cols, 'TSUM');
 
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '序號');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '學校代碼');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '單位機構名稱');
+                foreach ($cols as $col) {
+                    switch( $col_tag )
+                    {
+                    case 0:
+                        $chr = chr($col_idx);
+                        break;
+                    case 1:
+                        $chr = 'A' . chr($col_idx);
+                        break;
+                    }
+                    switch( $col )
+                    {
+                    case 'ASUM':
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, '第一類(A類)小計');
+                        break;
+                    case 'BSUM':
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, '第二類(B類)小計');
+                        break;
+                    case 'CSUM':
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, '第三類(C類)小計');
+                        break;
+                    case 'TSUM':
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, '華語研習三大類合計');
+                        break;
+                    default:
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $acs[ $col ]);
+                    }
+                    if ($col_max > $col_idx) {
+                        $col_idx++;
+                    } else {
+                        $col_tag = 1;
+                        $col_idx = $col_min;
+                    }
+                }
+
+                $col_idx = $col_ini;
+                $col_tag = 0;
                 $qnt = 0;
                 foreach ($targets as $target) {
                     $qnt++;
@@ -724,15 +767,13 @@ echo "<hr>";
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
                     $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
-print_r( $classes );
-print_r('<hr>');
 
                     $cs = array();
                     $sum_a = 0;
                     $sum_b = 0;
                     $sum_c = 0;
                     foreach ($classes as $c) {
-                        $cs[$c]['minor_code'] = $c['new_people'];
+                        $cs[$c['minor_code']] = $c['new_people'];
                         if (strpos($c['minor_code'], 'A') !== false) {
                             $sum_a += $c['new_people'];
                         } else if (strpos($c['minor_code'], 'B') !== false) {
@@ -745,61 +786,46 @@ print_r('<hr>');
                     $sum_t = $sum_a + $sum_b + $sum_c;
 
                     $col_idx = $col_ini;
+                    $col_tag = 0;
                     foreach ( $cols as $col ) {
                         switch($col_tag) 
                         {
                         case 0:
-                            switch( $col )
-                            {
-                            case 'ASUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'BSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'CSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'TSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            default:
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                            }
+                            $chr = chr( $col_idx );
                             break;
                         case 1:
-                            switch( $col )
-                            {
-                            case 'ASUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'BSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'CSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            case 'TSUM':
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                                break;
-                            default:
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A'. chr( $col_idx ) . $knt, (($cs[$col])? $cs[$col] : ""));
-                            }
+                            $chr = 'A' . chr( $col_idx );
                             break;
                         }
-                        $col_idx++;
-                        if ($col_idx > $col_max) {
+
+                        switch( $col )
+                        {
+                        case 'ASUM':
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
+                            break;
+                        case 'BSUM':
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
+                            break;
+                        case 'CSUM':
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
+                            break;
+                        case 'TSUM':
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
+                            break;
+                        default:
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
+                        }
+                        if ($col_max > $col_idx) {
                             $col_tag = 1;
                             $col_idx = $col_min;
+                        } else {
+                            $col_idx++;
                         }
                     }
                 }
 
-                $cnt = 1;
-                $objPHPExcel->createSheet();
-                $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人數簡表' );
 
+/*
                 $cnt = 2;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -839,6 +865,7 @@ print_r('<hr>');
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '大學附設華語中心人數(次)一覽表(交叉總表)' );
+*/
 
                 $filename = '管理報表';
                 break;

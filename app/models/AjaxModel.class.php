@@ -237,7 +237,6 @@ class AjaxModel extends Model {
                 $sql .= '   AND `era_id` = :era_id';
                 $sql .= ' GROUP BY `minor_code`';
                 $targets[$k]['classes'] = $this->dbSelect($sql, array(':agency_id'=>$v['id'], ':era_id'=>$data['era_id']));
-                
             }
             return $targets;
             break;

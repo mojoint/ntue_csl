@@ -5,7 +5,7 @@ class Core
     {   
         date_default_timezone_set('UTC');
         spl_autoload_register(array($this, 'loadClass'));
-        
+        ini_set("session.cookie_httponly", True);        
         session_start();
         $this->removeMagicQuotes();
         $this->unregisterGlobals();
