@@ -9,17 +9,18 @@
           mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
           $('#grid-academic_agency_unlock').kendoGrid({
             pageable: false,
+            resizable: true,
             columns: [
               { title: '&nbsp;', field: 'agency_id' },
               { title: '&nbsp;', field: 'id' },
-              { title: '學校名稱', field: 'academic_institution_cname' },
-              { title: '機構名稱', field: 'academic_agency_cname' },
-              { title: '申請年度', field: 'academic_era_cname' },
-              { title: '申請季度', field: 'quarter' },
+              { title: '學校名稱', field: 'academic_institution_cname', width: '100px' },
+              { title: '機構名稱', field: 'academic_agency_cname', width: '100px' },
+              { title: '申請年度', field: 'academic_era_cname', width: '100px' },
+              { title: '申請季度', field: 'quarter', width: '100px' },
               { title: '&nbsp;', field: 'minors' },
               { title: '申請類別', field: 'minors_code' },
-              { title: '申請天數', field: 'work_days' },
-              { title: '修改原因', field: 'note' },
+              { title: '申請天數', field: 'work_days', width: '100px' },
+              { title: '修改原因', field: 'note', width: '100px' },
               { title: '&nbsp;', field: 'state' },
               { title: '&nbsp;', width: '200px',
                 command: [
@@ -39,7 +40,7 @@
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(1);
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(6)
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(10);
-          $('#grid-academic_agency_unlock').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_unlock, page: 1, pageSize: 10 }));  
+          $('#grid-academic_agency_unlock').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_unlock }));  
         </script>
     <?php endif; ?>
       </div>

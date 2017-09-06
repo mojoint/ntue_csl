@@ -228,6 +228,31 @@ class AjaxModel extends Model {
             $sql .= ' GROUP BY `minor_code`';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
+        case 'admin_academic_agency_report_manager_people_summary':
+            $sql  = 'SELECT `minor_code`, SUM(`people`) `people`';
+            $sql .= '  FROM `academic_agency_class`';
+            $sql .= ' WHERE `agency_id` = :agency_id';
+            $sql .= '   AND `era_id` = :era_id';
+            $sql .= ' GROUP BY `minor_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            break;
+        case 'admin_academic_agency_report_manager_total_hours_summary':
+            $sql  = 'SELECT `minor_code`, SUM(`total_hours`) `total_hours`';
+            $sql .= '  FROM `academic_agency_class`';
+            $sql .= ' WHERE `agency_id` = :agency_id';
+            $sql .= '   AND `era_id` = :era_id';
+            $sql .= ' GROUP BY `minor_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            break;
+        case 'admin_academic_agency_report_manager_turnover_summary':
+            $sql  = 'SELECT `minor_code`, SUM(`turnover`) `turnover`';
+            $sql .= '  FROM `academic_agency_class`';
+            $sql .= ' WHERE `agency_id` = :agency_id';
+            $sql .= '   AND `era_id` = :era_id';
+            $sql .= ' GROUP BY `minor_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            break;
+        /*
         case 'admin_academic_agency_report_manager_new_people_summary':
             $targets = $this->dbQuery('admin_academic_agency_report_targets');
             foreach($targets as $k=>$v) {
@@ -240,6 +265,7 @@ class AjaxModel extends Model {
             }
             return $targets;
             break;
+        */
         case 'admin_academic_agency_report_statistics':
             $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
             $sql .= '  FROM `academic_agency_class` t1';
