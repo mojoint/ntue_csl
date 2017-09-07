@@ -22,21 +22,29 @@
         <div id="grid-academic_class-b" class="col-xs-4"></div>
         <div id="grid-academic_class-c" class="col-xs-4"></div>
 
-        <script type="text/x-kendo-template" id="template-academic_class-footer">
+        <script type="text/x-kendo-template" id="template-academic_class_apply-footer">
           <div class="createBtnContainer">
             <label for="editor-academic_class-note">修改理由說明</label>
             <input type="text" id="editor-academic_class-note" />
             <label for="editor-academic_class-days">修改天數</label>
-            <!--<input type="text" id="editor-academic_class-work_days" />-->
             <select id="editor-academic_class-work_days"></select>
             <a href="\\#" class="k-button" id="btn-academic_class-unlock"><span class="fa fa-save"></span>&nbsp;確認提出</a>
+          </div>
+          <div class="toolbar"></div>
+        </script>
+        <script type="text/x-kendo-template" id="template-academic_class_exists-footer">
+          <div class="createBtnContainer">
+            <label for="editor-academic_class-note">修改理由說明</label>
+            <input type="text" id="editor-academic_class-note" class="disable" />
+            <label for="editor-academic_class-days">修改天數</label>
+            <select id="editor-academic_class-work_days" class="disable" ></select>
+            <label id="editor-academic_class-status"></label>
           </div>
           <div class="toolbar"></div>
         </script>
         <div id="grid-academic_class-footer" class="col-xs-12"></div>
         <script>
           mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
-console.log( mojo.data.academic_agency_unlock.length );
           var academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
           var academic_class = JSON.parse('<?php echo json_encode($academic_class); ?>');
           $('#grid-academic_class').kendoGrid({
@@ -45,11 +53,10 @@ console.log( mojo.data.academic_agency_unlock.length );
             toolbar: kendo.template($('#template-academic_class').html())
           });
           // set academic_era
-          
           for (var i=0; i<academic_era.length; i++) {
             $('#editor-academic_era').append('<option value="' + academic_era[i]['id'] +'">' + academic_era[i]['cname'] + '</option>');
-          }
-          
+          } 
+
           mojo.grid.academic_class_a = $('#grid-academic_class-a').kendoGrid({
             pageable: false,
             columns: [
@@ -125,11 +132,24 @@ console.log( mojo.data.academic_agency_unlock.length );
 
           $('#editor-academic_era option:first-child').attr('selected', true).trigger('change');
 
-          $('#grid-academic_class-footer').kendoGrid({
-            pageable: false,
-            height: 0,
-            toolbar: kendo.template($('#template-academic_class-footer').html())
-          });
+          console.log (mojo.data.academic_agency_unlock);
+          if (mojo.data.academic_agency_unlock.length) {
+            $('#grid-academic_class-footer').kendoGrid({
+                pageable: false,
+                height: 0,
+                toolbar: kendo.template($('#template-academic_class_exists-footer').html())
+            });
+            if (mojo.data.academic_agency_unlock[0]['status'])
+              $('#editor-academic_class-status').html( mojo.data.academic_agency_unlock[0]['online'] + ' ~ ' + mojo.data.academic_agency_unlock[0]['offline'] + ' 開放填報');
+            else
+              $('#editor-academic_class-status').html('待審核');
+          } else {
+            $('#grid-academic_class-footer').kendoGrid({
+                pageable: false,
+                height: 0,
+                toolbar: kendo.template($('#template-academic_class_apply-footer').html())
+            });
+          }
 
         </script>
     <?php endif; ?>

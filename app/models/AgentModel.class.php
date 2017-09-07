@@ -87,7 +87,8 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'academic_agency_unlock':
-            $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
+            $sql  = 'SELECT *, (now() between concat(`online`, " 00:00:00") and concat(`offline`, " 23:59:59") ) `status`';
+            $sql .= ' FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_agency_hr':

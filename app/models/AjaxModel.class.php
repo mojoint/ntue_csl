@@ -119,6 +119,8 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'admin_academic_agency_unlock_yes':
+            //$sql = 'UPDATE `academic_agency_unlock` SET `state` = 2 WHERE `agency_id` = :agency_id AND `state` = :state';
+            //return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':state'=>1));
             $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
             return $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
@@ -424,7 +426,7 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era[0]['id']));
             break;
         case 'agent_academic_agency_contact_add':
-            $sql = 'SELECT `id` FROM `academic_era` WHERE `state` = :state';
+            $sql = 'SELECT * FROM `academic_era` WHERE `state` = :state';
             $era = $this->dbSelect($sql, array(':state'=>1));
             
             if (1 == $data['primary']) {
