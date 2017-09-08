@@ -631,6 +631,7 @@ class AjaxController extends Controller {
             case 'manager':
                 $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
                 $academic_class = (new AjaxModel)->dbQuery('academic_class', array('era_id'=>$era_id));
+                /* summary */
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '人時數營收總簡表' );
@@ -661,6 +662,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $summary['turnover']);
                 }
 
+                /* new people summary */
                 $cnt = 1;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -825,6 +827,7 @@ class AjaxController extends Controller {
                     }
                 }
 
+                /* people summary */
                 $cnt = 2;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -989,6 +992,7 @@ class AjaxController extends Controller {
                     }
                 }
 
+                /* total hours summary */
                 $cnt = 3;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -1153,6 +1157,7 @@ class AjaxController extends Controller {
                     }
                 }
 
+                /* turnover summary */
                 $cnt = 4;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -1317,26 +1322,608 @@ class AjaxController extends Controller {
                     }
                 }
 
+                /* new people detail */
                 $cnt = 5;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人數詳表' );
 
+                $new_peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_detail', array('era_id'=>$era_id));
+                $sum_a = 0;
+                $sum_b = 0;
+                $sum_c = 0;
+                $sum_t = 0;
+
+                $minor_a = array();
+                $minor_b = array();
+                $minor_c = array();
+
+                foreach( $new_peoples as $new_people ) {
+                    switch( $new_people['major_code'] )
+                    {
+                    case 'A':
+                        $sum_a += $new_people['new_people'];
+                        array_push($minor_a, $new_people);
+                        break;
+                    case 'B':
+                        $sum_b += $new_people['new_people'];
+                        array_push($minor_b, $new_people);
+                        break;
+                    case 'C':
+                        $sum_c += $new_people['new_people'];
+                        array_push($minor_c, $new_people);
+                        break;
+                    }
+                    $sum_t += $new_people['new_people'];
+                }
+
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人數詳表' );
+
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '第一類(A)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '第二類(B)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '第三類(C)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '華語中心三類合計');
+
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+
+                $knt = 4;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部比');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+
+                $col_ini = 66;
+                $col_min = 65;
+                $col_max = 90;
+                
+                /* A */
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人數詳表明細' );
+
+                $knt = 7;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'A類總人數');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第一類(A類)小計');
+
+                $knt = 8;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                
+                $knt = 9;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_a) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+
+                /* B */
+                $knt = 11;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'B類總人數');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第二類(B類)小計');
+
+                $knt = 12;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+
+                $knt = 13;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_b) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+
+                /* C */
+                $knt = 15;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'C類總人數');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第三類(C類)小計');
+
+                $knt = 16;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+
+                $knt = 17;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_c) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+
+                /* people detail */
                 $cnt = 6;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人次詳表' );
 
+                $peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_detail', array('era_id'=>$era_id));
+
+                $sum_a = 0;
+                $sum_b = 0;
+                $sum_c = 0;
+                $sum_t = 0;
+
+                $minor_a = array();
+                $minor_b = array();
+                $minor_c = array();
+
+                foreach( $peoples as $people ) {
+                    switch( $people['major_code'] )
+                    {
+                    case 'A':
+                        $sum_a += $people['people'];
+                        array_push($minor_a, $people);
+                        break;
+                    case 'B':
+                        $sum_b += $people['people'];
+                        array_push($minor_b, $people);
+                        break;
+                    case 'C':
+                        $sum_c += $people['people'];
+                        array_push($minor_c, $people);
+                        break;
+                    }
+                    $sum_t += $people['people'];
+                }
+
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人次詳表' );
+
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人次');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '第一類(A)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '第二類(B)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '第三類(C)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '華語中心三類合計');
+
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人次');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+
+                $knt = 4;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部比');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+
+                $col_ini = 66;
+                $col_min = 65;
+                $col_max = 90;
+                
+                /* A */
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人次詳表明細' );
+
+                $knt = 7;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'A類總人次');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第一類(A類)小計');
+
+                $knt = 8;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人次');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                
+                $knt = 9;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_a) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+
+                /* B */
+                $knt = 11;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'B類總人次');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第二類(B類)小計');
+
+                $knt = 12;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人次');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+
+                $knt = 13;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_b) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+
+                /* C */
+                $knt = 15;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'C類總人次');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第三類(C類)小計');
+
+                $knt = 16;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人次');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+
+                $knt = 17;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_c) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+
+                /* total hours detail */
                 $cnt = 7;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總時數詳表' );
 
+                $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('era_id'=>$era_id));
+                $sum_a = 0;
+                $sum_b = 0;
+                $sum_c = 0;
+                $sum_t = 0;
+
+                $minor_a = array();
+                $minor_b = array();
+                $minor_c = array();
+
+                foreach( $total_hours as $total_hour ) {
+                    switch( $total_hour['major_code'] )
+                    {
+                    case 'A':
+                        $sum_a += $total_hour['total_hours'];
+                        array_push($minor_a, $total_hour);
+                        break;
+                    case 'B':
+                        $sum_b += $total_hour['total_hours'];
+                        array_push($minor_b, $total_hour);
+                        break;
+                    case 'C':
+                        $sum_c += $total_hour['total_hours'];
+                        array_push($minor_c, $total_hour);
+                        break;
+                    }
+                    $sum_t += $total_hour['total_hours'];
+                }
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總時數詳表' );
+
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總時數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '第一類(A)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '第二類(B)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '第三類(C)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '華語中心三類合計');
+
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總時數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+
+                $knt = 4;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部比');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+
+                $col_ini = 66;
+                $col_min = 65;
+                $col_max = 90;
+                
+                // A 
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人數詳表明細' );
+
+                $knt = 7;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'A類總人數');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第一類(A類)小計');
+
+                $knt = 8;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                
+                $knt = 9;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_a) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+
+                // B 
+                $knt = 11;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'B類總時數');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第二類(B類)小計');
+
+                $knt = 12;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總時數');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+
+                $knt = 13;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_b) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+
+                // C 
+                $knt = 15;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'C類總時數');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第三類(C類)小計');
+
+                $knt = 16;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總時數');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+
+                $knt = 17;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_c) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+
+                /* turnover detail */
                 $cnt = 8;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總營收詳表' );
 
+                $turnovers = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_detail', array('era_id'=>$era_id));
+
+                $sum_a = 0;
+                $sum_b = 0;
+                $sum_c = 0;
+                $sum_t = 0;
+
+                $minor_a = array();
+                $minor_b = array();
+                $minor_c = array();
+
+                foreach( $turnovers as $turnover ) {
+                    switch( $turnover['major_code'] )
+                    {
+                    case 'A':
+                        $sum_a += $turnover['turnover'];
+                        array_push($minor_a, $turnover);
+                        break;
+                    case 'B':
+                        $sum_b += $turnover['turnover'];
+                        array_push($minor_b, $turnover);
+                        break;
+                    case 'C':
+                        $sum_c += $turnover['turnover'];
+                        array_push($minor_c, $turnover);
+                        break;
+                    }
+                    $sum_t += $turnover['turnover'];
+                }
+
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總營收詳表' );
+
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '第一類(A)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '第二類(B)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '第三類(C)小計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '華語中心三類合計');
+
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+
+                $knt = 4;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部比');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+
+                $col_ini = 66;
+                $col_min = 65;
+                $col_max = 90;
+                
+                // A 
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總營收詳表明細' );
+
+                $knt = 7;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'A類總營收');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第一類(A類)小計');
+
+                $knt = 8;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總營收');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                
+                $knt = 9;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_a as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_a) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+
+                // B 
+                $knt = 11;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'B類總營收');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第二類(B類)小計');
+
+                $knt = 12;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總營收');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+
+                $knt = 13;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_b as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_b) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+
+                // C 
+                $knt = 15;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, 'C類總營收');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $acs[$minor['minor_code']]);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, '第三類(C類)小計');
+
+                $knt = 16;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總營收');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+
+                $knt = 17;
+                $col_idx = $col_ini;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
+                foreach( $minor_c as $minor ) {
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_c) * 100, 2) . '%');
+                    $col_idx++;
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+
+                /* */
                 $cnt = 9;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -1349,7 +1936,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( '明細' );
 
-                $knt = 0;
+                $knt = 1;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '語文中心代碼');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '語文中心名稱');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '國家代碼');
@@ -1400,15 +1987,15 @@ class AjaxController extends Controller {
                     $cname = preg_replace("/\)/", "|", $cname);
                     $cname = preg_replace("/\:/", "-", $cname);
                     $objPHPExcel->getActiveSheet()->setTitle( $cname );
-                    
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A0', '學校代碼');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B0', '單位名稱');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C0', '總人數');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D0', '總人次');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E0', '總時數');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F0', '總營收');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G0', '小註');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H0', '備註');
+                    $knt = 1;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '學校代碼');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '單位名稱');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '總時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '總營收');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '小註');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '備註');
 
                     $new_people = 0;
                     $people = 0;
