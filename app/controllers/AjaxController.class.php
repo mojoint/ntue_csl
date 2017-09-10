@@ -2,6 +2,7 @@
 
 class AjaxController extends Controller {
     public function admin($key, $val) {
+        if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
         switch($key) 
         {
@@ -225,6 +226,7 @@ class AjaxController extends Controller {
     } 
 
     public function agent($key, $val) {
+        if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
         switch($key) 
         {
@@ -376,6 +378,7 @@ class AjaxController extends Controller {
     }
 
     public function uploads($key, $val) {
+        if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
         switch($key) 
         {
@@ -388,6 +391,7 @@ class AjaxController extends Controller {
     }
 
     public function refs($key, $val) {
+        if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
         switch($key) 
         {
@@ -428,6 +432,7 @@ class AjaxController extends Controller {
     }
 
     public function reporter($key, $val, $era_id, $quarter=1, $agency_id=0) {
+        if (!isset($_SESSION)) { exit; }
         switch($key) 
         {
         case 'academic_admin_report':
@@ -1929,9 +1934,40 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '大學附設華語中心人數(次)一覽表(交叉總表)' );
 
+                $details = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_detail', array('era_id'=>$era_id));
+
+                $new_people = 0;
+                $people = 0;
+
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '大學附設華語中心招生人數(次)一覽表(交叉總表)' );
+
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '學校代碼');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '機構名稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, 'A + B人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, 'A + B總人次');
+
+                foreach( $details as $detail ) {
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $detail['institution_code']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $detail['institution_cname'] . $detail['academic_agency_cname']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $detail['new_people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $detail['people']);
+                    $new_people += $detail['new_people'];
+                    $people += $detail['people'];
+                }
+                $knt++;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '合計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $new_people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $people);
+
                 $filename = '管理報表';
                 break;
             case 'statistics':
+                $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
+                $era_last = (new AjaxModel)->dbQuery('admin_academic_era_last', array('era_id'=>$era_id));
+                
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( '明細' );
@@ -1945,12 +1981,12 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '男生');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '女生');
                 foreach ($targets as $target) {
-                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_statistics', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_statistics_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
                     if (sizeof($res)) {
                         foreach($res as $r) {
                             $knt++;
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['country_code']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $r['country_cname']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
@@ -1965,14 +2001,60 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex(1);
                 $objPHPExcel->getActiveSheet()->setTitle( '聯絡人' );
 
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '語文中心代碼');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '語文中心名稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '統計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '男生');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '女生');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '主管姓名');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '職稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '主要聯絡人');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '職稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '聯絡電話');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '電子郵件');
 
-
+                foreach ($targets as $target) {
+                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_statistics_contact', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    if (sizeof($res)) {
+                        $r = $res[0];
+                        $knt++;
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['new_people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $r['new_male']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_female']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $r['manager_cname']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['manager_title']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['primary_cname']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['primary_title']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['primary_tel']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['primary_email']);
+                    }
+                }
 
                 $cnt++;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex(2);
                 $objPHPExcel->getActiveSheet()->setTitle( '差異' );
 
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '語文中心代碼');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '語文中心名稱');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $era[0]['cname']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, ($era[0]['common'] - 1911 - 1) . '年度');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '差距');
+                foreach ($targets as $target) {
+                    $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_statistics_compare', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    if (sizeof($res)) {
+                        $knt++;
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $res['cur']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $res['last']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, ($res['cur'] - $res['last']));
+                    }
+                }
                 $filename = '統計處報表';
                 break;
             case 'major_b':
@@ -2527,6 +2609,7 @@ class AjaxController extends Controller {
     }
 
     public function mailer($key, $username, $email, $url) {
+        if (!isset($_SESSION)) { exit; }
         $official = (new AjaxModel)->dbQuery('mailer_official_get')[0];
 
         if ($official) {
@@ -2557,6 +2640,7 @@ class AjaxController extends Controller {
     }
 
     public function downloader( $key, $val, $param="" ) {
+        if (!isset($_SESSION)) { exit; }
         //ignore_user_abort(true);
         //set_time_limit(0); // disable the time limit for this script
          
@@ -2620,10 +2704,6 @@ class AjaxController extends Controller {
             break;
         }
         exit;
-    }
-
-    public function uploader() {
-
     }
 
 }
