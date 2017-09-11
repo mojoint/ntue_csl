@@ -453,10 +453,26 @@ class AjaxController extends Controller {
                         $objPHPExcel->createSheet();
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt);
-                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['cname'] );
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
+                    $knt = 1;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '國別(地區)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '男新生人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '女新生人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '每期上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '每週平均上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '總人時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '營收額度');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, '小註(課程名稱)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, '備註');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, '最後修改時間');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
+
                     if (sizeof($res)) {
-                        $knt = 0;
                         foreach($res as $r) {
                             $count = 0;
                             $size = sizeof($r['country']);
@@ -500,23 +516,23 @@ class AjaxController extends Controller {
                         $objPHPExcel->createSheet();
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt);
-                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
-                    if (sizeof($res)) {
-                        $knt = 0;
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '每週平均上課時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '每週平均上課時數(每班平均)');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '每期上課時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '營收額度');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '每週平均上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '每週平均上課時數(每班平均)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '每期上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '營收額度');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
 
+                    if (sizeof($res)) {
+                        $knt = 1;
                         foreach($res as $r) {
                             $knt++;
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
@@ -546,11 +562,28 @@ class AjaxController extends Controller {
                         $objPHPExcel->createSheet();
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt);
-                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
+                    $knt = 1;
+
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '國別(地區)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '男新生人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '女新生人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '每期上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '每週平均上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '總人時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '營收額度');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, '小註(課程名稱)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, '備註');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, '最後修改時間');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
+
                     if (sizeof($res)) {
-                        $knt = 0;
                         foreach($res as $r) {
                             $count = 0;
                             $size = sizeof($r['country']);
@@ -595,22 +628,23 @@ class AjaxController extends Controller {
                         $objPHPExcel->createSheet();
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt);
-                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-' .$target['cname'] );
+                    $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '每週平均上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '每週平均上課時數(每班平均)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '每期上課時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人時數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '營收額度');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
+
                     if (sizeof($res)) {
                         $knt = 1;
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '每週平均上課時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '每週平均上課時數(每班平均)');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '每期上課時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '總人時數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '營收額度');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '小註(課程名稱)');
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
 
                         foreach($res as $r) {
                             $knt++;
