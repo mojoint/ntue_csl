@@ -519,6 +519,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
+                    $knt = 1;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
@@ -532,7 +533,6 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
 
                     if (sizeof($res)) {
-                        $knt = 1;
                         foreach($res as $r) {
                             $knt++;
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
@@ -631,6 +631,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->getActiveSheet()->setTitle( $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
 
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
+                    $knt = 1;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '研習類別');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '總人數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人次');
@@ -644,7 +645,6 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '備註');
 
                     if (sizeof($res)) {
-                        $knt = 1;
 
                         foreach($res as $r) {
                             $knt++;
