@@ -2104,8 +2104,8 @@ class AjaxController extends Controller {
                             $people += intval( $minor['people'] );
                             $hours += floatval( $minor['hours'] );
                             $turnover += floatval( $minor['turnover'] );
+                            $knt++;
                         }
-                        $knt++;
                     }
 
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A1', '合計');
