@@ -5,8 +5,12 @@ class IndexController extends Controller {
         $this->assign('title', '華語文');
         $this->assign('header', $this->headers());
         $this->assign('content', $this->contents());
+        if (isset($_SESSION) && isset($_SESSION['error_code'])) {
+            $this->assign('error_code', $_SESSION['error_code']);
+        }
         $this->render();
     }
+
 
     function activate() {
         $reg_userpass = '/^(.+){3,80}$/';
@@ -20,9 +24,9 @@ class IndexController extends Controller {
             if (1 == sizeof($res)) {
                 $cnt = (new IndexModel)->dbQuery('activate', array('email'=>$email, 'timestamp'=>$timestamp, 'userpass'=>$userpass));      
             }
-            $this->redirect();
+            $this->redirect('activated');
         } else {
-            $this->redirect();
+            $this->redirect('error_activate');
         }
     }
 
@@ -42,10 +46,10 @@ debugger('mhho','admin login');
                     $_SESSION['username'] = $username;
                     $this->redirect('admin');
                 } else {
-                    $this->redirect();
+                    $this->redirect('error_login');
                 }
             } else {
-                $this->redirect();
+                $this->redirect('error_login');
             }
         //} else {
         //    $this->redirect();
@@ -68,10 +72,10 @@ debugger('mhho','agent login');
                     $_SESSION['username'] = $username;
                     $this->redirect('agent');
                 } else {
-                    $this->redirect();
+                    $this->redirect('error_login');
                 }
             } else {
-                $this->redirect();
+                $this->redirect('error_login');
             }
         //} else {
         //    $this->redirect();
@@ -94,12 +98,14 @@ debugger('mhho','agent login');
                     <div class="g-recaptcha" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O"></div>
                 </div>
                 <div class="form-group col-xs-12">
-                    <div class="col-xs-6">
+                    <div class="col-xs-5">
                         <a href="/index/agent" class="btn btn-lg btn-block btn-primary g-recaptcha" id="btn-login-agent" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O" data-callback="/index/agent/">教育機構登入</a>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-5">
                         <a href="/index/admin/" class="btn btn-lg btn-block btn-danger g-recaptcha" id="btn-login-admin" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O" data-callback="/index/admin/">管理員登入</a>
                     </div>
+                    <div class="col-xs-1"></div>
                 </div>
             </form>
         </section>';

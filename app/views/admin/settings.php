@@ -10,7 +10,7 @@
           <div role="tabpanel" class="tab-pane active" id="academic_era">
             <script type="text/x-kendo-template" id="template-academic_era">
               <div class="createBtnContainer">
-                <a href="\\#" class="k-button" id="btn-academic_era-add"><span class="fa fa-plus"></span>&nbsp;新增年季</a>
+                <a href="\\#" class="k-button" id="btn-academic_era-add"><span class="fa fa-plus"></span>&nbsp;增加新年度</a>
               </div>
               <div class="toolbar"></div>
             </script>
@@ -57,6 +57,7 @@
                 <a href="\\#" class="k-button" id="btn-academic_class-add"><span class="fa fa-plus"></span>&nbsp;新增類別</a>
                 <a href="\\#" class="k-button" id="btn-academic_class-save"><span class="fa fa-save"></span>&nbsp;儲存設定</a>
               </div>
+              <div><label>請勾選不納入績效認列之類別</label></div>
               <div class="toolbar"></div>
             </script>
             <div id="dialog-academic_class"></div>

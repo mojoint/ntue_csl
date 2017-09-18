@@ -487,6 +487,9 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $r['info']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, $r['note']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, $r['latest']);
                                 } else {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, "");
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, "");
@@ -598,6 +601,9 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $r['info']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, $r['note']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, $r['latest']);
                                 } else {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, "");
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, "");
@@ -2664,9 +2670,9 @@ class AjaxController extends Controller {
         } else {
             $subject = '華語文教育機構績效系統通知信';
             $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
-            $from = 'wenyu0421@tea.ntue.edu.tw';
+            $from = 'enjouli82029@tea.ntue.edu.tw';
 
-            $headers = 'From: 許文諭<' . $from . "> \r\n".
+            $headers = 'From: 李恩柔<' . $from . "> \r\n".
             'Reply-To: ' . $from . " \r\n".
             'X-Mailer: PHP/'. phpversion();
         }
@@ -2685,6 +2691,27 @@ class AjaxController extends Controller {
         case 'pdf':
             switch( $val )
             {
+            case 'admin_manual':
+                $dl_file = $val . '.pdf';
+                $full_path = $path . $dl_file;
+                if (file_exists($full_path)) {
+                    $fs = filesize($fullPath);
+                    $path_info = pathinfo($full_path);
+                    if ($fd = fopen($full_path, "r")) {
+                        header("Content-type: application/pdf");
+                        header("Content-Disposition: attachment; filename=\"".$path_info["basename"]."\""); // use 'attachment' to force a file download
+                        header("Content-length: $fs");
+                        header("Cache-control: private"); //use this to open files directly
+
+                        while(!feof($fd)) {
+                            $bf = fread($fd, 2048);
+                            echo $bf;
+                        }
+
+                    }
+                }
+                fclose($fd);
+                break;
             case 'user_manual':
                 $dl_file = $val . '.pdf';
                 $full_path = $path . $dl_file;

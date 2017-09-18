@@ -21,7 +21,7 @@ class Controller
     {   
     }   
 
-    public function redirect($key='', $val=null) {
+    public function redirect($key='') {
         switch($key)
         {   
         case 'agent':
@@ -29,6 +29,30 @@ class Controller
             break;
         case 'admin':
             header("Location:". APP_URL .'/admin/dashboard/');
+            break;
+        case 'error_activate':
+            if (isset($_SESSION)) {
+                session_destroy();
+                session_start();
+            }
+            $_SESSION['error_code'] = 'error_activate';
+            header("Location:". APP_URL );
+            break;
+        case 'activated':
+            if (isset($_SESSION)) {
+                session_destroy();
+                session_start();
+            }
+            $_SESSION['error_code'] = 'activated';
+            header("Location:". APP_URL );
+            break;
+        case 'error_login':
+            if (isset($_SESSION)) {
+                session_destroy();
+                session_start();
+            }
+            $_SESSION['error_code'] = 'error_login';
+            header("Location:". APP_URL );
             break;
         default:
             if (isset($_SESSION)) {
