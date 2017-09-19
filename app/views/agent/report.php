@@ -3,7 +3,7 @@
     <?php if ($_SESSION['agent']) : ?>
       <div id="grid-academic_agency_report_search">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 10%"/><col style="width: 20%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -65,8 +65,16 @@
         mojo.data.institution_code = '<?php echo $institution_code; ?>';
         mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
         mojo.data.academic_era_quarter = [
-          {quarter: 1, cname: '第一季'},
-          {quarter: 2, cname: '第二季'}
+          {quarter: 0, cname: '第1季~第4季(年度)'},
+          {quarter: 1, cname: '第1季'},
+          {quarter: 2, cname: '第2季'},
+          {quarter: 3, cname: '第3季'},
+          {quarter: 4, cname: '第4季'},
+          {quarter: 5, cname: '第1季~第2季'},
+          {quarter: 6, cname: '第2季~第3季'},
+          {quarter: 7, cname: '第3季~第4季'},
+          {quarter: 8, cname: '第1季~第3季'},
+          {quarter: 9, cname: '第2季~第4季'}
         ];
         for (var i=0; i<mojo.data.academic_era.length; i++)
           $('#academic_agency_report-era').append('<option value="' + mojo.data.academic_era[i]['id'] + '">' + mojo.data.academic_era[i]['cname'] + '</option>');
