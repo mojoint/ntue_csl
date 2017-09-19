@@ -284,7 +284,7 @@ console.log( res );
                       {    
                       case 'A': 
                         html_a += '<tr>';
-                        html_a += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                        html_a += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                         html_a += '<td class="new_people">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                         html_a += '<td class="people">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                         html_a += '<td class="weekly">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
@@ -319,7 +319,7 @@ console.log( res );
                         break;
                       case 'B': 
                         html_b += '<tr>';
-                        html_b += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                        html_b += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                         html_b += '<td class="new_people">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                         html_b += '<td class="people">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                         html_b += '<td class="weekly">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
@@ -354,7 +354,7 @@ console.log( res );
                         break;
                       case 'C': 
                         html_c += '<tr>';
-                        html_c += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
+                        html_c += '<td class="minor_code_cname">' + mojo.quarters[ mojo.data.academic_agency_report_summary[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_summary[i]['minor_code_cname'] + '</td>';
                         html_c += '<td class="new_people_a">' + mojo.data.academic_agency_report_summary[i]['new_people'] + '</td>';
                         html_c += '<td class="people_a">' + mojo.data.academic_agency_report_summary[i]['people'] + '</td>';
                         html_c += '<td class="weekly_a">' + mojo.data.academic_agency_report_summary[i]['weekly'] + '</td>';
@@ -534,7 +534,7 @@ console.log( res );
                         html_a += '<tr>';
                         html_a += '<td class="minor_code_cname">';
                         if (j == jsize)
-                          html_a += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
+                          html_a += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
                         html_a += '</td>';
                         html_a += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['country_code_cname'] + '</td>';
                         html_a += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_a[i]['country'][j]['new_male'] + '</td>';
@@ -585,8 +585,7 @@ console.log( res );
                         html_b += '<tr>';
                         html_b += '<td class="minor_code_cname">';
                         if (j == jsize)
-                          html_b += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
-                          html_b += mojo.data.academic_agency_report_detail_b[i]['minor_code_cname'];
+                          html_b += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
                         html_b += '</td>';
                         html_b += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['country_code_cname'] + '</td>';
                         html_b += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_b[i]['country'][j]['new_male'] + '</td>';
@@ -637,7 +636,7 @@ console.log( res );
                         html_c += '<tr>';
                         html_c += '<td class="minor_code_cname">';
                         if (j == jsize)
-                          html_c += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
+                          html_c += mojo.quarters[ mojo.data.academic_agency_report_detail[i]['quarter'] ] + ':' + mojo.data.academic_agency_report_detail[i]['minor_code_cname'];
                         html_c += '</td>';
                         html_c += '<td class="country_code_cname">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['country_code_cname'] + '</td>';
                         html_c += '<td class="country_new_male">' + mojo.data.academic_agency_report_detail_c[i]['country'][j]['new_male'] + '</td>';
