@@ -65,7 +65,7 @@
         mojo.data.institution_code = '<?php echo $institution_code; ?>';
         mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
         mojo.data.academic_era_quarter = [
-          {quarter: 0, cname: '第1季~第4季(年度)'},
+          {quarter: 10, cname: '第1季~第4季(年度)'},
           {quarter: 1, cname: '第1季'},
           {quarter: 2, cname: '第2季'},
           {quarter: 3, cname: '第3季'},

@@ -18,12 +18,12 @@ class AgentController extends Controller {
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('fill'));
             $academic_agency_fill = (new AgentModel)->dbQuery('academic_agency_fill', array('agency_id'=>$_SESSION['agent']['agency_id']));
-
             if (sizeof($academic_agency_fill)) {
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
                 $_SESSION['agent']['quarter_id'] = $academic_agency_fill[0]['id'];
                 $this->assign('academic_agency_fill', $academic_agency_fill);
+                $this->assign('academic_era_quarter', $academic_agency_fill[0]['cname']);
                 $this->assign('era_id', $academic_agency_fill[0]['era_id']);
                 $this->assign('quarter', $academic_agency_fill[0]['quarter']);
                 $this->assign('quarter_id', $academic_agency_fill[0]['id']);

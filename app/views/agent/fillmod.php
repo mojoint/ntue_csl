@@ -105,7 +105,6 @@
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
 
         mojo.data.academic_agency_class_country = JSON.parse('<?php echo json_encode($academic_agency_class_country); ?>');
-
         mojo.data.content_list = JSON.parse('<?php echo json_encode($content_list); ?>');
         mojo.refs.content_list = {};
         for (var i=0; i<mojo.data.content_list.length; i++)
@@ -115,7 +114,8 @@
         mojo.refs.country_list = {};
         mojo.refs.country_code_list = []; 
         for (var i=0; i<mojo.data.country_list.length; i++) {
-          mojo.refs.country_list[mojo.data.country_list[i]['code']] = mojo.data.country_list[i];                                                                                                                                                 mojo.refs.country_code_list.push({'code': mojo.data.country_list[i].code, 'cname': mojo.data.country_list[i].cname, 'ename': mojo.data.country_list[i].ename, 'select_key': mojo.data.country_list[i].cname + ' ' + mojo.data.country_list[i].ename + ' ' + mojo.data.country_list[i].code });
+          mojo.refs.country_list[mojo.data.country_list[i]['code']] = mojo.data.country_list[i];
+          mojo.refs.country_code_list.push({'code': mojo.data.country_list[i].code, 'cname': mojo.data.country_list[i].cname, 'ename': mojo.data.country_list[i].ename, 'select_key': mojo.data.country_list[i].cname + ' ' + mojo.data.country_list[i].ename + ' ' + mojo.data.country_list[i].code });
         }
 
         mojo.data.major_list = JSON.parse('<?php echo json_encode($major_list); ?>');
