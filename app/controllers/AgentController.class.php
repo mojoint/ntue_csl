@@ -6,6 +6,9 @@ class AgentController extends Controller {
             $this->assign('title', '華語文-機構');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('dashboard'));
+            $agent_contract_count = (new AgentModel)->dbQuery('agent_contract_count',array('agency_id'=>$_SESSION['agent']['agency_id']));
+            $this->assign('agent_contract_count', $agent_contract_count);
+debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->render();
         } else {
             $this->redirect();
