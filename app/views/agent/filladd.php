@@ -10,6 +10,7 @@
         </div>
         <div class="toolbar"></div>
       </script>
+      <div id="dialog-academic_agency_class"></div>
       <div id="grid-academic_agency_class">
         <table role="grid">
           <colgroup><col/><col/><col/></colgroup>
@@ -102,6 +103,8 @@
           pageable: false,
           toolbar: kendo.template($('#template-academic_agency_class_summary').html())
         });
+
+        mojo.data.academic_agency_class_last = JSON.parse('<?php echo json_encode($academic_agency_class_last); ?>');
 
         mojo.data.content_list = JSON.parse('<?php echo json_encode($content_list); ?>');
         mojo.refs.content_list = {};

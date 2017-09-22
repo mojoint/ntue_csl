@@ -491,6 +491,23 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
             break;
+        case 'agent_academic_agency_class_import':
+            // classes
+            $sql  = 'INSERT INTO `academic_agency_class` ';
+            $sql .= 'SELECT 0 `id`, `agency_id`, `era_id`, (`quarter` + 1) `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `new_people`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, now() `latest`, 0 `state`';
+            $sql .= '  FROM `academic_agency_class` ';
+            $sql .= ' WHERE `id` = :id';
+
+            $id = $this->dbInsert($sql, array(':id'=>$data['id']));
+
+            // country 
+            $sql  = 'INSERT INTO `academic_agency_class_country`';
+            $sql .= 'SELECT 0 `id`, :class_id `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`';
+            $sql .= '  FROM `academic_agency_class_country`';
+            $sql .= ' WHERE `class_id` = :id';
+            $cnt = $this->dbInsert($sql, array(':class_id'=>$id, ':id'=>$data['id']));
+            return $id;
+            break;
         case 'agent_academic_agency_class_mod':
             $sql = 'UPDATE `academic_agency_class` SET `minor_code` = :minor_code, `cname` = :cname, `content_code` = :content_code, `target_code` = :target_code, `new_people` = :new_people, `people` = :people, `weekly` = :weekly, `weeks` = :weeks, `hours` = :hours, `adjust` = :adjust, `total_hours` = :total_hours, `revenue` = :revenue, `subsidy` = :subsidy, `turnover` = :turnover, `note` = :note, `latest` = NOW() WHERE `id` = :class_id';
             $cnt = $this->dbUpdate($sql, array(':minor_code'=>$data['minor_code'], ':cname'=>$data['cname'], ':content_code'=>$data['content_code'], ':target_code'=>$data['target_code'], ':new_people'=>$data['new_people'], ':people'=>$data['people'], ':weekly'=>$data['weekly'], ':weeks'=>$data['weeks'], 'hours'=>$data['hours'], ':adjust'=>$data['adjust'], ':total_hours'=>$data['total_hours'], ':revenue'=>$data['revenue'], ':subsidy'=>$data['subsidy'], ':turnover'=>$data['turnover'], ':note'=>base64_decode($data['note']), ':class_id'=>$data['class_id']));

@@ -4,7 +4,7 @@
     <div id="academic_agency_class" data-mojo="<?php if (isset($mojo)) { echo $mojo; } ?>" data-era_id="<?php echo $era_id ;?>" data-quarter="<?php echo $quarter ;?>" data-quarter_id="<?php echo $quarter_id ;?>">
       <script type="text/x-kendo-template" id="template-academic_agency_class">
         <div class="createBtnContainer">
-          <a href="\\#" class="k-button" id="btn-academic_agency_class-import"><span class="fa fa-copy"></span>&nbsp;自上一季匯入</a>
+          <!--<a href="\\#" class="k-button" id="btn-academic_agency_class-import"><span class="fa fa-copy"></span>&nbsp;自上一季匯入</a>-->
         </div>
         <div class="toolbar"></div>
       </script>

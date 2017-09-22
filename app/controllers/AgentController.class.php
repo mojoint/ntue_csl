@@ -51,6 +51,9 @@ class AgentController extends Controller {
             $this->assign('major_list', (new AgentModel)->dbQuery('refs_major_list'));
             $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list'));
             $this->assign('target_list', (new AgentModel)->dbQuery('refs_target_list'));
+            if ($_SESSION['agent']['quarter'] != 1) {
+                $this->assign('academic_agency_class_last', (new AgentModel)->dbQuery('academic_agency_class_last', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$_SESSION['agent']['era_id'], 'quarter'=>($_SESSION['agent']['quarter'] -1), 'major_code'=>$mojo)));
+            }
             $this->render();
         } else {
             $this->redirect();
