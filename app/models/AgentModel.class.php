@@ -143,6 +143,11 @@ class AgentModel extends Model {
             $sql = 'SELECT * FROM `target_list` WHERE "NTUE" = :ntue ORDER BY `code`';
             return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
+        case 'agent_contract_count':
+            $sql = 'SELECT count(*) as cnt FROM `academic_agency_contact` WHERE `agency_id` = :agency_id ';
+            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            return $res[0]['cnt'];
+            break;
         }
     }
 }
