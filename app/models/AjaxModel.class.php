@@ -179,7 +179,7 @@ class AjaxModel extends Model {
             break;
         case 'admin_academic_era_quarter_mod':
             // update previous quarter to be offline
-            $sql = 'UPDATE `academic_era_quarter` SET `state` = :state WHERE `state` = :state_org';
+            $sql = 'UPDATE `academic_era_quarter` SET `state` = :state WHERE `state` = :state_orig';
             $cnt = $this->dbUpdate($sql, array(':state'=>2, ':state_orig'=>1));
             // update the setting one to be online
             $sql = 'UPDATE `academic_era_quarter` SET `online` = :online, `offline` = :offline, `state` = :state WHERE `id` = :id';

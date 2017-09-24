@@ -127,7 +127,7 @@ class AjaxController extends Controller {
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('admin_academic_era_quarter_mod', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));    
+                $res = (new AjaxModel)->dbQuery('admin_academic_era_quarter_mod', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -205,9 +205,9 @@ class AjaxController extends Controller {
                         /* $email = 'thucop@gmail.com'; */
                         $subject = $_POST['emailSubject'];
                         $message = $_POST['emailBody']."\n";
-                        $from = 'wenyu0421@tea.ntue.edu.tw';
+                        $from = 'enjouli82029@tea.ntue.edu.tw';
                         $headers = "Content-type: text/html; charset=UTF-8\r\n";
-                        $headers = 'From: 許文諭<' . $from . "> \r\n".
+                        $headers = 'From: 李恩柔<' . $from . "> \r\n".
                         'Reply-To: ' . $from . " \r\n".
                         'X-Mailer: PHP/'. phpversion();
                         mail( $email, $subject, $message, $headers );
@@ -2263,8 +2263,6 @@ class AjaxController extends Controller {
                 $objPHPExcel->getActiveSheet()->setTitle( $filename );
 
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
-print_r( $res );
-exit;
                 $size = sizeof($res);
                 if ($size) {
                     $knt = 1;
