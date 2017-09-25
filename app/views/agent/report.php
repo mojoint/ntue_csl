@@ -18,7 +18,6 @@
         <li class="active" role="presentation"><a id="tab-academic_agency_report_summary" href="#academic_agency_report_summary" aria-controls="academic_agency_report_summary" role="tab" data-toggle="tab">課程統計簡表(四大類)</a></li>
         <li role="presentation"><a id="tab-academic_agency_report_detail" href="#academic_agency_report_detail" aria-controls="academic_agency_report_detail" role="tab" data-toggle="tab">課程明細詳表(含國別)</a></li>
         <li role="presentation"><a id="tab-academic_agency_report_pdf" href="#academic_agency_report_pdf" aria-controls="academic_agency_report_pdf" role="tab" data-toggle="tab">績效報表</a></li>
-        <li role="presentation"><a id="tab-academic_agency_report_history" href="#academic_agency_report_history" aria-controls="academic_agency_report_history" role="tab" data-toggle="tab">105年度績效報表</a></li>
       </ul>    
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="academic_agency_report_summary">
@@ -41,24 +40,6 @@
             <div class="toolbar"></div>
           </script>
           <div id="grid-academic_agency_report_pdf"></div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="academic_agency_report_history">
-          <script type="text/x-kendo-template" id="template-academic_agency_report_history">
-            <div class="createBtnContainer"><a href="\\#" class="k-button" id="btn-academic_agency_report_history-export"><span class="fa fa-file-pdf-o"></span>&nbsp;EXCEL報表</a></div>
-            <div class="toolbar"></div>
-          </script>
-          <div id="grid-academic_agency_report_history">
-            <table role="grid">
-              <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
-              <thead></thead>
-              <tbody>
-                <tr>
-                  <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_agency_report_history_summary-export"><span class="fa fa-file-excel-o"></span>&nbsp;匯出105年度機構個別表</a></td>
-                  <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_agency_report_history_detail-export"><span class="fa fa-file-excel-o"></span>&nbsp;匯出105年度機構校總表</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
       <script>

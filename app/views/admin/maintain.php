@@ -64,7 +64,7 @@
                 { title: '使用者ID', field: 'username', width: '150px' },
                 { title: '電子郵件', field: 'email' },
                 { title: '學校名稱', field: 'academic_institution_cname', width: '200px' },
-                { title: '所屬機構', field: 'academic_agency_cname', width: '200px' },
+                { title: '機構名稱', field: 'academic_agency_cname', width: '200px' },
                 { title: '&nbsp;', width: '100px',
                   command: [
                     {

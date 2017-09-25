@@ -3225,16 +3225,6 @@ console.log( res );
         window.open('/ajax/reporter/academic_agency_report/pdf/' + $('#academic_agency_report-era').val() + '/' + $('#academic_agency_report-quarter').val() + '/' + mojo.mojos[2]);
       });
 
-      $('#btn-academic_agency_report_history_summary-export').on('click', function(e) {
-        e.preventDefault();
-        window.open('/ajax/downloader/y105/summary/' + mojo.data.institution_code, '_blank');
-      });
-
-      $('#btn-academic_agency_report_history_detail-export').on('click', function(e) {
-        e.preventDefault();
-        window.open('/ajax/downloader/y105/detail/' + mojo.data.institution_code, '_blank');
-      });
-
       mojo.tags.report = false;
       $('#btn-academic_agency_report-search').on('click', function(e) {
         e.preventDefault();
@@ -3247,7 +3237,20 @@ console.log( res );
     if (mojo.mojo_if('sec-agency_report'))
       mojo.watch_agency_report();
 
-    
+    mojo.watch_y105 = function() {
+      $('#btn-academic_agency_report_history_summary-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/downloader/y105/summary/' + mojo.data.institution_code, '_blank');
+      });
+
+      $('#btn-academic_agency_report_history_detail-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/downloader/y105/detail/' + mojo.data.institution_code, '_blank');
+      });
+    };
+
+    if (mojo.mojo_if('sec-y105')) 
+      mojo.watch_y105();
 
   });
 })(jQuery);

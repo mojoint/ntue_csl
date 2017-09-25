@@ -146,6 +146,18 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
         }
     }
 
+    function y105() {
+        if (isset($_SESSION['agent'])) {
+            $this->assign('title', '華語文-機構');
+            $this->assign('header', $this->headers());
+            $this->assign('sidebar', $this->sidebars('y105'));
+            $this->assign('institution_code', $_SESSION['agent']['institution_code']);
+            $this->render();
+        } else {
+            $this->redirect();
+        }
+    }
+
     function logout() {
         $this->redirect();
     }
@@ -161,7 +173,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
     }
 
     function sidebars($tag) {
-        $currents = array('fill'=>'', 'info'=>'', 'report'=>'', 'unlock'=>'', 'message'=>'');
+        $currents = array('fill'=>'', 'info'=>'', 'report'=>'', 'unlock'=>'', 'message'=>'', 'y105'=>'');
         $currents[$tag] = 'current';
         $agency_name = (isset($_SESSION['agent']))? $_SESSION['agent']['academic_institution_cname'] : '機構';
         $html  = '<h2 id="logo"><a href="#">'. $agency_name .'</a></h2>';
@@ -172,6 +184,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
         $html .=   '<li class="'. $currents['report'] .'"><a href="/agent/report/">機構報表</a></li>';
         $html .=   '<li class="'. $currents['unlock'] .'"><a href="/agent/unlock/">修改申請</a></li>';
         $html .=   '<li class="'. $currents['message'] .'"><a href="/agent/message/">留言板</a></li>';
+        $html .=   '<li class="'. $currents['y105'] .'"><a href="/agent/y105/">105年績效報表</a></li>';
         $html .=   '<li class=""><a href="/agent/logout/">系統登出</a></li>';
 		$html .=  '</ul>';
 		$html .= '</nav>';

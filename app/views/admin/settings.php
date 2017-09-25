@@ -26,7 +26,7 @@
                   { title: '', field: 'id' },
                   { title: '', field: 'era_id' },
                   { title: '', field: 'quarter' },
-                  { title: '學年季度', field: 'cname' },
+                  { title: '季度', field: 'cname' },
                   { title: '開放填報', field: 'online' },
                   { title: '結束填報', field: 'offline' },
                   { title: '', field: 'state' },

@@ -74,6 +74,9 @@ class AjaxController extends Controller {
                 foreach ($rs as $r) {
                     switch( intval($r['state']) ) 
                     {
+                    case -1:
+                        $r['state'] = '尚未填報';
+                        break;
                     case 0:
                         if (strlen($r['offline'])) {
                             if (strtotime($r['offline'] . ' 23:59:59') - time() > 0) {

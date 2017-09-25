@@ -95,18 +95,31 @@ class AjaxModel extends Model {
             return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
         case 'admin_academic_agency_status':
+            /*
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`, IFNULL(t5.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
-            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t2.`id` = t5.`agency_id`';
+            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t2.`id` = t5.`agency_id` AND t1.`era_id` = t5.`era_id` AND t1.`quarter` = t5.`quarter`';
             $sql .= ' WHERE t1.`agency_id` != :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
             $sql .= '   AND t1.`quarter` = :quarter';
             $sql .= ' GROUP BY t1.`agency_id`';
             $sql .= ' ORDER BY t2.`institution_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            */
+
+            $sql  = 'SELECT IFNULL(count(t4.id), 0) `cnt`, t1.`id`, t1.`cname` `academic_agency_cname`, t1.`institution_code`, t2.`cname` `institution_cname`, t3.`id` `era_id`, t3.`cname` `era_cname`, IFNULL(t4.`state`, -1) `state`, IFNULL(t5.`offline`, "") `offline`';
+            $sql .= '  FROM `academic_agency` t1';
+            $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
+            $sql .= ' INNER JOIN `academic_era` t3 ON t3.`id` = :era_id';
+            $sql .= '  LEFT JOIN `academic_agency_class` t4 ON t1.`id` = t4.`agency_id` AND t4.`era_id` = t3.`id` AND t4.`quarter` = :quarter4';
+            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t1.`id` = t5.`agency_id` AND t5.`era_id` = t3.`id` AND t5.`quarter` = :quarter5';
+            $sql .= ' WHERE t1.`id` != :agency_id';
+            $sql .= ' GROUP BY t1.`id`';
+            $sql .= ' ORDER BY t1.`institution_code`';
+
+            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter4'=>$data['quarter'], ':quarter5'=>$data['quarter']));
             break;
         case 'admin_academic_agency_status_byid':
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`';
