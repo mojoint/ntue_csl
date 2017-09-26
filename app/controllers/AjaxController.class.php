@@ -2734,7 +2734,7 @@ class AjaxController extends Controller {
                 $dl_file = $val . '.pdf';
                 $full_path = $path . $dl_file;
                 if (file_exists($full_path)) {
-                    $fs = filesize($fullPath);
+                    $fs = filesize($full_path);
                     $path_info = pathinfo($full_path);
                     if ($fd = fopen($full_path, "r")) {
                         header("Content-type: application/pdf");
@@ -2755,7 +2755,7 @@ class AjaxController extends Controller {
                 $dl_file = $val . '.pdf';
                 $full_path = $path . $dl_file;
                 if (file_exists($full_path)) {
-                    $fs = filesize($fullPath);
+                    $fs = filesize($full_path);
                     $path_info = pathinfo($full_path);
                     if ($fd = fopen($full_path, "r")) {
                         header("Content-type: application/pdf");
