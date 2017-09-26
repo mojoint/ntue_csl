@@ -6,7 +6,7 @@
           <div class="createBtnContainer">
             <select id="select-academic_agency_status-era"></select>
             <select id="select-academic_agency_status-quarter"></select>
-            <a href="\\#" class="k-button" id="btn-academic_agency_status-search"><span class="fa fa-plus"></span>&nbsp;查詢狀況</a>
+            <a href="\\#" class="k-button" id="btn-academic_agency_status-search"><span class="fa fa-search"></span>&nbsp;查詢狀況</a>
           </div>
           <div class="toolbar"></div>
             </script>

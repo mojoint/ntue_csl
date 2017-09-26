@@ -3,7 +3,8 @@ class Core
 {
     public function run()
     {   
-        date_default_timezone_set('UTC');
+        //date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Taipei');
         spl_autoload_register(array($this, 'loadClass'));
         ini_set("session.cookie_httponly", True);        
         session_start();

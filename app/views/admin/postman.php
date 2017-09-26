@@ -6,11 +6,16 @@
       <div class="container">
         <div style="width:95%;">
           致：<select id="email-rcptto">
-                <option value='1'>所有單位人員</option>
-                <option value='2'>所有單位主管</option>
-                <option value='3'>所有單位職員</option>
-                <option value='4'>所有未填報單位聯絡人</option>
+                <option value="1">所有單位人員</option>
+                <option value="2">所有單位主管</option>
+                <option value="3">所有單位職員</option>
+                <option value="4">所有未填報單位聯絡人</option>
+                <option value="9">只寄副本(測試收發用)</option>
               </select>
+        </div>
+        <div style="width:95%">
+          <label>寄件副本</label>
+          <input type="text" id="email-ccto" style="width:95%" />
         </div>
         <div style="width:95%;">
           <label>信件主旨</label>

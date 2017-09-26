@@ -59,7 +59,7 @@
         'tel': /^(\d){3,4}-(\d){3,4}$/,
         'string255': /^(.){1,255}$/,
         'country_code': /[a-z0-9][\d]{2}/i,
-        'zipcode': /^(\d){3,5$/
+        'zipcode': /^(\d){3,5}$/
       },
       refs: {},
       tags: {}
@@ -126,7 +126,7 @@
       };
     }
   </script>
-  <script src="/public/js/mojo.combo.v1.9.js"></script>
+  <script src="/public/js/mojo.combo.v9.26.js"></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">
 <?php 

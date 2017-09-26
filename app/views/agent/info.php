@@ -75,7 +75,7 @@
           <div id="grid-academic_agency_hr"></div>
           <script>
             $('#grid-academic_agency_hr').kendoGrid({
-              pageable: true,
+              pageable: false,
               resizable: true,
               height: 550,
               columns: [
@@ -103,7 +103,7 @@
             $('#grid-academic_agency_hr').data('kendoGrid').hideColumn(1);
             $('#grid-academic_agency_hr').data('kendoGrid').hideColumn(8);
             var hr_data = JSON.parse('<?php echo json_encode($academic_agency_hr); ?>');
-            $('#grid-academic_agency_hr').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: hr_data, page: 1, pageSize: 10 }));
+            $('#grid-academic_agency_hr').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: hr_data }));
           </script>
         </div>
         <div role="tabpanel" class="tab-pane" id="academic_agency_contact">
@@ -115,7 +115,7 @@
           <div id="grid-academic_agency_contact"></div>
           <script>
             $('#grid-academic_agency_contact').kendoGrid({
-              pageable: true,
+              pageable: false,
               resizable: true,
               height: 550,
               columns: [
@@ -159,7 +159,7 @@
             $('#grid-academic_agency_contact').data('kendoGrid').hideColumn(12);
             $('#grid-academic_agency_contact').data('kendoGrid').hideColumn(13);
             var contact_data = JSON.parse('<?php echo json_encode($academic_agency_contact); ?>');
-            $('#grid-academic_agency_contact').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: contact_data, page: 1, pageSize: 10 }));
+            $('#grid-academic_agency_contact').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: contact_data }));
           </script>
         </div>
       </div>

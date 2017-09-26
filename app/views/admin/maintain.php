@@ -43,7 +43,6 @@
             });
             $('#grid-academic_agency').data('kendoGrid').hideColumn(0);
             mojo.data.academic_agency = JSON.parse('<?php echo json_encode($academic_agency); ?>');
-            //$('#grid-academic_agency').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency, page: 1, pageSize: 10 }));
             $('#grid-academic_agency').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency }));
           </script>
         </div>
@@ -83,7 +82,6 @@
             $('#grid-academic_agency_agent').data('kendoGrid').hideColumn(0);
             $('#grid-academic_agency_agent').data('kendoGrid').hideColumn(1);
             mojo.data.academic_agency_agent = JSON.parse('<?php echo json_encode($academic_agency_agent); ?>');
-            //$('#grid-academic_agency_agent').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_agent, page: 1, pageSize: 10 }));
             $('#grid-academic_agency_agent').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_agent }));
           </script>    
         </div>

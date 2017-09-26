@@ -74,7 +74,7 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_agency_agent` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' WHERE "NTUE" = :ntue';
-            return $this->dbSelect($sql, array(':ntue'=>MD5Prfix));
+            return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'admin_academic_agency_agent_get_byid':
             $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`';
@@ -148,8 +148,8 @@ class AjaxModel extends Model {
         case 'admin_academic_era_add':
             $sql = 'SELECT * FROM `academic_era` WHERE "NTUE" = :ntue ORDER BY `id` DESC LIMIT 1';
             $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
-            $sql  = 'INSERT INTO `academic_era` (`id`, `common`, `roc`, `code`, `cname`, `state`)';
-            $sql .= ' VALUES (0, :common, :roc, :code, :cname, 0)';
+            $sql  = 'INSERT INTO `academic_era` (`id`, `common`, `roc`, `code`, `cname`, `state`, `taken`)';
+            $sql .= ' VALUES (0, :common, :roc, :code, :cname, 0, 0)';
             $common = intval($res[0]['common']) + 1;
             $roc = intval($res[0]['roc']) + 1;
             $code = "Y". $roc;
@@ -203,11 +203,19 @@ class AjaxModel extends Model {
             $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
+        case 'admin_academic_class_add':
+            $sql = 'INSERT INTO `academic_class` (`id`, `era_id`, `major_code`, `minor_code`, `cname`, `state`) VALUES (0, :era_id, :major_code, :minor_code, :cname, 0)';
+            $id = $this->dbInsert($sql, array(':era_id'=>$data['era_id'], ':major_code'=>$data['major_code'], ':minor_code'=>$data['minor_code'], ':cname'=>$data['cname']));
+            return $this->dbQuery('admin_academic_class', array('era_id'=>$data['era_id']));
+            break;
         case 'admin_academic_class_mod':
             for ($i=0; $i<sizeof($data['checks']); $i++) {
               $sql = 'UPDATE `academic_class` SET `state` = 1 WHERE `id` = :id';
               $cnt = $this->dbUpdate($sql, array(':id'=>$data['checks'][$i]));
             }
+
+            $sql = 'UPDATE `academic_era` SET `taken` = :taken WHERE `id` = :era_id';
+            return $this->dbUpdate($sql, array(':taken'=>$data['taken'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_check_new_user_add':
             $sql = 'SELECT count(*) `cnt` FROM `academic_agency_agent` where `username` = :username ';

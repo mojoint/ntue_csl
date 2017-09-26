@@ -24,7 +24,7 @@ for admin postman function
                 return false;
             }
             $('#email-send').text('發送中...').prop('disabled', true);
-            mojo.ajax('admin','postman','emailSend',{'emailRcptTo':$('#email-rcptto').val(),'emailSubject':$('#email-subject').val(),'emailBody':$('#email-body textarea').val()});
+            mojo.ajax('admin','postman','emailSend',{'emailRcptTo':$('#email-rcptto').val(),'emailSubject':$('#email-subject').val(),'emailBody':$('#email-body textarea').val(), 'emailCcTo':$('#email-ccto').val()});
         })
         ;
 

@@ -38,6 +38,11 @@ class Model
         return $str->rowCount();
     }  
 
+    public function dbLogger($path, $key, $val, $data) {
+        $sql = 'INSERT INTO `logger` (`id`, `path`, `key`, `val`, `data`) VALUES (0, :path, :key, :val, :data)';
+        return $this->dbInsert( $sql, array(':path'=>$path, ':key'=>$key, ':val'=>$val, ':data'=>$data ) );
+    }  
+
     private function dbConnect() {
         $this->_pdo = new PDO('mysql:host='. DB_HOST .';port=3306;dbname='. DB_NAME .';charset=utf8', DB_USER, DB_PASSWORD);
         $this->_pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 

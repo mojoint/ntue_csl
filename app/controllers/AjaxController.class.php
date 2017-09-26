@@ -139,13 +139,13 @@ class AjaxController extends Controller {
             switch( $val )
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('admin_academic_class_add');
+                $res = (new AjaxModel)->dbQuery('admin_academic_class_add', array('major_code'=>$_POST['major'], 'minor_code'=>$_POST['minor'], 'cname'=>$_POST['cname'], 'era_id'=>$_POST['era_id']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'sel':
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('admin_academic_class_mod', array('checks'=>$_POST['checks']));
+                $res = (new AjaxModel)->dbQuery('admin_academic_class_mod', array('checks'=>$_POST['checks'], 'era_id'=>$_POST['era_id'], 'taken'=>$_POST['taken']));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -196,29 +196,72 @@ class AjaxController extends Controller {
             {                                                                             
             case 'emailSend':
                if (isset($_SESSION['admin'])) {
-
-                    $receverList = (new AjaxModel)->dbQuery('admin_postman_receverlist',array('rcpttotype'=>$_POST['emailRcptTo']));
                     $receverCnt = 0;
-                    debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t".$_POST['emailSubject']."\tTotal mail count:".count($receverList));
-                    foreach($receverList as $recever){
-                        $receverCnt++;
-                        $email = $recever['email'];
-                        $emailName = $recever['cname'];
-                        debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t". $receverCnt."\t".$_POST['emailSubject']."\t".$email."\t".$emailName);
-                        /* $email = 'thucop@gmail.com'; */
-                        $subject = $_POST['emailSubject'];
-                        $message = $_POST['emailBody']."\n";
-                        $from = 'enjouli82029@tea.ntue.edu.tw';
-                        $headers = "Content-type: text/html; charset=UTF-8\r\n";
-                        $headers = 'From: 李恩柔<' . $from . "> \r\n".
-                        'Reply-To: ' . $from . " \r\n".
-                        'X-Mailer: PHP/'. phpversion();
-                        mail( $email, $subject, $message, $headers );
-                        //if($receverCnt == 5) {
-                           //break;
-                        //}
+                    $helo = '';
+                    switch($_POST['emailRcptTo'])
+                    {
+                    case 9:
+                        if (strlen($_POST['emailCcTo'])) {
+                            $receverList = explode(';', $_POST['emailCcTo']);
+                            foreach($receverList as $recever){
+                                $receverCnt++;
+                                $email = $recever;
+                                $subject = $_POST['emailSubject'];
+                                $message = $_POST['emailBody']."\n";
+                                $from = 'enjouli82029@tea.ntue.edu.tw';
+                                $headers = "Content-type: text/html; charset=UTF-8\r\n";
+                                $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                                'Reply-To: ' . $from . " \r\n".
+                                'X-Mailer: PHP/'. phpversion();
+$helo .= $recever . ';';
+                                mail( $email, $subject, $message, $headers );
+                            }
+                        }
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+/*
+                        $receverList = (new AjaxModel)->dbQuery('admin_postman_receverlist',array('rcpttotype'=>$_POST['emailRcptTo']));
+                        debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t".$_POST['emailSubject']."\tTotal mail count:".count($receverList));
+                        foreach($receverList as $recever){
+                            $receverCnt++;
+                            $email = $recever['email'];
+                            $emailName = $recever['cname'];
+                            debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t". $receverCnt."\t".$_POST['emailSubject']."\t".$email."\t".$emailName);
+                            // $email = 'thucop@gmail.com'; 
+                            $subject = $_POST['emailSubject'];
+                            $message = $_POST['emailBody']."\n";
+                            $from = 'enjouli82029@tea.ntue.edu.tw';
+                            $headers = "Content-type: text/html; charset=UTF-8\r\n";
+                            $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                            'Reply-To: ' . $from . " \r\n".
+                            'X-Mailer: PHP/'. phpversion();
+                            mail( $email, $subject, $message, $headers );
+                        }
+*/
+                        // if cc
+
+                        if (strlen($_POST['emailCcTo'])) {
+                            $receverList = explode(';', $_POST['emailCcTo']);
+                            foreach($receverList as $recever){
+$helo .= $recever .';';
+                                $receverCnt++;
+                                $email = $recever;
+                                $subject = $_POST['emailSubject'];
+                                $message = $_POST['emailBody']."\n";
+                                $from = 'enjouli82029@tea.ntue.edu.tw';
+                                $headers = "Content-type: text/html; charset=UTF-8\r\n";
+                                $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                                'Reply-To: ' . $from . " \r\n".
+                                'X-Mailer: PHP/'. phpversion();
+                                mail( $email, $subject, $message, $headers );
+                            }
+                        }
+                        break;
                     }
-                    $json = array("code"=>1, "data"=>$receverCnt);
+                    $json = array("code"=>1, "data"=>$receverCnt, "helo"=>$helo);
                 }
                     
                 break;
@@ -441,16 +484,16 @@ class AjaxController extends Controller {
 
     public function reporter($key, $val, $era_id, $quarter=1, $agency_id=0) {
         if (!isset($_SESSION)) { exit; }
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+        //date_default_timezone_set('Asia/Taipei');
+        define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+        $objPHPExcel = new PHPExcel();
+        $sharedStyle = new PHPExcel_Style(); 
         switch($key) 
         {
         case 'academic_admin_report':
-            error_reporting(E_ALL);
-            ini_set('display_errors', TRUE);
-            ini_set('display_startup_errors', TRUE);
-            date_default_timezone_set('Asia/Taipei');
-            define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-            $objPHPExcel = new PHPExcel();
-            $sharedStyle = new PHPExcel_Style(); 
             $targets = (new AjaxModel)->dbQuery('admin_academic_agency_report_targets');
             switch( $val )
             {
@@ -724,7 +767,8 @@ class AjaxController extends Controller {
 
                 $knt = 1;
                 $qnt = 0;
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語中心(人時數營收總表)');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語中心(人時數營收總簡表)');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
                 $knt++;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '序號');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '學校代碼');
@@ -733,6 +777,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '總人次');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '總人時數');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '營收額度');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
 
                 foreach( $turnover_summary as $summary ) {
                     $knt++;
@@ -755,6 +800,7 @@ class AjaxController extends Controller {
                 $knt = 1;
                 $qnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '各類研習總人數簡表' );
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
                 $knt++;
                 // columns array
                 $cols = array();
@@ -842,6 +888,7 @@ class AjaxController extends Controller {
                         $col_idx = $col_min;
                     }
                 }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
 
                 $col_idx = $col_ini;
                 $col_tag = 0;
@@ -920,6 +967,7 @@ class AjaxController extends Controller {
                 $knt = 1;
                 $qnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '各類研習總人次簡表' );
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
                 $knt++;
                 // columns array
                 $cols = array();
@@ -1007,6 +1055,7 @@ class AjaxController extends Controller {
                         $col_idx = $col_min;
                     }
                 }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
 
                 $col_idx = $col_ini;
                 $col_tag = 0;
@@ -1085,6 +1134,7 @@ class AjaxController extends Controller {
                 $knt = 1;
                 $qnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '各類研習總人時數簡表' );
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
                 $knt++;
                 // columns array
                 $cols = array();
@@ -1172,6 +1222,7 @@ class AjaxController extends Controller {
                         $col_idx = $col_min;
                     }
                 }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
 
                 $col_idx = $col_ini;
                 $col_tag = 0;
@@ -1240,6 +1291,7 @@ class AjaxController extends Controller {
                         }
                     }
                 }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
 
                 /* turnover summary */
                 $cnt = 4;
@@ -1250,6 +1302,7 @@ class AjaxController extends Controller {
                 $knt = 1;
                 $qnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '各類研習總營收簡表' );
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
                 $knt++;
                 // columns array
                 $cols = array();
@@ -1337,6 +1390,7 @@ class AjaxController extends Controller {
                         $col_idx = $col_min;
                     }
                 }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":C" . $knt);
 
                 $col_idx = $col_ini;
                 $col_tag = 0;
@@ -1711,7 +1765,7 @@ class AjaxController extends Controller {
                 $cnt = 7;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總時數詳表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人時數詳表' );
 
                 $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('era_id'=>$era_id));
                 $sum_a = 0;
@@ -1742,7 +1796,7 @@ class AjaxController extends Controller {
                     $sum_t += $total_hour['total_hours'];
                 }
                 $knt = 1;
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總時數詳表' );
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $era[0]['cname'] . '華語文中心各類研習總人時數詳表' );
 
                 $knt = 2;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總時數');
@@ -2149,6 +2203,8 @@ class AjaxController extends Controller {
                     $cname = preg_replace("/\:/", "-", $cname);
                     $objPHPExcel->getActiveSheet()->setTitle( $cname );
                     $knt = 1;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $cname);
+                    $knt = 2;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '學校代碼');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '單位名稱');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總人數');
@@ -2165,7 +2221,7 @@ class AjaxController extends Controller {
                     $info = '';
                     $note = '';
                     
-                    $knt = 2;
+                    $knt = 3;
                     foreach ($targets as $target) {
                         $minor_b = (new AjaxModel)->dbQuery('admin_academic_agency_report_minor_b', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'minor_code'=>$b['minor_code']));
                         if (sizeof($minor_b)) {
@@ -2187,14 +2243,14 @@ class AjaxController extends Controller {
                         }
                     }
 
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A1', '合計');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B1', '');
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C1', $new_people);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D1', $people);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E1', $hours);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F1', $turnover);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G1', $info);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H1', $note);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '合計');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $new_people);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $people);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $hours);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $turnover);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $info);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $note);
 
                     $cnt++;
                 }
@@ -2254,12 +2310,12 @@ class AjaxController extends Controller {
             switch($val)
             {
             case 'summary':
-                error_reporting(E_ALL);
-                ini_set('display_errors', TRUE);
-                ini_set('display_startup_errors', TRUE);
-                date_default_timezone_set('Asia/Taipei');
-                define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-                $objPHPExcel = new PHPExcel();
+                //error_reporting(E_ALL);
+                //ini_set('display_errors', TRUE);
+                //ini_set('display_startup_errors', TRUE);
+                //date_default_timezone_set('Asia/Taipei');
+                //define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+                //$objPHPExcel = new PHPExcel();
                 $cnt = 0;
                 $filename = $era[0]['cname'] . $agency[0]['institution_code'] . $agency[0]['academic_institution_cname'] . '課程明細簡表(四大類)';
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -2355,12 +2411,12 @@ class AjaxController extends Controller {
                 exit;
                 break;
             case 'detail':
-                error_reporting(E_ALL);
-                ini_set('display_errors', TRUE);
-                ini_set('display_startup_errors', TRUE);
-                date_default_timezone_set('Asia/Taipei');
-                define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-                $objPHPExcel = new PHPExcel();
+                //error_reporting(E_ALL);
+                //ini_set('display_errors', TRUE);
+                //ini_set('display_startup_errors', TRUE);
+                //date_default_timezone_set('Asia/Taipei');
+                //define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+                //$objPHPExcel = new PHPExcel();
 
                 $filename = $era[0]['cname'] . $agency[0]['institution_code'] . $agency[0]['academic_institution_cname'] . '課程明細詳表(含國別)';
                 $cnt = 0;
