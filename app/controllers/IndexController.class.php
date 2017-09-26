@@ -7,6 +7,7 @@ class IndexController extends Controller {
         $this->assign('content', $this->contents());
         if (isset($_SESSION) && isset($_SESSION['error_code'])) {
             $this->assign('error_code', $_SESSION['error_code']);
+            unset($_SESSION['error_code']);
         }
         $this->render();
     }
