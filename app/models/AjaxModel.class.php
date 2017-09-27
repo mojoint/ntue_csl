@@ -805,6 +805,13 @@ class AjaxModel extends Model {
 
             return $res; //$this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
+        case 'agent_academic_agency_report_taken':
+            $sql  = 'SELECT t1.*, t2.`taken`';
+            $sql .= '  FROM `academic_class` t1';
+            $sql .= ' INNER JOIN `academic_era` t2 ON t1.`era_id` = t2.`id`';
+            $sql .= ' WHERE t1.`era_id` = :era_id AND t1.`state` = 0';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            break;
         case 'agent_academic_agency_unlock':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));

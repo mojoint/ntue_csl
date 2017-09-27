@@ -376,6 +376,7 @@ $helo .= $recever .';';
             $res['summary'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
             $res['detail'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
             $res['pdf'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_pdf', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+            $res['taken'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_taken', array('era_id'=>$_POST['era_id']));
             $json = array("code"=>1, "data"=>$res);
             break;
         case 'academic_agency_unlock':
