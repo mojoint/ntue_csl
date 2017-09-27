@@ -226,7 +226,7 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_agency` t1';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
             $sql .= ' WHERE t1.`agent` > :agent';
-            $sql .= '   AND t1.`id` < :id '; // exclue test 
+            $sql .= '   AND t1.`id` != :id '; // exclue test 
             return $this->dbSelect($sql, array(':agent'=>0, ':id'=>999));
             break;
         case 'admin_academic_agency_report_manager_summary':
@@ -288,6 +288,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT `major_code`, `minor_code`, SUM(`new_people`) `new_people`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
@@ -295,6 +296,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT `major_code`, `minor_code`, SUM(`people`) `people`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
@@ -302,6 +304,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT `major_code`, `minor_code`, SUM(`total_hours`) `total_hours`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
@@ -309,6 +312,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT `major_code`, `minor_code`, SUM(`turnover`) `turnover`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
@@ -641,7 +645,7 @@ class AjaxModel extends Model {
             return $this->dbQuery('agent_academic_agency_hr', array('agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_report_countries':
-            $sql  = 'SELECT IFNULL(COUNT(DISTINCT t2.`country_code`), 0) `countries`, t1.`minor_code`';
+            $sql  = 'SELECT IFNULL(COUNT(DISTINCT t2.`country_code`), 0) `countries`, t1.*';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
@@ -724,29 +728,38 @@ class AjaxModel extends Model {
 
             switch($data['quarter'])
             {
-            case 10:
-                $quarters = '1,2,3,4';
-                break;
             case 5:
                 $quarters = '1,2';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 6:
                 $quarters = '2,3';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 7:
                 $quarters = '3,4';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 8:
                 $quarters = '1,2,3';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 9:
                 $quarters = '2,3,4';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
+                break;
+            case 10:
+                $quarters = '1,2,3,4';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
+                break;
+            case 11:
                 break;
             default:
                 $quarters = $data['quarter'];
+                $sql .= '   AND t1.`quarter` = '. $quarters ;
             }
-            $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
             $sql .= ' GROUP BY t1.`quarter`, t1.`minor_code`';
+            $sql .= ' ORDER BY t1.`quarter`, t1.`minor_code`';
 
             // $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
