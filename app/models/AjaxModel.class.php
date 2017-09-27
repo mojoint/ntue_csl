@@ -708,7 +708,7 @@ class AjaxModel extends Model {
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
 
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -716,6 +716,7 @@ class AjaxModel extends Model {
             $sql .= 'MAX(t1.`latest`) `latest`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
+            $sql .= ' INNER JOIN `major_list` t3 ON t1.`major_code` = t3.`code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
             // $sql .= '   AND t1.`quarter` = :quarter';
