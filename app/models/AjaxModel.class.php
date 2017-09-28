@@ -391,7 +391,7 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':major_b'=>'B'));
             break;
         case 'admin_academic_agency_report_minor_b':
-            $sql  = 'SELECT SUM(`new_people`) `new_people`, SUM(`people`) `people`, SUM(`hours`) `hours`, SUM(`turnover`) `turnover`, "" `info`, GROUP_CONCAT(`note`) `note`'; 
+            $sql  = 'SELECT SUM(`new_people`) `new_people`, SUM(`people`) `people`, SUM(`hours`) `hours`, SUM(`total_hours`) `total_hours`, SUM(`turnover`) `turnover`, "" `info`, GROUP_CONCAT(`note`) `note`'; 
             $sql .= '  FROM `academic_agency_class` ';
             $sql .= ' WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `minor_code` = :minor_code'; 
             $sql .= ' GROUP BY `minor_code`';
