@@ -499,7 +499,8 @@ $helo .= $recever .';';
                 array(
                     'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                     'borders' => array(
-                        'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                        'bottom' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                        'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN)
                     )
                 )
             );
@@ -553,8 +554,8 @@ $helo .= $recever .';';
             case 'era_detail':
                 //$quarter = 11; 
                 $cnt = 0;
-                $sum = array( 'new_people'=>0, 'people'=>0, 'weekly'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0 );
                 foreach ($targets as $target) {
+                    $major_cache = 'A';
                     if ($cnt > 0) {
                         $objPHPExcel->createSheet();
                     }
@@ -680,7 +681,8 @@ $helo .= $recever .';';
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['countries']);
+                        //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['countries']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'S' ]['new_male']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'S' ]['new_female']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['new_people']);
@@ -814,8 +816,8 @@ $helo .= $recever .';';
             case 'era_summary':
                 //$quarter = 11; 
                 $cnt = 0;
-                $sum = array( 'new_people'=>0, 'people'=>0, 'weekly'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0 );
                 foreach ($targets as $target) {
+                    $major_cache = 'A';
                     if ($cnt > 0) {
                         $objPHPExcel->createSheet();
                     }
@@ -883,6 +885,15 @@ $helo .= $recever .';';
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
                         $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
 
+                        $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
+                        $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
+                        $major_sum[ 'S' ][ 'weekly' ] += intval( $r['weekly'] );
+                        $major_sum[ 'S' ][ 'avg_weekly' ] += intval( $r['avg_weekly'] );
+                        $major_sum[ 'S' ][ 'hours' ] += intval( $r['hours'] );
+                        $major_sum[ 'S' ][ 'total_hours' ] += intval( $r['total_hours'] );
+                        $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
+                        $major_sum[ 'S' ][ 'classes' ] += intval( $r['classes'] );
+
                         $major_cache = $r['major_code'];
                     }
                     $knt++;
@@ -899,14 +910,14 @@ $helo .= $recever .';';
 
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'A' ]['new_people'] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'A' ]['weekly'] + $major_sum[ 'B' ][ 'weekly' ] + $major_sum[ 'C' ][ 'weekly' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'A' ]['hours'] + $major_sum[ 'B' ][ 'hours' ] + $major_sum[ 'C' ][ 'hours' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['classes'] + $major_sum[ 'B' ][ 'classes' ] + $major_sum[ 'C' ][ 'classes' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['new_people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'S' ]['people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'S' ]['weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['avg_weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'S' ]['hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['total_hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['turnover']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['classes']);
 
 /*
                     if (sizeof($res)) {
@@ -937,16 +948,6 @@ $helo .= $recever .';';
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '營收額度');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '已組合班數');
                     $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
-                    $knt++;
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, "");
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $sum['new_people']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum['people']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $sum['weekly']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum['avg_weekly']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum['hours']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum['total_hours']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $sum['turnover']);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum['classes']);
 */
 
                     $cnt++;
@@ -959,6 +960,7 @@ $helo .= $recever .';';
 
                 $cnt = 0;
                 foreach ($targets as $target) {
+                    $major_cache = 'A';
                     if ($cnt > 0) {
                         $objPHPExcel->createSheet();
                     }
@@ -1019,16 +1021,17 @@ $helo .= $recever .';';
                                 $kountry = (new AjaxModel)->dbQuery('agent_academic_agency_report_countries', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
                                 $major_sum[ $r['major_code'] ][ 'countries' ] = intval($kountry[0]['countries']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['countries']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['new_male']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['new_female']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
+                                //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['countries']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['new_male']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['new_female']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                                 $knt++;
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
@@ -1068,6 +1071,8 @@ $helo .= $recever .';';
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $country['people']);
                                 $major_sum[ $r['major_code'] ][ 'new_male' ] += intval( $country['new_male'] );
                                 $major_sum[ $r['major_code'] ][ 'new_female' ] += intval( $country['new_female'] );
+                                $major_sum[ 'S' ][ 'new_male' ] += intval( $country['new_male'] );
+                                $major_sum[ 'S' ][ 'new_female' ] += intval( $country['new_female'] );
                             } 
     
                             $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
@@ -1077,23 +1082,40 @@ $helo .= $recever .';';
                             $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                             $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
     
+                            $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
+                            $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
+                            $major_sum[ 'S' ][ 'weekly' ] += intval( $r['weekly'] );
+                            $major_sum[ 'S' ][ 'avg_weekly' ] += intval( $r['avg_weekly'] );
+                            $major_sum[ 'S' ][ 'total_hours' ] += intval( $r['total_hours'] );
+                            $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
                             $major_cache = $r['major_code'];
                         }
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $major_cache ]);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['new_male']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['new_female']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'A' ]['countries'] + $major_sum[ 'B' ][ 'countries' ] + $major_sum[ 'C' ][ 'countries' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'A' ]['new_male'] + $major_sum[ 'B' ][ 'new_male' ] + $major_sum[ 'C' ][ 'new_male' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'A' ]['new_female'] + $major_sum[ 'B' ][ 'new_female' ] + $major_sum[ 'C' ][ 'new_female' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'A' ]['new_people'] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['weekly'] + $major_sum[ 'B' ][ 'weekly' ] + $major_sum[ 'C' ][ 'weekly' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
+                        //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['countries']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'S' ]['new_male']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'S' ]['new_female']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['new_people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'S' ]['people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['people']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['avg_weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'S' ]['total_hours']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'S' ]['turnover']);
                         $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                     }
 /*
@@ -1142,6 +1164,7 @@ $helo .= $recever .';';
 
                 $cnt = 0;
                 foreach ($targets as $target) {
+                    $major_cache = 'A';
                     if ($cnt > 0) {
                         $objPHPExcel->createSheet();
                     }
@@ -1172,14 +1195,14 @@ $helo .= $recever .';';
                         $knt++;
                         if ($major_cache != $r['major_code']) {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['hours']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['classes']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $major_cache ]['new_people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['people']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['total_hours']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['turnover']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['classes']);
                             $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
 
                             $knt++;
@@ -1208,22 +1231,39 @@ $helo .= $recever .';';
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
                         $major_sum[ $r['major_code'] ][ 'classes' ] += intval( $r['classes'] );
 
+                        $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
+                        $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
+                        $major_sum[ 'S' ][ 'weekly' ] += floatval( $r['weekly'] );
+                        $major_sum[ 'S' ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
+                        $major_sum[ 'S' ][ 'hours' ] += floatval( $r['hours'] );
+                        $major_sum[ 'S' ][ 'total_hours' ] += floatval( $r['total_hours'] );
+                        $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
+                        $major_sum[ 'S' ][ 'classes' ] += intval( $r['classes'] );
+
                         $major_cache = $r['major_code'];
                     }
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $major_cache ]['new_people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['total_hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['turnover']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['classes']);
                     $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
 
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'A' ]['new_people'] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'A' ]['weekly'] + $major_sum[ 'B' ][ 'weekly' ] + $major_sum[ 'C' ][ 'weekly' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'A' ]['hours'] + $major_sum[ 'B' ][ 'hours' ] + $major_sum[ 'C' ][ 'hours' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['classes'] + $major_sum[ 'B' ][ 'classes' ] + $major_sum[ 'C' ][ 'classes' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['new_people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'S' ]['people']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'S' ]['weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['avg_weekly']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'S' ]['hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['total_hours']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['turnover']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['classes']);
 /*
                     if (sizeof($res)) {
                         foreach($res as $r) {
