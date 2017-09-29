@@ -1260,7 +1260,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1463,7 +1463,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1666,7 +1666,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1871,7 +1871,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1964,7 +1964,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人數簡表' );
 
-                $new_peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_detail', array('era_id'=>$era_id));
+                $new_peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('era_id'=>$era_id));
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
@@ -2114,7 +2114,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人次簡表' );
 
-                $peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_detail', array('era_id'=>$era_id));
+                $peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_summary', array('era_id'=>$era_id));
 
                 $sum_a = 0;
                 $sum_b = 0;
@@ -2265,7 +2265,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人時數簡表' );
 
-                $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('era_id'=>$era_id));
+                $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_summary', array('era_id'=>$era_id));
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
@@ -2414,7 +2414,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總營收簡表' );
 
-                $turnovers = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_detail', array('era_id'=>$era_id));
+                $turnovers = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_summary', array('era_id'=>$era_id));
 
                 $sum_a = 0;
                 $sum_b = 0;

@@ -230,10 +230,12 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agent'=>0, ':id'=>999));
             break;
         case 'admin_academic_agency_report_manager_summary':
-            $sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
+            //$sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
+            $sql  = 'SELECT t1.`agency_id`, t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`),0) `new_people`, IFNULL(SUM(t4.`male` + t4.`female`), 0) `old_people`, IFNULL(SUM(t4.`male` + t4.`female` + t4.`new_male` + t4.`new_female`), 0) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t4 ON t1.`id` = t4.`class_id`';
             $sql .= ' WHERE t1.`era_id` = :era_id';
             $sql .= '   AND t2.`id` != :agency_id';
             $sql .= ' GROUP BY t1.`agency_id`';
@@ -241,42 +243,45 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>999));
             break;
         case 'admin_academic_agency_report_manager_new_people_summary':
-            $sql  = 'SELECT `minor_code`, SUM(`new_people`) `new_people`';
-            $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `agency_id` = :agency_id';
-            $sql .= '   AND `era_id` = :era_id';
-            $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            $sql  = 'SELECT t1.`agency_id`, t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`new_male` + t2.`new_female` + t2.`male` + t2.`female`), 0) `people`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+            $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND t1.`agency_id` != 999';
+            $sql .= ' GROUP BY t1.`minor_code`';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_people_summary':
-            $sql  = 'SELECT `minor_code`, SUM(`people`) `people`';
-            $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `agency_id` = :agency_id';
-            $sql .= '   AND `era_id` = :era_id';
-            $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            $sql  = 'SELECT t1.`agency_id`, t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`new_male` + t2.`new_female` + t2.`male` + t2.`female`), 0) `people`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+            $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND t1.`agency_id` != 999';
+            $sql .= ' GROUP BY t1.`minor_code`';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_total_hours_summary':
-            $sql  = 'SELECT `minor_code`, SUM(`total_hours`) `total_hours`';
+            $sql  = 'SELECT `agency_id`, `major_code`, `minor_code`, SUM(`total_hours`) `total_hours`';
             $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `agency_id` = :agency_id';
-            $sql .= '   AND `era_id` = :era_id';
+            $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_turnover_summary':
-            $sql  = 'SELECT `minor_code`, SUM(`turnover`) `turnover`';
+            $sql  = 'SELECT `agency_id`, `major_code`, `minor_code`, SUM(`turnover`) `turnover`';
             $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `agency_id` = :agency_id';
-            $sql .= '   AND `era_id` = :era_id';
+            $sql .= ' WHERE `era_id` = :era_id';
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_detail':
-            $sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`';
+            $sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`), 0) `new_people`, IFNULL(SUM(t4.`male` + t4.`female` + t4.`new_male` + t4.`new_female`), 0) `people`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t4 ON t1.`id` = t4.`class_id`';
             $sql .= ' WHERE t1.`era_id` = :era_id';
             $sql .= '   AND t1.`major_code` IN ("A", "B")';
             $sql .= '   AND t1.`agency_id` != 999';
@@ -285,36 +290,40 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_new_people_detail':
-            $sql  = 'SELECT `major_code`, `minor_code`, SUM(`new_people`) `new_people`';
-            $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `era_id` = :era_id';
-            $sql .= '   AND `agency_id` != 999';
-            $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            //$sql  = 'SELECT t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`';
+            $sql  = 'SELECT t1.`agency_id`, t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`new_male` + t2.`new_female` + t2.`male` + t2.`female`), 0) `people`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+            $sql .= ' WHERE t1.`era_id` = :era_id';
+            $sql .= '   AND t1.`agency_id` = :agency_id';
+            $sql .= ' GROUP BY t1.`minor_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_people_detail':
-            $sql  = 'SELECT `major_code`, `minor_code`, SUM(`people`) `people`';
-            $sql .= '  FROM `academic_agency_class`';
-            $sql .= ' WHERE `era_id` = :era_id';
-            $sql .= '   AND `agency_id` != 999';
-            $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            //$sql  = 'SELECT t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`male` + t2.`female`), 0) `people`';
+            $sql  = 'SELECT t1.`agency_id`, t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`new_male` + t2.`new_female` + t2.`male` + t2.`female`), 0) `people`';
+            $sql .= '  FROM `academic_agency_class` t1';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+            $sql .= ' WHERE t1.`era_id` = :era_id';
+            $sql .= '   AND t1.`agency_id` = :agency_id';
+            $sql .= ' GROUP BY t1.`minor_code`';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_total_hours_detail':
-            $sql  = 'SELECT `major_code`, `minor_code`, SUM(`total_hours`) `total_hours`';
+            $sql  = 'SELECT `agency_id`, `major_code`, `minor_code`, SUM(`total_hours`) `total_hours`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
-            $sql .= '   AND `agency_id` != 999';
+            $sql .= '   AND `agency_id` = :agency_id';
             $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_manager_turnover_detail':
-            $sql  = 'SELECT `major_code`, `minor_code`, SUM(`turnover`) `turnover`';
+            $sql  = 'SELECT `agency_id`, `major_code`, `minor_code`, SUM(`turnover`) `turnover`';
             $sql .= '  FROM `academic_agency_class`';
             $sql .= ' WHERE `era_id` = :era_id';
-            $sql .= '   AND `agency_id` != 999';
+            $sql .= '   AND `agency_id` = :agency_id';
             $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_statistics_detail':
             $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
@@ -654,13 +663,15 @@ class AjaxModel extends Model {
         case 'agent_academic_agency_report_summary':
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            //$sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, IFNULL(SUM(t3.`new_male` + t3.`new_female`), 0) `new_people`, IFNULL(SUM(t3.`male` + t3.`female` + t3.`new_male` + t3.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, ';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
             $sql .= 'GROUP_CONCAT(t1.`note`) `note`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t3 ON t3.`class_id` = t1.`id`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
             
@@ -717,7 +728,8 @@ class AjaxModel extends Model {
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
 
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            //$sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`), 0) `new_people`, IFNULL(SUM(t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, ';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -726,6 +738,7 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
             $sql .= ' INNER JOIN `major_list` t3 ON t1.`major_code` = t3.`code`';
+            $sql .= '  LEFT JOIN `academic_agency_class_country` t4 ON t4.`class_id` = t1.`id`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
 
