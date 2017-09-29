@@ -230,17 +230,40 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agent'=>0, ':id'=>999));
             break;
         case 'admin_academic_agency_report_manager_summary':
-            //$sql  = 'SELECT t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
-            $sql  = 'SELECT t1.`agency_id`, t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`),0) `new_people`, IFNULL(SUM(t4.`male` + t4.`female`), 0) `old_people`, IFNULL(SUM(t4.`male` + t4.`female` + t4.`new_male` + t4.`new_female`), 0) `people`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`';
+
+            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t2.`institution_code`, t2.`cname` `academic_agency_cname`, t3.`cname` `institution_cname`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, 0 `new_people`, 0 `people`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
-            $sql .= '  LEFT JOIN `academic_agency_class_country` t4 ON t1.`id` = t4.`class_id`';
             $sql .= ' WHERE t1.`era_id` = :era_id';
             $sql .= '   AND t2.`id` != :agency_id';
             $sql .= ' GROUP BY t1.`agency_id`';
             $sql .= ' ORDER BY t2.`institution_code`';
-            return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>999));
+
+            $res = $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>999));
+
+            foreach( $res as $key=>$val ) {
+                $sql  = 'SELECT SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`) `people`';
+                $sql .= '  FROM `academic_agency_class` t1';
+                $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t1.`id` = t2.`class_id`';
+                $sql .= ' WHERE t1.`agency_id` = :agency_id';
+                $sql .= ' GROUP BY t1.`agency_id`';
+                
+                $new_people = 0;
+                $people = 0;
+                
+                $rs = $this->dbSelect($sql, array(':agency_id'=>$val['agency_id']));
+                if (sizeof($rs)) {
+                    foreach( $rs as $r ) {
+                        $new_people = $r['new_people'];
+                        $people = $r['people'];
+                    } 
+                }
+                $res[$key]['new_people'] = $new_people;
+                $res[$key]['people'] = $people;
+            }
+
+            return $res;
             break;
         case 'admin_academic_agency_report_manager_new_people_summary':
             $sql  = 'SELECT t1.`agency_id`, t1.`major_code`, t1.`minor_code`, IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`new_male` + t2.`new_female` + t2.`male` + t2.`female`), 0) `people`';
