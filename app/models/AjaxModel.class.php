@@ -95,20 +95,7 @@ class AjaxModel extends Model {
             return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
         case 'admin_academic_agency_status':
-            /*
-            $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`, IFNULL(t5.`offline`, "") `offline`';
-            $sql .= '  FROM `academic_agency_class` t1';
-            $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
-            $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
-            $sql .= ' INNER JOIN `academic_era` t4 ON t1.`era_id` = t4.`id`';
-            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t2.`id` = t5.`agency_id` AND t1.`era_id` = t5.`era_id` AND t1.`quarter` = t5.`quarter`';
-            $sql .= ' WHERE t1.`agency_id` != :agency_id';
-            $sql .= '   AND t1.`era_id` = :era_id';
-            $sql .= '   AND t1.`quarter` = :quarter';
-            $sql .= ' GROUP BY t1.`agency_id`';
-            $sql .= ' ORDER BY t2.`institution_code`';
-            */
-
+/*
             $sql  = 'SELECT IFNULL(count(t4.id), 0) `cnt`, t1.`id`, t1.`cname` `academic_agency_cname`, t1.`institution_code`, t2.`cname` `institution_cname`, t3.`id` `era_id`, t3.`cname` `era_cname`, IFNULL(t4.`state`, -1) `state`, IFNULL(t5.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency` t1';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
@@ -118,8 +105,20 @@ class AjaxModel extends Model {
             $sql .= ' WHERE t1.`id` != :agency_id';
             $sql .= ' GROUP BY t1.`id`';
             $sql .= ' ORDER BY t1.`institution_code`';
+*/
 
-            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter4'=>$data['quarter'], ':quarter5'=>$data['quarter']));
+            $sql  = 'SELECT t1.*, t2.`cname` academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id` `era_cname`, IFNULL(count(t5.id), 0) `classes`, IFNULL(t6.`offline`, "") `offline`';
+            $sql .= '  FROM `academic_agency_era_quarter` t1';
+            $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
+            $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
+            $sql .= ' INNER JOIN `academic_era` t4 ON t4.`id` = :era_id';
+            $sql .= '  LEFT JOIN `academic_agency_class` t5 ON t2.`id` = t5.`agency_id` AND t3.`id` = t5.`era_id` AND t5.`quarter` = :quarter_t5';
+            $sql .= '  LEFT JOIN `academic_agency_unlock` t6 ON t2.`id` = t6.`agency_id` AND t3.`id` = t6.`era_id` AND t6.`quarter` = :quarter_t6';
+            $sql .= ' WHERE t1.`id` != 999';
+            $sql .= ' GROUP BY t2.`id`';
+            $sql .= ' ORDER BY t2.`institution_code`';
+
+            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter_t5'=>$data['quarter'], ':quarter_t6'=>$data['quarter']));
             break;
         case 'admin_academic_agency_status_byid':
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`';
@@ -402,7 +401,12 @@ class AjaxModel extends Model {
                 $last = $this->dbSelect($sql, array(':agency_id'=>$old[0]['agency_list_id'], ':year'=>2016));
                 */
                 /* excel version */
-                $sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic`.`academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+                //$sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic`.`academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+                $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`';
+                $sql .= '  FROM `academic_agency_class` t1';
+                $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                $sql .= ' WHERE t1.`agency_id` = :agency_id';
+                $sql .= '   AND t1.`era_id` = :era_id';
                 $cur = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'])); 
                 $sql = 'SELECT `new_people` FROM `academic_agency_class_y105` WHERE `agency_id` = :agency_id';
                 $last = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
