@@ -663,7 +663,7 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
-            //$sql .= '   AND t1.`quarter` = :quarter';
+            
             switch($data['quarter'])
             {
             case 10:
@@ -671,26 +671,31 @@ class AjaxModel extends Model {
                 break;
             case 5:
                 $quarters = '1,2';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 6:
                 $quarters = '2,3';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 7:
                 $quarters = '3,4';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 8:
                 $quarters = '1,2,3';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             case 9:
                 $quarters = '2,3,4';
+                $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
                 break;
             default:
                 $quarters = $data['quarter'];
+                $sql .= '   AND t1.`quarter` = ' . $data['quarter'];
             }
-            $sql .= '   AND t1.`quarter` IN ('. $quarters .')';
-            $sql .= ' GROUP BY t1.`quarter`, t1.`minor_code`';
+            $sql .= ' GROUP BY t1.`major_code`, t1.`minor_code`';
+            $sql .= ' ORDER BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
 
-            //$res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
 
             if (sizeof($res)) {
@@ -706,7 +711,7 @@ class AjaxModel extends Model {
                 }
             }
 
-            return $res; //$this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            return $res; 
             break;
         case 'agent_academic_agency_report_detail':
             /* academic_agency_report_quarter */
@@ -723,8 +728,6 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN `major_list` t3 ON t1.`major_code` = t3.`code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
-            // $sql .= '   AND t1.`quarter` = :quarter';
-            // $sql .= ' GROUP BY t1.`minor_code`';
 
             switch($data['quarter'])
             {
@@ -758,10 +761,9 @@ class AjaxModel extends Model {
                 $quarters = $data['quarter'];
                 $sql .= '   AND t1.`quarter` = '. $quarters ;
             }
-            $sql .= ' GROUP BY t1.`quarter`, t1.`minor_code`';
-            $sql .= ' ORDER BY t1.`quarter`, t1.`minor_code`';
+            $sql .= ' GROUP BY t1.`major_code`, t1.`minor_code`';
+            $sql .= ' ORDER BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
 
-            // $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
 
             if (sizeof($res)) {
@@ -816,7 +818,7 @@ class AjaxModel extends Model {
                 }
             }
 
-            return $res; //$this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            return $res; 
             break;
         case 'agent_academic_agency_report_taken':
             $sql  = 'SELECT t1.*, t2.`taken`';

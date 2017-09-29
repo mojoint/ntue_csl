@@ -197,11 +197,10 @@ class AjaxController extends Controller {
             case 'emailSend':
                if (isset($_SESSION['admin'])) {
                     $receverCnt = 0;
-                    $helo = '';
                     switch($_POST['emailRcptTo'])
                     {
                     case 9:
-                        if (strlen($_POST['emailCcTo'])) {
+                        if (isset($_POST['emailCcTo']) && strlen($_POST['emailCcTo'])) {
                             $receverList = explode(';', $_POST['emailCcTo']);
                             foreach($receverList as $recever){
                                 $receverCnt++;
@@ -213,7 +212,6 @@ class AjaxController extends Controller {
                                 $headers = 'From: 李恩柔<' . $from . "> \r\n".
                                 'Reply-To: ' . $from . " \r\n".
                                 'X-Mailer: PHP/'. phpversion();
-$helo .= $recever . ';';
                                 mail( $email, $subject, $message, $headers );
                             }
                         }
@@ -222,7 +220,6 @@ $helo .= $recever . ';';
                     case 2:
                     case 3:
                     case 4:
-/*
                         $receverList = (new AjaxModel)->dbQuery('admin_postman_receverlist',array('rcpttotype'=>$_POST['emailRcptTo']));
                         debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t".$_POST['emailSubject']."\tTotal mail count:".count($receverList));
                         foreach($receverList as $recever){
@@ -240,13 +237,11 @@ $helo .= $recever . ';';
                             'X-Mailer: PHP/'. phpversion();
                             mail( $email, $subject, $message, $headers );
                         }
-*/
                         // if cc
 
-                        if (strlen($_POST['emailCcTo'])) {
+                        if (isset($_POST['emailCcTo']) && strlen($_POST['emailCcTo'])) {
                             $receverList = explode(';', $_POST['emailCcTo']);
                             foreach($receverList as $recever){
-$helo .= $recever .';';
                                 $receverCnt++;
                                 $email = $recever;
                                 $subject = $_POST['emailSubject'];
@@ -261,7 +256,7 @@ $helo .= $recever .';';
                         }
                         break;
                     }
-                    $json = array("code"=>1, "data"=>$receverCnt, "helo"=>$helo);
+                    $json = array("code"=>1, "data"=>$receverCnt);
                 }
                     
                 break;
@@ -532,7 +527,7 @@ $helo .= $recever .';';
             switch( $val )
             {
             case 'era_detail':
-                //$quarter = 11; 
+                $quarter = 10; 
                 $cnt = 0;
                 foreach ($targets as $target) {
                     $major_cache = 'A';
@@ -603,7 +598,7 @@ $helo .= $recever .';';
                                 $kount++;
                                 $knt++;
                                 if ($countries == $kount) {
-                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '第'. $r['quarter'] .'季: ' . $r['minor_code_cname']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['weekly']);
@@ -688,7 +683,7 @@ $helo .= $recever .';';
                 $filename = '年度機構詳表';
                 break;
             case 'era_summary':
-                //$quarter = 11; 
+                $quarter = 10; 
                 $cnt = 0;
                 foreach ($targets as $target) {
                     $major_cache = 'A';
@@ -744,7 +739,7 @@ $helo .= $recever .';';
                             $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
                             $knt++;
                         }
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '第' . $r['quarter'] .'季: ' . $r['minor_code_cname']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $r['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $r['weekly']);
