@@ -431,7 +431,22 @@ class AjaxModel extends Model {
             $sql .= '  FROM `academic_agency_class` ';
             $sql .= ' WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `minor_code` = :minor_code'; 
             $sql .= ' GROUP BY `minor_code`';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], 'minor_code'=>$data['minor_code']));
+
+            $res =  $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], 'minor_code'=>$data['minor_code']));
+            if (sizeof($res)) {
+                foreach($res as $key=>$val) {
+                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $str .= '  FROM `academic_agency_class` t1';
+                    $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
+                    $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
+                    $str .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
+                    $str .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($str, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
+                    $res[$key]['info'] = $r[0]['cname'];
+                }
+            }
+
+            return $res;
             break;
         case 'admin_board_unreply_query_bk':
             $sql  = 'SELECT t.* ';
@@ -731,7 +746,7 @@ class AjaxModel extends Model {
                 $quarters = $data['quarter'];
                 $sql .= '   AND t1.`quarter` = ' . $data['quarter'];
             }
-            $sql .= ' GROUP BY t1.`major_code`, t1.`minor_code`';
+            $sql .= ' GROUP BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
             $sql .= ' ORDER BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
 
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));

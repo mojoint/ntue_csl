@@ -499,6 +499,16 @@ class AjaxController extends Controller {
                 )
             );
 
+            $sharedStyleT = new PHPExcel_Style(); 
+            $sharedStyleT->applyFromArray(
+                array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    'borders' => array(
+                        'top' => array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    )
+                )
+            );
+
             $targets = (new AjaxModel)->dbQuery('admin_academic_agency_report_targets');
             $majors = (new AjaxModel)->dbQuery('refs_major_list');
 
@@ -2613,13 +2623,17 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '小計');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '男生');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '女生');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
+                //$objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
                 
                 foreach ($targets as $target) {
                     $res = (new AjaxModel)->dbQuery('admin_academic_agency_report_statistics_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
                     if (sizeof($res)) {
+                        $cache_code = '';
                         foreach($res as $r) {
                             $knt++;
+                            if ($cache_code != $target['institution_code']) {
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyleT, "A". $knt .":G" . $knt);
+                            }
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['country_code']);
@@ -2627,10 +2641,11 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $r['new_male']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['new_female']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
+                            //$objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
                             $sum_n += $r['new_people'];
                             $sum_m += $r['new_male'];
                             $sum_f += $r['new_female'];
+                            $cache_code = $target['institution_code'];
                         }
                     }
                 }
@@ -2643,7 +2658,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_n);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum_m);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_f);
-                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyleT, "A". $knt .":G" . $knt);
                 // contact
                 $cnt++;
                 $objPHPExcel->createSheet();
