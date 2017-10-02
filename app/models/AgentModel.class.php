@@ -75,7 +75,8 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':id'=>$data['class_id']));
             break;
         case 'academic_agency_class_country_query':
-            $sql  = 'SELECT t1.*, SUM(t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`, t3.`cname` `country_cname`';
+            //$sql  = 'SELECT t1.*, SUM(t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`, t3.`cname` `country_cname`';
+            $sql  = 'SELECT t1.*, (t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`, t3.`cname` `country_cname`';
             $sql .= '  FROM `academic_agency_class_country` t1';
             $sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`id` = t1.`class_id`';
             $sql .= ' INNER JOIN `country_list` t3 on t1.`country_code` = t3.`code`';
