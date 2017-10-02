@@ -107,14 +107,14 @@ class AjaxModel extends Model {
             $sql .= ' ORDER BY t1.`institution_code`';
 */
 
-            $sql  = 'SELECT t1.*, t2.`cname` academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id` `era_cname`, IFNULL(count(t5.id), 0) `classes`, IFNULL(t6.`offline`, "") `offline`';
+            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(count(t5.id), 0) `classes`, IFNULL(t6.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency_era_quarter` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t4.`id` = :era_id';
-            $sql .= '  LEFT JOIN `academic_agency_class` t5 ON t2.`id` = t5.`agency_id` AND t3.`id` = t5.`era_id` AND t5.`quarter` = :quarter_t5';
-            $sql .= '  LEFT JOIN `academic_agency_unlock` t6 ON t2.`id` = t6.`agency_id` AND t3.`id` = t6.`era_id` AND t6.`quarter` = :quarter_t6';
-            $sql .= ' WHERE t1.`id` != 999';
+            $sql .= '  LEFT JOIN `academic_agency_class` t5 ON t2.`id` = t5.`agency_id` AND t4.`id` = t5.`era_id` AND t5.`quarter` = :quarter_t5';
+            $sql .= '  LEFT JOIN `academic_agency_unlock` t6 ON t2.`id` = t6.`agency_id` AND t4.`id` = t6.`era_id` AND t6.`quarter` = :quarter_t6';
+            $sql .= ' WHERE t1.`agency_id` != :agency_id';
             $sql .= ' GROUP BY t2.`id`';
             $sql .= ' ORDER BY t2.`institution_code`';
 
@@ -706,7 +706,7 @@ class AjaxModel extends Model {
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
             //$sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, IFNULL(SUM(t3.`new_male` + t3.`new_female`), 0) `new_people`, IFNULL(SUM(t3.`male` + t3.`female` + t3.`new_male` + t3.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, IFNULL(SUM(t3.`new_male` + t3.`new_female`), 0) `new_people`, IFNULL(SUM(t3.`male` + t3.`female` + t3.`new_male` + t3.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -771,7 +771,7 @@ class AjaxModel extends Model {
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
 
             //$sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`), 0) `new_people`, IFNULL(SUM(t4.`male` + t4.`female` + t4.`new_male` + t4.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, IFNULL(SUM(t4.`new_male` + t4.`new_female`), 0) `new_people`, IFNULL(SUM(t4.`male` + t4.`female` + t4.`new_male` + t4.`new_female`), 0) `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -847,7 +847,7 @@ class AjaxModel extends Model {
 
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';

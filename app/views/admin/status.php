@@ -15,7 +15,7 @@
               mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
   
               $('#grid-academic_agency_status').kendoGrid({
-                pageable: true,
+                pageable: false,
                 columns: [
                   { field: 'institution_code', title: '學校代碼' },
                   { field: 'institution_cname', title: '學校名稱'  },

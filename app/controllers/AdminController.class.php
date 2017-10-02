@@ -137,7 +137,7 @@ class AdminController extends Controller {
         $html  = '<nav id="topbar">';
         $html .=  '<ul>';
         $html .=   '<li><a href="#" class="btn" id="btn-admin"><b>'. $admin .'</b>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;</a></li>';
-        $html .=   '<li><a href="#" class="btn" id="btn-help"><i class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;</a></li>';
+        $html .=   '<li><a href="#" class="btn" id="btn-admin-help"><i class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;</a></li>';
         $html .=   '<li><a href="#" class="btn" id="btn-admin-manual"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;</a></li>';
         $html .=  '</ul>';
         $html .= '</nav>';

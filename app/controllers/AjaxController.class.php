@@ -593,7 +593,7 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
@@ -610,7 +610,7 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '第'. $r['quarter'] .'季: ' . $r['minor_code_cname']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
-                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['weekly']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
@@ -642,14 +642,14 @@ class AjaxController extends Controller {
     
                             $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
                             $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
-                            $major_sum[ $r['major_code'] ][ 'weekly' ] += floatval( $r['weekly'] );
+                            $major_sum[ $r['major_code'] ][ 'hours' ] += floatval( $r['hours'] );
                             $major_sum[ $r['major_code'] ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
                             $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                             $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
     
                             $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
                             $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
-                            $major_sum[ 'S' ][ 'weekly' ] += floatval( $r['weekly'] );
+                            $major_sum[ 'S' ][ 'hours' ] += floatval( $r['hours'] );
                             $major_sum[ 'S' ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
                             $major_sum[ 'S' ][ 'total_hours' ] += floatval( $r['total_hours'] );
                             $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
@@ -664,7 +664,7 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
@@ -678,7 +678,7 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'S' ]['people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['people']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['avg_weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'S' ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'S' ]['turnover']);
@@ -887,7 +887,7 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
@@ -904,7 +904,7 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
-                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['weekly']);
+                                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
@@ -936,14 +936,14 @@ class AjaxController extends Controller {
     
                             $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
                             $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
-                            $major_sum[ $r['major_code'] ][ 'weekly' ] += floatval( $r['weekly'] );
+                            $major_sum[ $r['major_code'] ][ 'hours' ] += floatval( $r['hours'] );
                             $major_sum[ $r['major_code'] ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
                             $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                             $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
     
                             $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
                             $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
-                            $major_sum[ 'S' ][ 'weekly' ] += intval( $r['weekly'] );
+                            $major_sum[ 'S' ][ 'hours' ] += intval( $r['hours'] );
                             $major_sum[ 'S' ][ 'avg_weekly' ] += intval( $r['avg_weekly'] );
                             $major_sum[ 'S' ][ 'total_hours' ] += intval( $r['total_hours'] );
                             $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
@@ -957,7 +957,7 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $major_cache ]['people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['people']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['avg_weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
@@ -971,7 +971,7 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'S' ]['people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['people']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['weekly']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['avg_weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'S' ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'S' ]['turnover']);
@@ -2823,7 +2823,7 @@ class AjaxController extends Controller {
             $majors = (new AjaxModel)->dbQuery('refs_major_list');
             $major_head = array();
             $major_foot = array('S'=>'合計');
-            $major_sum = array('S'=>array('new_people'=>0, 'people'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0));
+            $major_sum = array('S'=>array('countries'=>0, 'new_male'=>0, 'new_female'=>0, 'new_people'=>0, 'people'=>0, 'weekly'=>0, 'avg_weekly'=>0, 'hours'=>0, 'total_hours'=>0, 'turnover'=>0, 'classes'=>0));
             $major_cache = 'A';
             foreach( $majors as $major ) {
                 switch( $major['code'] ) 
@@ -3019,7 +3019,7 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $r['major_code'] ]['new_people']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ $r['major_code'] ]['people']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $r['major_code'] ]['people']);
-                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['weekly']);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $r['major_code'] ]['hours']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $r['major_code'] ]['avg_weekly']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $r['major_code'] ]['total_hours']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $r['major_code'] ]['turnover']);
@@ -3036,7 +3036,7 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $r['minor_code_cname']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['people']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['weekly']);
+                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['avg_weekly']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
@@ -3066,7 +3066,7 @@ class AjaxController extends Controller {
 
                         $major_sum[ $r['major_code'] ][ 'new_people' ] += intval( $r['new_people'] );
                         $major_sum[ $r['major_code'] ][ 'people' ] += intval( $r['people'] );
-                        $major_sum[ $r['major_code'] ][ 'weekly' ] += floatval( $r['weekly'] );
+                        $major_sum[ $r['major_code'] ][ 'hours' ] += floatval( $r['hours'] );
                         $major_sum[ $r['major_code'] ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
                         $major_sum[ $r['major_code'] ][ 'total_hours' ] += floatval( $r['total_hours'] );
                         $major_sum[ $r['major_code'] ][ 'turnover' ] += intval( $r['turnover'] );
@@ -3084,7 +3084,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'A' ]['new_people'] + $major_sum[ 'B' ][ 'new_people' ] + $major_sum[ 'C' ][ 'new_people' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'A' ]['people'] + $major_sum[ 'B' ][ 'people' ] + $major_sum[ 'C' ][ 'people' ]);
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['weekly'] + $major_sum[ 'B' ][ 'weekly' ] + $major_sum[ 'C' ][ 'weekly' ]);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'A' ]['hours'] + $major_sum[ 'B' ][ 'hours' ] + $major_sum[ 'C' ][ 'hours' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'A' ]['avg_weekly'] + $major_sum[ 'B' ][ 'avg_weekly' ] + $major_sum[ 'C' ][ 'avg_weekly' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'A' ]['total_hours'] + $major_sum[ 'B' ][ 'total_hours' ] + $major_sum[ 'C' ][ 'total_hours' ]);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'A' ]['turnover'] + $major_sum[ 'B' ][ 'turnover' ] + $major_sum[ 'C' ][ 'turnover' ]);
@@ -3363,6 +3363,27 @@ class AjaxController extends Controller {
                 fclose($fd);
                 break;
             case 'user_manual':
+                $dl_file = $val . '.pdf';
+                $full_path = $path . $dl_file;
+                if (file_exists($full_path)) {
+                    $fs = filesize($full_path);
+                    $path_info = pathinfo($full_path);
+                    if ($fd = fopen($full_path, "r")) {
+                        header("Content-type: application/pdf");
+                        header("Content-Disposition: attachment; filename=\"".$path_info["basename"]."\""); // use 'attachment' to force a file download
+                        header("Content-length: $fs");
+                        header("Cache-control: private"); //use this to open files directly
+
+                        while(!feof($fd)) {
+                            $bf = fread($fd, 2048);
+                            echo $bf;
+                        }
+
+                    }
+                }
+                fclose($fd);
+                break;
+            case 'qa':
                 $dl_file = $val . '.pdf';
                 $full_path = $path . $dl_file;
                 if (file_exists($full_path)) {
