@@ -103,9 +103,10 @@
           pageable: false,
           toolbar: kendo.template($('#template-academic_agency_class_summary').html())
         });
-
-        mojo.data.academic_agency_class_last = JSON.parse('<?php echo (isset($academic_agency_class_last)? json_encode($academic_agency_class_last) : array()); ?>');
-
+        mojo.data.academic_agency_class_last = [];
+        <?php if (isset($academic_agency_class_last)): ?>
+          mojo.data.academic_agency_class_last = JSON.parse('<?php echo $academic_agency_class_last; ?>');
+        <?php endif; ?>
         mojo.data.content_list = JSON.parse('<?php echo json_encode($content_list); ?>');
         mojo.refs.content_list = {};
         for (var i=0; i<mojo.data.content_list.length; i++)
