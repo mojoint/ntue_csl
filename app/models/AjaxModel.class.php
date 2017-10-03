@@ -95,7 +95,6 @@ class AjaxModel extends Model {
             return $this->dbQuery('admin_academic_agency_agent_get_byid',array('id'=>$data['id']));
             break;
         case 'admin_academic_agency_status':
-/*
             $sql  = 'SELECT IFNULL(count(t4.id), 0) `cnt`, t1.`id`, t1.`cname` `academic_agency_cname`, t1.`institution_code`, t2.`cname` `institution_cname`, t3.`id` `era_id`, t3.`cname` `era_cname`, IFNULL(t4.`state`, -1) `state`, IFNULL(t5.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency` t1';
             $sql .= ' INNER JOIN `academic_institution` t2 ON t1.`institution_code` = t2.`code`';
@@ -105,8 +104,9 @@ class AjaxModel extends Model {
             $sql .= ' WHERE t1.`id` != :agency_id';
             $sql .= ' GROUP BY t1.`id`';
             $sql .= ' ORDER BY t1.`institution_code`';
-*/
 
+
+/*
             $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(count(t5.id), 0) `classes`, IFNULL(t6.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency_status` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
@@ -117,6 +117,7 @@ class AjaxModel extends Model {
             $sql .= ' WHERE t1.`agency_id` != :agency_id';
             $sql .= ' GROUP BY t2.`id`';
             $sql .= ' ORDER BY t2.`institution_code`';
+*/
 
             return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter_t5'=>$data['quarter'], ':quarter_t6'=>$data['quarter']));
             break;

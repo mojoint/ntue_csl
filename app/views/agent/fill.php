@@ -8,6 +8,8 @@
       <?php if (isset($academic_agency_class)) : ?>
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
       <?php endif; ?>
+      console.log( mojo.data.academic_agency_fill );
+      console.log( mojo.data.academic_agency_class );
     </script>
         <?php if (0 == $quarter_id) : ?>
     <div><p>目前未開放填報</p></div>      
