@@ -368,10 +368,10 @@ class AjaxController extends Controller {
             /* academic_agency_report_quarter */
             /* 0:1~4, 1:1, 2:2, 3:3, 4:4, 5:1~2, 6:2~3, 7:3~4, 8:1~3, 9:2~4 */
             $res = array();
-            $res['summary'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
-            $res['detail'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
-            $res['pdf'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_pdf', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
-            $res['taken'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_taken', array('era_id'=>$_POST['era_id']));
+            $res['summary'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+            $res['detail'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_detail', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+            $res['pdf'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_pdf', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
+            $res['taken'] = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_taken', array('era_id'=>$_POST['era_id']));
             $json = array("code"=>1, "data"=>$res);
             break;
         case 'academic_agency_unlock':
@@ -810,7 +810,6 @@ class AjaxController extends Controller {
 
                 break;
             case 'quarter_detail':
-
                 $cnt = 0;
                 foreach ($targets as $target) {
                     $major_cache = 'A';
@@ -2868,7 +2867,8 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $filename );
 
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
                 $size = sizeof($res);
                 if ($size) {
                     $knt = 1;
@@ -2978,7 +2978,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt);
                 $objPHPExcel->getActiveSheet()->setTitle( $filename );
 
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_detail', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_detail', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
                 $size = sizeof($res);
                 if ($size) {
                     $knt = 1;
@@ -3143,7 +3143,7 @@ class AjaxController extends Controller {
                 // set text shadow effect
                 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
                 // Set some content to print
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
 
                 $size = sizeof($res);
                 if ($size) {

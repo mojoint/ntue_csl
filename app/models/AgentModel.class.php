@@ -27,13 +27,36 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_fill':
+            $sql = 'SELECT * FROM `academic_agency_status` WHERE `agency_id` = :agency_id and `unlock` = 1 and `state` = 0';
+            $state = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+
+            if (sizeof($state)) {
+                $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
+                $res = $this->dbSelect($sql, array(':era_id'=>$state[0]['era_id'], 'quarter'=>$state[0]['quarter']));
+            } else {
+                $sql  = 'SELECT t1.* ';
+                $sql .= '  FROM `academic_era_quarter` t1';
+                $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
+                $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
+                if (sizeof($res)) {
+                    $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
+                    $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
+                    if (sizeof($result)) {
+                        return array();
+                    }
+                }
+            }
+$res['sql'] = $sql;
+            return $res;
+/*
             $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND NOW() BETWEEN CONCAT(`online`, " 00:00:00")  AND CONCAT(`offline`, " 23:59:59")';
             $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             $sql = 'SELECT COUNT(*) `cnt` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
             $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
             if (sizeof($unlock) && ($status[0]['cnt'] == 0)) {
                 $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
-                return $this->dbSelect($sql, array(':era_id'=>$res[0]['era_id'], 'quarter'=>$res[0]['quarter']));
+                $era_quarter = $this->dbSelect($sql, array(':era_id'=>$res[0]['era_id'], 'quarter'=>$res[0]['quarter']));
+                return $era_quarter;
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
@@ -51,6 +74,7 @@ class AgentModel extends Model {
                     return $res;
                 }
             }
+*/
             break;
         case 'academic_agency_class':
             $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
