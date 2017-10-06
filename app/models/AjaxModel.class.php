@@ -469,7 +469,7 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':major_b'=>'B'));
             break;
         case 'admin_academic_agency_report_minor_b':
-            $sql  = 'SELECT SUM(`new_people`) `new_people`, SUM(`people`) `people`, SUM(`hours`) `hours`, SUM(`total_hours`) `total_hours`, SUM(`turnover`) `turnover`, "" `info`, GROUP_CONCAT(`note`) `note`'; 
+            $sql  = 'SELECT 0 `new_people`, 0 `people`, SUM(`hours`) `hours`, SUM(`total_hours`) `total_hours`, SUM(`turnover`) `turnover`, "" `info`, GROUP_CONCAT(`note` SEPARATOR " ") `note`'; 
             $sql .= '  FROM `academic_agency_class` ';
             $sql .= ' WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `minor_code` = :minor_code'; 
             $sql .= ' GROUP BY `minor_code`';
@@ -477,13 +477,23 @@ class AjaxModel extends Model {
             $res =  $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], 'minor_code'=>$data['minor_code']));
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
-                    $str .= '  FROM `academic_agency_class` t1';
-                    $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
-                    $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
-                    $str .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
-                    $str .= ' GROUP BY t1.`minor_code`';
-                    $r = $this->dbSelect($str, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
+
+                    $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`), 0) `people`';
+                    $sql .= '  FROM `academic_agency_class` t1';
+                    $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
+                    $sql .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
+                    $res[$key]['new_people'] = $r[0]['new_people'];
+                    $res[$key]['people'] = $r[0]['people'];
+
+                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $sql .= '  FROM `academic_agency_class` t1';
+                    $sql .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
+                    $sql .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
+                    $sql .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
                     $res[$key]['info'] = $r[0]['cname'];
                 }
             }
@@ -602,9 +612,13 @@ class AjaxModel extends Model {
                 $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             } else {
                 $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
-                $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+                $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+                $unlock = 0;
+                if (sizeof($res)) {
+                    $unlock = $res[0]['unlock'];
+                }
                 $sql = 'INSERT INTO `academic_agency_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `state`) VALUES (0, :agency_id, :era_id, :quarter, 1, :unlock, 0)';
-                $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':unlock'=>$unlock[0]['unlock']));
+                $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':unlock'=>$unlock));
             }
 
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
@@ -775,7 +789,7 @@ class AjaxModel extends Model {
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
-            $sql .= 'GROUP_CONCAT(t1.`note`) `note`,';
+            $sql .= 'GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`,';
             $sql .= 'MAX(t1.`latest`) `latest`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
@@ -831,7 +845,7 @@ class AjaxModel extends Model {
                     $res[$key]['new_people'] = $r[0]['new_people'];
                     $res[$key]['people'] = $r[0]['people'];
 
-                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $sql .= '  FROM `academic_agency_class` t1';
                     $sql .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $sql .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
@@ -853,7 +867,7 @@ class AjaxModel extends Model {
             break;
         case 'agent_academic_agency_report_era_summary':
             // get data from class
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, 0 `new_people`, 0 `people`, COUNT(*) `classes`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`, IFNULL(MAX(t1.`latest`), "") `latest`, GROUP_CONCAT(t1.`id`) `id`, ';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, 0 `new_people`, 0 `people`, COUNT(*) `classes`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`, IFNULL(MAX(t1.`latest`), "") `latest`, ';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t2 WHERE t2.`agency_id` = t1.`agency_id` AND t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`minor_code` = t1.`minor_code`),2) `avg_weekly`, t3.`cname` `minor_code_cname` ';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t3 ON t1.`era_id` = t3.`era_id` AND t1.`minor_code` = t3.`minor_code`';
@@ -906,7 +920,7 @@ class AjaxModel extends Model {
                     $res[$key]['new_people'] = $r[0]['new_people'];
                     $res[$key]['people'] = $r[0]['people'];
                     // info 
-                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $sql .= '  FROM `academic_agency_class` t1';
                     $sql .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $sql .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
@@ -930,7 +944,7 @@ class AjaxModel extends Model {
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
-            $sql .= 'GROUP_CONCAT(t1.`note`) `note`';
+            $sql .= 'GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
@@ -941,7 +955,7 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
@@ -970,7 +984,7 @@ class AjaxModel extends Model {
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
-            $sql .= 'GROUP_CONCAT(t1.`note`) `note`';
+            $sql .= 'GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
             $sql .= '  LEFT JOIN `academic_agency_class_country` t3 ON t3.`class_id` = t1.`id`';
@@ -1013,7 +1027,7 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
@@ -1035,7 +1049,7 @@ class AjaxModel extends Model {
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
-            $sql .= 'GROUP_CONCAT(t1.`note`) `note`,';
+            $sql .= 'GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`,';
             $sql .= 'MAX(t1.`latest`) `latest`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
@@ -1083,7 +1097,7 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
@@ -1111,7 +1125,7 @@ class AjaxModel extends Model {
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
-            $sql .= 'GROUP_CONCAT(t1.`note`) `note`';
+            $sql .= 'GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t2 ON t1.`era_id` = t2.`era_id` AND t1.`minor_code` = t2.`minor_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
@@ -1122,7 +1136,7 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`)) `cname`';
+                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
                     $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               

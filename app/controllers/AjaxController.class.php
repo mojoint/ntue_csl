@@ -479,7 +479,7 @@ class AjaxController extends Controller {
     }
 
     public function reporter($key, $val, $era_id, $quarter=1, $agency_id=0) {
-        if (!isset($_SESSION)) { exit; }
+        if (!(isset($_SESSION['admin']) || isset($_SESSION['agent']))) { exit; }
         switch($key) 
         {
         case 'academic_admin_report':
