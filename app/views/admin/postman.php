@@ -15,11 +15,11 @@
         </div>
         <div style="width:95%">
           <label>寄件副本</label>
-          <input type="text" id="email-ccto" style="width:95%" />
+          <input type="text" id="email-ccto" style="width:95%" placeholder="多個副本收地址時請以 ； 隔開" />
         </div>
         <div style="width:95%;">
           <label>信件主旨</label>
-          <input type="text" id="email-subject" style="width:95%"/>
+          <input type="text" id="email-subject" style="width:95%" />
         </div>
         <div style="width:95%;">
           <div id="email-body" style="width:95%;height:300px;">
