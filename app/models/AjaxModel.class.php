@@ -107,18 +107,17 @@ class AjaxModel extends Model {
             $sql .= ' ORDER BY t1.`institution_code`';
 */
 
-            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(count(t5.id), 0) `classes`, IFNULL(t6.`offline`, "") `offline`';
+            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(t5.`offline`, "") `offline`';
             $sql .= '  FROM `academic_agency_status` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
             $sql .= ' INNER JOIN `academic_era` t4 ON t4.`id` = :era_id';
-            $sql .= '  LEFT JOIN `academic_agency_class` t5 ON t2.`id` = t5.`agency_id` AND t4.`id` = t5.`era_id` AND t5.`quarter` = :quarter_t5';
-            $sql .= '  LEFT JOIN `academic_agency_unlock` t6 ON t2.`id` = t6.`agency_id` AND t4.`id` = t6.`era_id` AND t6.`quarter` = :quarter_t6';
+            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t2.`id` = t5.`agency_id` AND t4.`id` = t5.`era_id` AND t5.`quarter` = :quarter';
             $sql .= ' WHERE t1.`agency_id` != :agency_id';
             $sql .= ' GROUP BY t2.`id`';
             $sql .= ' ORDER BY t2.`institution_code`';
 
-            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter_t5'=>$data['quarter'], ':quarter_t6'=>$data['quarter']));
+            return $this->dbSelect($sql, array(':agency_id'=>999, ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             break;
         case 'admin_academic_agency_status_byid':
             $sql  = 'SELECT count(*) `cnt`, t1.`agency_id`, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t1.`era_id`, t4.`cname` `era_cname`, t1.`quarter`, t1.`state`';
