@@ -132,8 +132,13 @@ class AjaxModel extends Model {
         case 'admin_academic_agency_unlock_yes':
             //$sql = 'UPDATE `academic_agency_unlock` SET `state` = 2 WHERE `agency_id` = :agency_id AND `state` = :state';
             //return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':state'=>1));
+
             $sql = 'UPDATE `academic_agency_unlock` SET `state` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `id` = :id';
-            return $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
+            $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `id` = :id';
+            $unlock = $this->dbSelect($sql, array(':id'=>$data['id']));
+            $sql = 'UPDATE `academic_agency_status` SET `state` = 0, `unlock` = 1 WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+            return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
             break;
         case 'admin_academic_agency_unlock_no':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';

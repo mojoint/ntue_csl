@@ -31,8 +31,24 @@ class AgentModel extends Model {
             $state = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
 
             if (sizeof($state)) {
-                $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
-                $res = $this->dbSelect($sql, array(':era_id'=>$state[0]['era_id'], 'quarter'=>$state[0]['quarter']));
+                $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter AND (now() BETWEEN `online` AND `offline`)';
+                $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$state[0]['era_id'], ':quarter'=>$state[0]['quarter']));
+                if (sizeof($unlock)) {
+                    $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
+                    $res = $this->dbSelect($sql, array(':era_id'=>$state[0]['era_id'], 'quarter'=>$state[0]['quarter']));
+                } else {
+                    $sql  = 'SELECT t1.* ';
+                    $sql .= '  FROM `academic_era_quarter` t1';
+                    $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
+                    $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
+                    if (sizeof($res)) {
+                        $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
+                        $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
+                        if (sizeof($result)) {
+                            return array();
+                        }
+                    }
+                }
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
@@ -122,7 +138,7 @@ $res['sql'] = $sql;
             return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'academic_agency_unlock':
-            $sql  = 'SELECT t1.*, (now() between concat(t1.`online`, " 00:00:00") and concat(t1.`offline`, " 23:59:59") ) `status`, t2.`classes`, t2.`unlock`, t2.`state`';
+            $sql  = 'SELECT t1.*, (now() between concat(t1.`online`, " 00:00:00") and concat(t1.`offline`, " 23:59:59") ) `status`, t2.`classes`, t2.`unlock`, t2.`state` `status_state`';
             $sql .= '  FROM `academic_agency_unlock` t1';
             $sql .= ' INNER JOIN `academic_agency_status` t2 ON t1.`agency_id` = t2.`agency_id` AND t1.`era_id` = t2.`era_id` AND t1.`quarter` = t2.`quarter`';
             $sql .= '  WHERE t1.`agency_id` = :agency_id';

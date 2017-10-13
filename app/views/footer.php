@@ -1,7 +1,7 @@
     </article>
   </div>                                                                        
 </main>
-<footer id-"footer">
+<footer id="footer">
   <div class="container">
 <?php
     if (isset($footer)) {
