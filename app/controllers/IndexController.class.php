@@ -34,7 +34,7 @@ class IndexController extends Controller {
     function admin() {
 debugger('mhho','admin login');
         //if ($_POST['g-recaptcha-response']) {
-            $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+            $reg_username = '/^([a-zA-Z0-9_]){3,50}$/';
             $reg_userpass = '/^(.+){3,80}$/';
             $username = $_POST['username'];
             $userpass = $_POST['userpass'];
@@ -60,7 +60,7 @@ debugger('mhho','admin login');
     function agent() {
 debugger('mhho','agent login');
         //if ($_POST['g-recaptcha-response']) {
-            $reg_username = '/^([a-zA-Z0-9]){3,50}$/';
+            $reg_username = '/^([a-zA-Z0-9_]){3,50}$/';
             $reg_userpass = '/^(.+){3,80}$/';
             $username = $_POST['username'];
             $userpass = $_POST['userpass'];
