@@ -39,8 +39,15 @@ class Model
     }  
 
     public function dbLogger($path, $key, $val, $data) {
-        $sql = 'INSERT INTO `logger` (`id`, `path`, `key`, `val`, `data`) VALUES (0, :path, :key, :val, :data)';
-        return $this->dbInsert( $sql, array(':path'=>$path, ':key'=>$key, ':val'=>$val, ':data'=>$data ) );
+        $sql = 'INSERT INTO `logger` (`id`, `uid`, `path`, `key`, `val`, `data`) VALUES (0, :uid, :path, :key, :val, :data)';
+        if (isset($_SESSION['admin'])) {
+            $uid = $_SESSION['admin']['id'];
+        } else if (isset($_SESSION['agent'])) {
+            $uid = $_SESSION['agent']['id'];
+        } else {
+            $uid = -1;
+        }
+        return $this->dbInsert( $sql, array(':uid'=> $uid, ':path'=>$path, ':key'=>$key, ':val'=>$val, ':data'=>$data ) );
     }  
 
     private function dbConnect() {

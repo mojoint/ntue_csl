@@ -4,25 +4,36 @@ class AjaxController extends Controller {
     public function admin($key, $val) {
         if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
+        $data = array();
         switch($key) 
         {
         case 'academic_agency':
             switch( $val ) 
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_add', array('institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_add', array('institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']));
+                $data = array('institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_add', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'del':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_del', array('id'=>$_POST['id']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_del', array('id'=>$_POST['id']));
+                $data = array('id'=>$_POST['id']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_del', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'get':
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_get');
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_mod', array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_mod', array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']));
+                $data = array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_mod', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             } 
@@ -33,7 +44,10 @@ class AjaxController extends Controller {
             case 'add':
                 $timestamp = time();
                 $session = base64_encode(MD5Prefix . $_POST['username'] . '@@@' . $timestamp . '@@@' . $_POST['agency_id']);
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_add', array('agency_id'=>$_POST['agency_id'], 'username'=>$_POST['username'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_add', array('agency_id'=>$_POST['agency_id'], 'username'=>$_POST['username'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp));
+                $data = array('agency_id'=>$_POST['agency_id'], 'username'=>$_POST['username'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_add', $data);
                 if (1 == $res['code']) {
                     $url = APP_URL .'/email/activate/'. $timestamp .'/'. $session .'/' . $_POST['username'] . '/' . $_POST['email'];
                     $this->mailer('add', $_POST['username'], $_POST['email'], $url);
@@ -41,17 +55,24 @@ class AjaxController extends Controller {
                 $json = array("code"=>$res['code'], "data"=>$res);
                 break;
             case 'del':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_del', array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_del', array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id']));
+                $data = array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_del', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'get':
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_get');
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
                 $timestamp = time();
                 $session = base64_encode(MD5Prefix . $_POST['id'] . '@@@' . $timestamp . '@@@' . $_POST['agency_id']);
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_mod', array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_mod', array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp));
+                $data = array('id'=>$_POST['id'], 'agency_id'=>$_POST['agency_id'], 'email'=>$_POST['email'], 'userpass'=>$session, 'timestamp'=>$timestamp);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_agent_mod', $data);
                 $url = APP_URL .'/email/activate/'. $timestamp . '/' . $session .'/'. $res[0]['username'] .'/'. $_POST['email'];
                 $this->mailer('mod', $res[0]['username'], $_POST['email'], $url);
 
@@ -113,11 +134,17 @@ class AjaxController extends Controller {
             switch( $val )
             {
             case 'yes':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_yes', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_yes', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
+                $data = array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_yes', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'no':
-                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id']));
+                $data = array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             } 
@@ -130,7 +157,10 @@ class AjaxController extends Controller {
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('admin_academic_era_quarter_mod', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_era_quarter_mod', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']));
+                $data = array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'online'=>$_POST['online'], 'offline'=>$_POST['offline']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_era_quarter_mod', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -139,13 +169,19 @@ class AjaxController extends Controller {
             switch( $val )
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('admin_academic_class_add', array('major_code'=>$_POST['major'], 'minor_code'=>$_POST['minor'], 'cname'=>$_POST['cname'], 'era_id'=>$_POST['era_id']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_class_add', array('major_code'=>$_POST['major'], 'minor_code'=>$_POST['minor'], 'cname'=>$_POST['cname'], 'era_id'=>$_POST['era_id']));
+                $data = array('major_code'=>$_POST['major'], 'minor_code'=>$_POST['minor'], 'cname'=>$_POST['cname'], 'era_id'=>$_POST['era_id']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_class_add', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'sel':
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('admin_academic_class_mod', array('checks'=>$_POST['checks'], 'era_id'=>$_POST['era_id'], 'taken'=>$_POST['taken']));
+                //$res = (new AjaxModel)->dbQuery('admin_academic_class_mod', array('checks'=>$_POST['checks'], 'era_id'=>$_POST['era_id'], 'taken'=>$_POST['taken']));
+                $data = array('checks'=>$_POST['checks'], 'era_id'=>$_POST['era_id'], 'taken'=>$_POST['taken']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('admin_academic_class_mod', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -160,12 +196,17 @@ class AjaxController extends Controller {
             case 'mod':
                 if (isset($_POST['username'])) {
                     $username = str_replace('NTUE', "", $_POST['username']);
-
                     if (isset($_POST['email'])) {
-                        $res = (new AjaxModel)->dbQuery('admin_profile_email_mod', array('username'=>$username, 'email'=>$_POST['email'],'session'=>$_SESSION['admin']['session']));
+                        //$res = (new AjaxModel)->dbQuery('admin_profile_email_mod', array('username'=>$username, 'email'=>$_POST['email'],'session'=>$_SESSION['admin']['session']));
+                        $data = array('username'=>$username, 'email'=>$_POST['email'],'session'=>$_SESSION['admin']['session']);
+                        $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                        $res = (new AjaxModel)->dbQuery('admin_profile_email_mod', $data);
                     }
                     if (isset($_POST['userpass'])) {
-                        $res = (new AjaxModel)->dbQuery('admin_profile_userpass_mod', array('username'=>$username, 'userpass'=>$_POST['userpass'],'session'=>$_SESSION['admin']['session']));
+                        //$res = (new AjaxModel)->dbQuery('admin_profile_userpass_mod', array('username'=>$username, 'userpass'=>$_POST['userpass'],'session'=>$_SESSION['admin']['session']));
+                        $data = array('username'=>$username, 'userpass'=>$_POST['userpass'],'session'=>$_SESSION['admin']['session']);
+                        $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                        $res = (new AjaxModel)->dbQuery('admin_profile_userpass_mod', $data);
                     }
                     $json = array("code"=>1, "data"=>$res);
                 }
@@ -179,13 +220,15 @@ class AjaxController extends Controller {
                 if (isset($_SESSION['admin'])) {
                     $res = (new AjaxModel)->dbQuery('admin_board_unreply_query');
                     $json = array("code"=>1, "data"=>$res);
-                    //$json = array("code"=>1, "data"=>"GOOD");
                 }
     
                 break;
             case 'replyMsgSave':
                 if (isset($_SESSION['admin'])) {
-                    $res = (new AjaxModel)->dbQuery('admin_board_save_reply',array('message_id'=>$_POST['msgid'],'admin_id'=>$_SESSION['admin']['id'],'reply_content'=>$_POST['replyContent']));
+                    //$res = (new AjaxModel)->dbQuery('admin_board_save_reply',array('message_id'=>$_POST['msgid'],'admin_id'=>$_SESSION['admin']['id'],'reply_content'=>$_POST['replyContent']));
+                    $data = array('message_id'=>$_POST['msgid'],'admin_id'=>$_SESSION['admin']['id'],'reply_content'=>$_POST['replyContent']);
+                    $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
+                    $res = (new AjaxModel)->dbQuery('admin_board_save_reply',$data);
                     $json = array("code"=>1, "data"=>$res);
                 }
                 break;
@@ -269,6 +312,7 @@ class AjaxController extends Controller {
     public function agent($key, $val) {
         if (!isset($_SESSION)) { exit; }
         $json = array("code"=>0);
+        $data = array();
         switch($key) 
         {
         case 'academic_agency':
@@ -279,7 +323,10 @@ class AjaxController extends Controller {
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_mod', array('id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'zipcode'=>$_POST['zipcode'], 'address'=>$_POST['address'], 'established'=>$_POST['established'], 'approval'=>$_POST['approval'], 'note'=>$_POST['note']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_mod', array('id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'zipcode'=>$_POST['zipcode'], 'address'=>$_POST['address'], 'established'=>$_POST['established'], 'approval'=>$_POST['approval'], 'note'=>$_POST['note']));
+                $data = array('id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'zipcode'=>$_POST['zipcode'], 'address'=>$_POST['address'], 'established'=>$_POST['established'], 'approval'=>$_POST['approval'], 'note'=>$_POST['note']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_mod', $data);
                 $json = array("code"=>1, "data"=>$res, "posts"=>$_POST);
                 break;
             }
@@ -289,40 +336,52 @@ class AjaxController extends Controller {
             {
             case 'add':
                 $country = (isset($_POST['country']))? $_POST['country'] : array();
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_add', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'major_code'=>$_POST['major_code'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country));
-                $json = array("code"=>1, "data"=>$res, 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours']);
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_class_add', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'major_code'=>$_POST['major_code'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country));
+                $data = array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'major_code'=>$_POST['major_code'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $cdata = array();
+                foreach( $country as $c ) {
+                    array_push($cdata, implode('@@@', $c));
+                }
+                $id = (new AjaxModel)->dbLogger('agent', $key . '_country', $val, implode('@@@', $cdata));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_add', $data);
+                $json = array("code"=>1, "data"=>$res);
                 break;
             case 'del':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_del', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'agency_id'=>$_POST['agency_id']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_class_del', array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'agency_id'=>$_POST['agency_id']));
+                $data = array('id'=>$_POST['id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'agency_id'=>$_POST['agency_id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_del', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'get':
                 break;
             case 'done':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_done', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'] ));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_class_done', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'] ));
+                $data = array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_done', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'import':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_import', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_class_import', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_import', $data);
                 $json = array("code"=>1, "data"=>$res, 'post'=>$_POST);
                 break;
             case 'mod':
                 $country = (isset($_POST['country']))? $_POST['country'] : array();
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'class_id'=>$_POST['class_id'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country));
-                $json = array("code"=>1, "data"=>$res, 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours']);
-                break;
-            }
-            break;
-        case 'academic_agency_class_country':
-            switch( $val )
-            {
-            case 'add':
-                break;
-            case 'del':
-                break;
-            case 'get':
-                break;
-            case 'mod':
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'class_id'=>$_POST['class_id'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country));
+                $data = array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'class_id'=>$_POST['class_id'], 'minor_code'=>$_POST['minor_code'], 'cname'=>$_POST['cname'], 'weekly'=>$_POST['weekly'], 'weeks'=>$_POST['weeks'], 'adjust'=>$_POST['adjust'], 'content_code'=>$_POST['content_code'], 'target_code'=>$_POST['target_code'], 'new_people'=>$_POST['new_people'], 'people'=>$_POST['people'], 'hours'=>$_POST['hours'], 'total_hours'=>$_POST['total_hours'], 'revenue'=>$_POST['revenue'], 'subsidy'=>$_POST['subsidy'], 'turnover'=>$_POST['turnover'], 'note'=>$_POST['note'], 'country'=>$country);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $cdata = array();
+                foreach( $country as $c ) {
+                    array_push($cdata, implode('@@@', $c));
+                }
+                $id = (new AjaxModel)->dbLogger('agent', $key . '_country', $val, implode('@@@', $cdata));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_class_mod', $data);
+                $json = array("code"=>1, "data"=>$res);
                 break;
             }
             break;
@@ -330,19 +389,31 @@ class AjaxController extends Controller {
             switch( $val ) 
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_add', array('agency_id'=>$_POST['agency_id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_add', array('agency_id'=>$_POST['agency_id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_add', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'del':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_del', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_del', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_del', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'get':
-                $res = (new AjaxModel)->dbQuery('agent_cademic_agency_contact', array('agency_id'=>$_POST['agency_id']));
+                //$res = (new AjaxModel)->dbQuery('agent_cademic_agency_contact', array('agency_id'=>$_POST['agency_id']));
+                $data = array('agency_id'=>$_POST['agency_id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_cademic_agency_contact', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_mod', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_mod', array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'id'=>$_POST['id'], 'cname'=>$_POST['cname'], 'title'=>$_POST['title'], 'manager'=>$_POST['manager'], 'staff'=>$_POST['staff'], 'role'=>$_POST['role'], 'area_code'=>$_POST['area_code'], 'phone'=>$_POST['phone'], 'ext'=>$_POST['ext'], 'email'=>$_POST['email'], 'spare_email'=>$_POST['spare_email'], 'primary'=>$_POST['primary']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_contact_mod', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -351,15 +422,24 @@ class AjaxController extends Controller {
             switch( $val ) 
             {
             case 'add':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_add', array('agency_id'=>$_POST['agency_id']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_add', array('agency_id'=>$_POST['agency_id']));
+                $data = array('agency_id'=>$_POST['agency_id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_add', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'get':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr', array('agency_id'=>$_POST['agency_id']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_hr', array('agency_id'=>$_POST['agency_id']));
+                $data = array('agency_id'=>$_POST['agency_id']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_mod', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'administration'=>$_POST['administration'], 'subject'=>$_POST['subject'], 'adjunct'=>$_POST['adjunct'], 'reserve'=>$_POST['reserve'], 'others'=>$_POST['others'], 'note'=>$_POST['note']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_mod', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'administration'=>$_POST['administration'], 'subject'=>$_POST['subject'], 'adjunct'=>$_POST['adjunct'], 'reserve'=>$_POST['reserve'], 'others'=>$_POST['others'], 'note'=>$_POST['note']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'administration'=>$_POST['administration'], 'subject'=>$_POST['subject'], 'adjunct'=>$_POST['adjunct'], 'reserve'=>$_POST['reserve'], 'others'=>$_POST['others'], 'note'=>$_POST['note']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_hr_mod', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -378,7 +458,10 @@ class AjaxController extends Controller {
             switch( $val ) 
             {
             case 'mod':
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_unlock', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'note'=>$_POST['note'], 'work_days'=>$_POST['work_days'], 'minors'=>$_POST['minors']));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_unlock', array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'note'=>$_POST['note'], 'work_days'=>$_POST['work_days'], 'minors'=>$_POST['minors']));
+                $data = array('agency_id'=>$_POST['agency_id'], 'era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter'], 'note'=>$_POST['note'], 'work_days'=>$_POST['work_days'], 'minors'=>$_POST['minors']);
+                $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_unlock', $data);
                 $json = array("code"=>1, "data"=>$res);
                 break;
             }
@@ -391,10 +474,16 @@ class AjaxController extends Controller {
                     $username = str_replace('NTUE', "", $_POST['username']);
 
                     if (isset($_POST['email'])) {
-                        $res = (new AjaxModel)->dbQuery('agent_profile_email_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'email'=>$_POST['email']));
+                        //$res = (new AjaxModel)->dbQuery('agent_profile_email_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'email'=>$_POST['email']));
+                        $data = array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'email'=>$_POST['email']);
+                        $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                        $res = (new AjaxModel)->dbQuery('agent_profile_email_mod', $data); 
                     }
                     if (isset($_POST['userpass'])) {
-                        $res = (new AjaxModel)->dbQuery('agent_profile_userpass_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'userpass'=>$_POST['userpass']));
+                        //$res = (new AjaxModel)->dbQuery('agent_profile_userpass_mod', array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'userpass'=>$_POST['userpass']));
+                        $data = array('agency_id'=>$_POST['agency_id'], 'username'=>$username, 'userpass'=>$_POST['userpass']);
+                        $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                        $res = (new AjaxModel)->dbQuery('agent_profile_userpass_mod', $data);
                     }
                     $json = array("code"=>1, "data"=>$res);
                 }
@@ -406,14 +495,20 @@ class AjaxController extends Controller {
             {
             case 'histMsgQry':
                 if (isset($_SESSION['agent'])) {
-                    $res = (new AjaxModel)->dbQuery('agent_board_reply_query', array('agent_id'=>$_SESSION['agent']['id']));
+                    //$res = (new AjaxModel)->dbQuery('agent_board_reply_query', array('agent_id'=>$_SESSION['agent']['id']));
+                    $data = array('agent_id'=>$_SESSION['agent']['id']);
+                    $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                    $res = (new AjaxModel)->dbQuery('agent_board_reply_query', $data);
                     $json = array("code"=>1, "data"=>$res);
 
                 }
                 break;
             case 'quesSave':
                 if (isset($_SESSION['agent'])) {
-                    $res = (new AjaxModel)->dbQuery('agent_board_question_add', array('agent_id'=>$_SESSION['agent']['id'],'question_content'=>$_POST['questionContent']));
+                    //$res = (new AjaxModel)->dbQuery('agent_board_question_add', array('agent_id'=>$_SESSION['agent']['id'],'question_content'=>$_POST['questionContent']));
+                    $data = array('agent_id'=>$_SESSION['agent']['id'],'question_content'=>$_POST['questionContent']);
+                    $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
+                    $res = (new AjaxModel)->dbQuery('agent_board_question_add', $data);
                     $json = array("code"=>1, "data"=>$res);
                 }
     

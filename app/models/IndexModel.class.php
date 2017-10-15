@@ -15,14 +15,26 @@ class IndexModel extends Model {
             return $this->dbUpdate($sql, array(':email'=>$data['email'], ':timestamp'=>$data['timestamp'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
             break;
         case 'admin':
-            $sql = 'SELECT `username` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
+            $sql = 'SELECT `username`, `ip_address` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
             $res = $this->dbSelect($sql, array(':username'=>$data['username'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
             if (1 == sizeof($res)) {
-                $sql = 'UPDATE `admin` SET session = :session, timestamp = :timestamp WHERE username = :username';
-                $session = "1" . base64_encode(MD5Prefix . $res[0]['username'] . '@@@' . $timestamp);
-                $cnt = $this->dbUpdate($sql, array(':timestamp'=>$timestamp, ':session'=>$session, ':username'=>$res[0]['username']));
-                $sql = 'SELECT `username`, `email`, `session`, `timestamp` ,`id` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
-                return $this->dbSelect($sql, array(':username'=>$data['username'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
+                if ($res[0]['ip_address'] != '0.0.0.0') {
+                    if ($res[0]['ip_address'] != $_REMOTE['IP_ADDR']) {
+                        $sql = 'UPDATE `admin` SET session = :session, timestamp = :timestamp WHERE username = :username';
+                        $session = "1" . base64_encode(MD5Prefix . $res[0]['username'] . '@@@' . $timestamp);
+                        $cnt = $this->dbUpdate($sql, array(':timestamp'=>$timestamp, ':session'=>$session, ':username'=>$res[0]['username']));
+                        $sql = 'SELECT `username`, `email`, `session`, `timestamp` ,`id` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
+                        return $this->dbSelect($sql, array(':username'=>$data['username'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
+                    } else {
+                        return $res;
+                    }
+                } else {
+                    $sql = 'UPDATE `admin` SET session = :session, timestamp = :timestamp WHERE username = :username';
+                    $session = "1" . base64_encode(MD5Prefix . $res[0]['username'] . '@@@' . $timestamp);
+                    $cnt = $this->dbUpdate($sql, array(':timestamp'=>$timestamp, ':session'=>$session, ':username'=>$res[0]['username']));
+                    $sql = 'SELECT `username`, `email`, `session`, `timestamp` ,`id` FROM `admin` WHERE username = :username AND userpass = MD5(:userpass) AND state = 1';
+                    return $this->dbSelect($sql, array(':username'=>$data['username'], ':userpass'=>MD5Prefix . $data['userpass'] . MD5Suffix));
+                }
             } else {
                 return $res;
             }
