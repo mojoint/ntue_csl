@@ -3242,7 +3242,8 @@ class AjaxController extends Controller {
                 // set text shadow effect
                 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
                 // Set some content to print
-                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                //$res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
+                $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_pdf', array('agency_id'=>$agency_id, 'era_id'=>$era_id, 'quarter'=>$quarter));
 
                 $size = sizeof($res);
                 if ($size) {
