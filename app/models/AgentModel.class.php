@@ -41,26 +41,12 @@ class AgentModel extends Model {
                     $sql .= '  FROM `academic_era_quarter` t1';
                     $sql .= ' WHERE NOW() BETWEEN CONCAT(t1.`online`, " 00:00:00") AND CONCAT(t1.`offline`, " 23:59:59") AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
                     $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
-                    if (sizeof($res)) {
-                        $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
-                        $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
-                        if (sizeof($result)) {
-                            return array();
-                        }
-                    }
                 }
             } else {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
                 $sql .= ' WHERE NOW() BETWEEN CONCAT(t1.`online`, " 00:00:00") AND CONCAT(t1.`offline`, " 23:59:59") AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
                 $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
-                if (sizeof($res)) {
-                    $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
-                    $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
-                    if (sizeof($result)) {
-                        return array();
-                    }
-                }
             }
             return $res;
 /*

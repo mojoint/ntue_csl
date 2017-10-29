@@ -96,15 +96,15 @@ debugger('mhho','agent login');
                     <input type="password" id="userpass" name="userpass" placeholder="請輸入您的密碼" class="form-control" />
                 </div>
                 <div class="form-group col-xs-12">
-                    <div class="g-recaptcha" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O"></div>
+                    <div id="recaptcha" class="g-recaptcha" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O" data-callback="mojocallback" data-size="invisible"></div>
                 </div>
                 <div class="form-group col-xs-12">
                     <div class="col-xs-5">
-                        <a href="/index/agent" class="btn btn-lg btn-block btn-primary g-recaptcha" id="btn-login-agent" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O" data-callback="/index/agent/">教育機構登入</a>
+                        <a href="/index/agent" class="btn btn-lg btn-block btn-primary " id="btn-login-agent" >教育機構登入</a>
                     </div>
                     <div class="col-xs-1"></div>
                     <div class="col-xs-5">
-                        <a href="/index/admin/" class="btn btn-lg btn-block btn-danger g-recaptcha" id="btn-login-admin" data-sitekey="6LdLuCMUAAAAANHGd41Qo7Mo2jGT_xFD3iALDo1O" data-callback="/index/admin/">管理員登入</a>
+                        <a href="/index/admin/" class="btn btn-lg btn-block btn-danger " id="btn-login-admin" >管理員登入</a>
                     </div>
                     <div class="col-xs-1"></div>
                 </div>

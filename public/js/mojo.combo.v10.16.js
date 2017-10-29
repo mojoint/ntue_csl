@@ -1041,9 +1041,10 @@ console.log( res );
 
       $('#btn-login-agent').on('click', function(e) {
         e.preventDefault();
+        $('#form-login').attr('action', "");
         if (mojo.check_login()) {
           $('#form-login').attr('action', $(this).attr('href'));
-          $('#form-login').submit();
+          grecaptcha.execute();
         }
       });
 

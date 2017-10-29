@@ -21,7 +21,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('fill'));
             $academic_agency_fill = (new AgentModel)->dbQuery('academic_agency_fill', array('agency_id'=>$_SESSION['agent']['agency_id']));
-
+print_r($academic_agency_fill);
             if (sizeof($academic_agency_fill)) {
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
