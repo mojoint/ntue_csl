@@ -27,6 +27,9 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_fill':
+            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
+            $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+/*
             $sql = 'SELECT * FROM `academic_agency_status` WHERE `agency_id` = :agency_id and `unlock` = 1 and `state` = 0';
             $state = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
 
@@ -49,7 +52,6 @@ class AgentModel extends Model {
                 $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             }
             return $res;
-/*
             $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND NOW() BETWEEN CONCAT(`online`, " 00:00:00")  AND CONCAT(`offline`, " 23:59:59")';
             $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             $sql = 'SELECT COUNT(*) `cnt` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
@@ -109,6 +111,10 @@ class AgentModel extends Model {
             $sql .= ' INNER JOIN `country_list` t3 on t1.`country_code` = t3.`code`';
             $sql .= ' WHERE t1.`class_id` = :class_id';
             return $this->dbSelect($sql, array(':class_id'=>$data['class_id']));
+            break;
+        case 'academic_agency_class_status':
+            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_agency_contact':
             $sql = 'SELECT * FROM `academic_agency_contact` WHERE `agency_id` = :agency_id ORDER by `id` DESC';

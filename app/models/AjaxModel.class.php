@@ -107,14 +107,16 @@ class AjaxModel extends Model {
             $sql .= ' ORDER BY t1.`institution_code`';
 */
 
-            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(t5.`offline`, "") `offline`';
+            $sql  = 'SELECT t1.*, t2.`cname` `academic_agency_cname`, t2.`institution_code`, t3.`cname` `institution_cname`, t4.`id` `era_id`, t4.`cname` `era_cname`, IFNULL(t5.`online`, "") `regular_online`, IFNULL(t5.`offline`, "") `regular_offline`';
             //$sql .= '  FROM `academic_agency_status` t1';
             $sql .= '  FROM `academic_agency_class_status` t1';
             $sql .= ' INNER JOIN `academic_agency` t2 ON t1.`agency_id` = t2.`id`';
             $sql .= ' INNER JOIN `academic_institution` t3 ON t2.`institution_code` = t3.`code`';
-            $sql .= ' INNER JOIN `academic_era` t4 ON t4.`id` = :era_id';
-            $sql .= '  LEFT JOIN `academic_agency_unlock` t5 ON t2.`id` = t5.`agency_id` AND t4.`id` = t5.`era_id` AND t5.`quarter` = :quarter';
+            $sql .= ' INNER JOIN `academic_era` t4 ON t4.`id` = t1.`era_id`';
+            $sql .= ' INNER JOIN `academic_era_quarter` t5 ON t1.`era_id` = t5.`era_id` AND t1.`quarter` = t5.`quarter`';
             $sql .= ' WHERE t1.`agency_id` != :agency_id';
+            $sql .= '   AND t1.`era_id` = :era_id';
+            $sql .= '   AND t1.`quarter` = :quarter';
             $sql .= ' GROUP BY t2.`id`';
             $sql .= ' ORDER BY t2.`institution_code`';
 
@@ -155,8 +157,8 @@ class AjaxModel extends Model {
         case 'admin_academic_agency_unlock_no':
             $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
             $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
-            $sql = 'UPDATE `academic_agency_unlock` SET `unlock` = 0 WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
-            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
+            $sql = 'UPDATE `academic_agency_class_status` SET `unlock` = 0 WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+            $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
             return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
@@ -993,6 +995,16 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
+                    // country
+                    $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`), 0) `people`';
+                    $sql .= '  FROM `academic_agency_class` t1';
+                    $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`minor_code` = :minor_code';
+                    $sql .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$val['quarter'], ':minor_code'=>$val['minor_code']));
+                    $res[$key]['new_people'] = $r[0]['new_people'];
+                    $res[$key]['people'] = $r[0]['people'];
+                    // info 
                     $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';
                     $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
@@ -1196,6 +1208,18 @@ class AjaxModel extends Model {
         case 'agent_academic_agency_unlock':
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id';
             $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id']));
+            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+            $classes = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            if (sizeof($res)) {
+                $sql = 'UPDATE `academic_agency_class_status` SET `classes` = :classes, `unlock` = 1, `minors` = :minors, `work_days` = :work_days, `note` = :note WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';  
+                $cnt = $this->dbUpdate($sql, array(':classes'=>sizeof($classes), ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            } else {
+                $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :classes, 1, :minors, :work_days, "", "", :note, 0)';
+
+                $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':classes'=>sizeof($classes), ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
+            }
             $sql = 'INSERT INTO `academic_agency_unlock` (`id`, `agency_id`, `era_id`, `quarter`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :minors, :work_days, "", "", :note, 0)';
             return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
             break;

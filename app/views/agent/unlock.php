@@ -44,7 +44,8 @@
         </script>
         <div id="grid-academic_class-footer" class="col-xs-12"></div>
         <script>
-          mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
+          //mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
+          mojo.data.academic_agency_class_status = JSON.parse('<?php echo json_encode($academic_agency_class_status); ?>');
           var academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
           var academic_class = JSON.parse('<?php echo json_encode($academic_class); ?>');
           $('#grid-academic_class').kendoGrid({
@@ -132,7 +133,47 @@
 
           $('#editor-academic_era option:first-child').attr('selected', true).trigger('change');
 
-          console.log (mojo.data.academic_agency_unlock);
+          console.log (mojo.data.academic_agency_class_status);
+          if (mojo.data.academic_agency_class_status) {
+            mojo.is_unlock = {};
+            mojo.if_unlock = false;
+            var now = new Date();
+            for (var i=0; i<mojo.data.academic_agency_class_status.length; i++) {
+              if ((mojo.data.academic_agency_class_status[i]['unlock'] == 1) && (mojo.data.academic_agency_class_status[i]['state'] == 0)) {
+                if (/-/.test(mojo.data.academic_agency_class_status[i]['offline'])) {
+                  var offs = mojo.data.academic_agency_class_status[i]['offline'].split('-');
+                  var offline = new Date(offs[0], offs[1], offs[2], '23', '59', '59');
+                  if (now <= offline) {
+                    $('#grid-academic_class-footer').kendoGrid({
+                      pageable: false,
+                      height: 0,
+                      toolbar: kendo.template($('#template-academic_class_exists-footer').html())
+                    });
+                    $('#editor-academic_class-status').html( mojo.data.academic_agency_class_status[i]['online'] + ' ~ ' + mojo.data.academic_agency_class_status[i]['offline'] + ' 開放填報');
+                    mojo.is_unlock = mojo.data.academic_agency_class_status[i];
+console.log( mojo.is_unlock );
+                    mojo.if_unlock = true;
+                    break;
+                  }
+                } else if (mojo.data.academic_agency_class_status[i]['work_days']) {
+                  $('#grid-academic_class-footer').kendoGrid({
+                    pageable: false,
+                    height: 0,
+                    toolbar: kendo.template($('#template-academic_class_exists-footer').html())
+                  });
+                  $('#editor-academic_class-status').html('待審核');
+                }
+              }
+            }
+            if (!mojo.if_unlock) {
+              $('#grid-academic_class-footer').kendoGrid({
+                pageable: false,
+                height: 0,
+                toolbar: kendo.template($('#template-academic_class_apply-footer').html())
+              });
+            }
+          }
+          /*
           if (mojo.data.academic_agency_unlock && mojo.data.academic_agency_unlock.length) {
             if (mojo.data.academic_agency_unlock[0]['status']) {
               if (mojo.data.academic_agency_unlock[0]['state']) {
@@ -179,7 +220,7 @@
               toolbar: kendo.template($('#template-academic_class_apply-footer').html())
             });
           }
-
+          */
         </script>
     <?php endif; ?>
       </div>

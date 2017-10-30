@@ -93,6 +93,28 @@ class AjaxController extends Controller {
                 $rs = (new AjaxModel)->dbQuery('admin_academic_agency_status', array('era_id'=>$_POST['era_id'], 'quarter'=>$_POST['quarter']));
                 $res = array();
                 foreach ($rs as $r) {
+                    switch( intval($r['state']) )
+                    {
+                    case 0:
+                        if (intval($r['classes']) > 0) {
+                            if (strtotime('now') < strtotime($r['regular_offline'] . ' 23:59:59')) {
+                                $r['state'] = '填報中';
+                            } else {
+                                if ((intval($r['unlock']) == 1) && (sizeof($r['offline']) && (strtotime('now') < strtotime($r['offline'] . ' 23:59:59')))) {
+                                    $r['state'] = '延長填報期限';
+                                } else {
+                                    $r['state'] = '填報截止'; 
+                                }
+                            }    
+                        } else {
+                            $r['state'] = '未填報';
+                        }
+                        break;
+                    case 1:
+                        $r['state'] = '完成送件';
+                        break;
+                    }
+/*
                     switch( intval($r['state']) ) 
                     {
                     case -1:
@@ -121,6 +143,7 @@ class AjaxController extends Controller {
                         $r['state'] = '完成送件';
                         break;
                     }
+*/
                     array_push( $res, $r );
                 }
                 break;
