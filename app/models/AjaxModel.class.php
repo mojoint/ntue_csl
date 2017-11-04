@@ -980,7 +980,7 @@ class AjaxModel extends Model {
         case 'agent_academic_agency_report_era_pdf':
 
             /* academic_agency_report_era */
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, 0 `new_people`, 0 `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -998,10 +998,10 @@ class AjaxModel extends Model {
                     // country
                     $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`), 0) `people`';
                     $sql .= '  FROM `academic_agency_class` t1';
-                    $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
-                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`minor_code` = :minor_code';
+                    $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
                     $sql .= ' GROUP BY t1.`minor_code`';
-                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$val['quarter'], ':minor_code'=>$val['minor_code']));
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$val['minor_code']));
                     $res[$key]['new_people'] = $r[0]['new_people'];
                     $res[$key]['people'] = $r[0]['people'];
                     // info 
@@ -1170,7 +1170,7 @@ class AjaxModel extends Model {
         case 'agent_academic_agency_report_pdf':
 
             /* academic_agency_report_era */
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, SUM(t1.`new_people`) `new_people`, SUM(t1.`people`) `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, 0 `new_people`, 0 `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
             $sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`),2) `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
             $sql .= '(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`) `classes`, ';
@@ -1185,13 +1185,23 @@ class AjaxModel extends Model {
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
-                    $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
-                    $str .= '  FROM `academic_agency_class` t1';
-                    $str .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
-                    $str .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
-                    $str .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
-                    $str .= ' GROUP BY t1.`minor_code`';
-                    $r = $this->dbSelect($str, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$val['minor_code']));
+                    // country
+                    $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`), 0) `people`';
+                    $sql .= '  FROM `academic_agency_class` t1';
+                    $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
+                    //$sql .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$val['minor_code']));
+                    $res[$key]['new_people'] = $r[0]['new_people'];
+                    $res[$key]['people'] = $r[0]['people'];
+                    // info 
+                    $sql  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
+                    $sql .= '  FROM `academic_agency_class` t1';
+                    $sql .= ' INNER JOIN `target_list` t2 ON t1.`target_code` = t2.`code`';               
+                    $sql .= ' INNER JOIN `content_list` t3 ON t1.`content_code` = t3.`code`';               
+                    $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
+                    $sql .= ' GROUP BY t1.`minor_code`';
+                    $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$val['minor_code']));
                     $res[$key]['info'] = $r[0]['cname'];
                 }
             }
