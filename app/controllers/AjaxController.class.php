@@ -895,10 +895,10 @@ class AjaxController extends Controller {
 
                         $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
                         $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
-                        $major_sum[ 'S' ][ 'weekly' ] += intval( $r['weekly'] );
-                        $major_sum[ 'S' ][ 'avg_weekly' ] += intval( $r['avg_weekly'] );
-                        $major_sum[ 'S' ][ 'hours' ] += intval( $r['hours'] );
-                        $major_sum[ 'S' ][ 'total_hours' ] += intval( $r['total_hours'] );
+                        $major_sum[ 'S' ][ 'weekly' ] += floatval( $r['weekly'] );
+                        $major_sum[ 'S' ][ 'avg_weekly' ] += floatval( $r['avg_weekly'] );
+                        $major_sum[ 'S' ][ 'hours' ] += floatval( $r['hours'] );
+                        $major_sum[ 'S' ][ 'total_hours' ] += floatval( $r['total_hours'] );
                         $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
                         $major_sum[ 'S' ][ 'classes' ] += intval( $r['classes'] );
 
@@ -1067,9 +1067,9 @@ class AjaxController extends Controller {
     
                             $major_sum[ 'S' ][ 'new_people' ] += intval( $r['new_people'] );
                             $major_sum[ 'S' ][ 'people' ] += intval( $r['people'] );
-                            $major_sum[ 'S' ][ 'hours' ] += intval( $r['hours'] );
-                            $major_sum[ 'S' ][ 'weekly' ] += intval( $r['weekly'] );
-                            $major_sum[ 'S' ][ 'total_hours' ] += intval( $r['total_hours'] );
+                            $major_sum[ 'S' ][ 'hours' ] += floatval( $r['hours'] );
+                            $major_sum[ 'S' ][ 'weekly' ] += floatval( $r['weekly'] );
+                            $major_sum[ 'S' ][ 'total_hours' ] += floatval( $r['total_hours'] );
                             $major_sum[ 'S' ][ 'turnover' ] += intval( $r['turnover'] );
                             $major_cache = $r['major_code'];
                         }
