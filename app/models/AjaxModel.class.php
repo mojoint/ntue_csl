@@ -915,6 +915,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, 0 `new_people`, 0 `people`, COUNT(*) `classes`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, GROUP_CONCAT(t1.`note` SEPARATOR " ") `note`, IFNULL(MAX(t1.`latest`), "") `latest`, ';
             //$sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t2 WHERE t2.`agency_id` = t1.`agency_id` AND t2.`era_id` = t1.`era_id` AND t2.`quarter` = t1.`quarter` AND t2.`minor_code` = t1.`minor_code`),2) `avg_weekly`, t3.`cname` `minor_code_cname` ';
             //$sql .= 'TRUNCATE(SUM(t1.`weekly`)/COUNT(*)), 2) `avg_weekly`, ';
+            $sql .= 't3.`cname` `minor_code_cname`, ';
             $sql .= '0 `avg_weekly` ';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_class` t3 ON t1.`era_id` = t3.`era_id` AND t1.`minor_code` = t3.`minor_code`';
