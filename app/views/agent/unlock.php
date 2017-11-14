@@ -142,7 +142,7 @@
               if ((mojo.data.academic_agency_class_status[i]['unlock'] == 1) && (mojo.data.academic_agency_class_status[i]['state'] == 0)) {
                 if (/-/.test(mojo.data.academic_agency_class_status[i]['offline'])) {
                   var offs = mojo.data.academic_agency_class_status[i]['offline'].split('-');
-                  var offline = new Date(offs[0], offs[1], offs[2], '23', '59', '59');
+                  var offline = new Date(offs[0], parseInt(offs[1]) -1, offs[2], '23', '59', '59');
                   if (now <= offline) {
                     $('#grid-academic_class-footer').kendoGrid({
                       pageable: false,
@@ -151,7 +151,6 @@
                     });
                     $('#editor-academic_class-status').html( mojo.data.academic_agency_class_status[i]['online'] + ' ~ ' + mojo.data.academic_agency_class_status[i]['offline'] + ' 開放填報');
                     mojo.is_unlock = mojo.data.academic_agency_class_status[i];
-console.log( mojo.is_unlock );
                     mojo.if_unlock = true;
                     break;
                   }

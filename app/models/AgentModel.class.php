@@ -15,17 +15,6 @@ class AgentModel extends Model {
             $sql = 'SELECT a.*, b.cname AS agency_name, b.aka, b.state AS agency_state FROM `academic_agency` a, `academic_institution` b WHERE a.id = :agency_id AND a.code = b.code';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
-        case 'academic_agency_set':
-            $sql = 'SELECT * FROM `academic_agency` WHERE agency_id = :agency_id';
-            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
-            if (0 == sizeof($res)) {
-                $sql = 'INSERT INTO `academic_agency` (agency_id) VALUES (:agency_id)';
-                $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id']));
-                $sql = 'SELECT * FROM `academic_agency` WHERE agency_id = :agency_id';
-                $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
-            }
-            return $res;
-            break;
         case 'academic_agency_fill':
             $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
             $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
