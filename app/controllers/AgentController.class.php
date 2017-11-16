@@ -6,6 +6,7 @@ class AgentController extends Controller {
             $this->assign('title', '華語文-機構');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('dashboard'));
+            $this->assign('dashboard', (new AgentModel)->dbQuery('dashboard'));
             $agent_contract_count = (new AgentModel)->dbQuery('agent_contract_count',array('agency_id'=>$_SESSION['agent']['agency_id']));
             $this->assign('agent_contract_count', $agent_contract_count);
 debugger('mhho','agent contact count:'.$agent_contract_count );
@@ -177,7 +178,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
         $currents = array('fill'=>'', 'info'=>'', 'report'=>'', 'unlock'=>'', 'message'=>'', 'y105'=>'');
         $currents[$tag] = 'current';
         $agency_name = (isset($_SESSION['agent']))? $_SESSION['agent']['academic_institution_cname'] : '機構';
-        $html  = '<h2 id="logo"><a href="#">'. $agency_name .'</a></h2>';
+        $html  = '<h2 id="logo"><a href="/agent/dashboard/">'. $agency_name .'</a></h2>';
         $html .= '<nav id="nav">';
         $html .=  '<ul>';
         $html .=   '<li class="'. $currents['fill'] .'"><a href="/agent/fill/">填報績效</a></li>';

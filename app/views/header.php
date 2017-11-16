@@ -37,6 +37,7 @@
   <!--  <script src="/public/js/exceplus-2.5.js"></script> -->
   <script src="/public/js/webtoolkit.base64.js"></script>
   <script src="/public/js/moment-with-locales.min.js"></script>
+  <script src="/public/js/tinymce/tinymce.min.js"></script>
   <!-- mojo -->
   <link rel="stylesheet" type="text/css" href="/public/css/mojo.css"/>
   <script>
@@ -131,7 +132,7 @@
       }
     };
   </script>
-  <script src="/public/js/mojo.combo.v11.14.js"></script>
+  <script src="/public/js/mojo.combo.v11.17.js"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">

@@ -139,14 +139,18 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':online'=>$data['online'], ':offline'=>$data['offline'], ':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `id` = :id';
             $unlock = $this->dbSelect($sql, array(':id'=>$data['id']));
-            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
-            $status =  $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
-            if (sizeof($status)) {
-                $sql = 'UPDATE `academic_agency_class_status` SET `state` = 0, `unlock` = 1 WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
-                return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
+            if (sizeof($unlock)) {
+                $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+                $status =  $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
+                if (sizeof($status)) {
+                    $sql = 'UPDATE `academic_agency_class_status` SET `state` = 0, `unlock` = 1, `online` = :online, `offline` = :offline WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+                    return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter'], ':online'=>$unlock[0]['online'], ':offline'=>$unlock[0]['offline']));
+                } else {
+                    $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, 0, 1, :minors, :work_days, :online, :offline, :note, 0)';
+                    return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter'], ':minors'=>$unlock[0]['minors'], ':work_days'=>$unlock[0]['work_days'], ':online'=>$unlock[0]['online'], ':offline'=>$unlock[0]['offline'], ':note'=>$unlock[0]['note']));
+                }
             } else {
-                $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, 0, 1, :minors, :work_days, :online, :offline, :note, 0)';
-                return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter'], ':minors'=>$unlock[0]['minors'], ':work_days'=>$unlock[0]['work_days'], ':online'=>$unlock[0]['online'], ':offline'=>$unlock[0]['offline'], ':note'=>$unlock[0]['note']));
+                return array();
             }
             break;
         case 'admin_academic_agency_unlock_no':
@@ -539,6 +543,11 @@ class AjaxModel extends Model {
             $cnt = $this->dbUpdate($sql, array(':reply_content'=>$data['reply_content'],':admin_id'=>$data['admin_id'],':message_id'=>$data['message_id']));
             return ['cnt'=>$cnt];
             break;						
+        case 'admin_dashboard_update':
+            $sql = 'UPDATE `official` SET `dashboard` = :dashboard';
+            $cnt = $this->dbUpdate($sql, array(':dashboard'=>$data['dashboard']));
+            return ['cnt'=>$cnt];
+            break;
         case 'admin_postman_receverlist':
             $sql  = 'SELECT cname,email ';
             $sql .= '  FROM `academic_agency_contact` ';
@@ -1225,7 +1234,7 @@ $res['sql'] = $str;
             $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
             $classes = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             if (sizeof($res)) {
-                $sql = 'UPDATE `academic_agency_class_status` SET `classes` = :classes, `unlock` = 1, `minors` = :minors, `work_days` = :work_days, `note` = :note WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';  
+                $sql = 'UPDATE `academic_agency_class_status` SET `classes` = :classes, `unlock` = 1, `minors` = :minors, `work_days` = :work_days, `online` = "", `offline` = "", `note` = :note WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';  
                 $cnt = $this->dbUpdate($sql, array(':classes'=>sizeof($classes), ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note'], ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             } else {
                 $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :classes, 1, :minors, :work_days, "", "", :note, 0)';

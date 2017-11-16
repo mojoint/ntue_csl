@@ -3,9 +3,7 @@
     <?php
         $html = '';
         if (isset($dashboard)) {
-            $html .= '<div class="table-grid">';
-            $html .= '<div id="grid"></div>';
-            $html .= '</div>';
+            $html .= '<div id="dashboard">'. base64_decode($dashboard[0]['dashboard']) .'</div>';
         }
         echo $html;
     ?>

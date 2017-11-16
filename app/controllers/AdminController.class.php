@@ -6,6 +6,7 @@ class AdminController extends Controller {
             $this->assign('title', '華語文-管理者');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('dashboard'));
+            $this->assign('dashboard', (new AdminModel)->dbQuery('dashboard'));
             $this->render();
         } else {
             $this->redirect();
@@ -113,12 +114,13 @@ class AdminController extends Controller {
     }
 
     function sidebars( $current ) {
-        $currents = array('status'=>'', 'postman'=>'', 'report'=>'', 'maintain'=>'', 'unlock'=>'', 'settings'=>'', 'message'=>'');
+        $currents = array('dashboard'=>'', 'status'=>'', 'postman'=>'', 'report'=>'', 'maintain'=>'', 'unlock'=>'', 'settings'=>'', 'message'=>'');
         $currents[$current] = 'current';
      
         $html  = '<h2 id="logo"><a href="#">管理者</a></h2>';
         $html .= '<nav id="nav">';
         $html .=  '<ul>';
+        $html .=   '<li class="'. $currents['dashboard'] .'"><a href="/admin/dashboard/">系統公告</a></li>';
         $html .=   '<li class="'. $currents['status'] .'"><a href="/admin/status/">填報狀況</a></li>';
         $html .=   '<li class="'. $currents['report'] .'"><a href="/admin/report/">管理報表</a></li>';
         $html .=   '<li class="'. $currents['postman'] .'"><a href="/admin/postman/">小郵差</a></li>';

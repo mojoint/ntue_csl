@@ -209,6 +209,17 @@ class AjaxController extends Controller {
                 break;
             }
             break;
+        case 'dashboard':
+            switch( $val )
+            {
+            case 'update':
+                $data = array('dashboard'=>$_POST['dashboard']);
+                $id = (new AjaxModel)->dbLogger('admin', $key, $val, $data['dashboard']);
+                $res = (new AjaxModel)->dbQuery('admin_dashboard_update', $data);
+                $json = array("code"=>1, "data"=>$res);
+                break;
+            }
+            break;
         case 'profile':
             switch( $val )
             {

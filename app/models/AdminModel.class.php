@@ -5,7 +5,8 @@ class AdminModel extends Model {
         switch($key)
         {
         case 'dashboard':
-
+            $sql = 'SELECT `dashboard` FROM `official` WHERE "NTUE" = :ntue';
+            return $this->dbSelect($sql, array(':ntue'=>"NTUE"));
             break;
         case 'academic_agency':
             $sql  = 'SELECT t1.*, t2.`cname` AS `institution_cname`, t2.`aka` AS `institution_aka`, IFNULL(t3.`administration`, 0) AS `academic_agency_hr_administration`, IFNULL(t3.`subject`, 0) AS `academic_agency_hr_subject`, IFNULL(t3.`adjunct`, 0) AS `academic_agency_hr_adjunct`, IFNULL(t3.`reserve`, 0) AS `academic_agency_hr_reserve` ';
@@ -84,7 +85,9 @@ class AdminModel extends Model {
                 foreach ( $minors as $minor ) {
                     $sql = 'SELECT `minor_code` FROM `academic_class` WHERE `id` = :id';
                     $minor_code = $this->dbSelect($sql, array(':id'=>$minor));
-                    array_push($minors_code, $minor_code[0]['minor_code']);
+                    if (sizeof($minor_code)) {
+                        array_push($minors_code, $minor_code[0]['minor_code']);
+                    }
                 }
                 $v['minors_code'] = implode(',', $minors_code);
                 $res[$k] = $v;

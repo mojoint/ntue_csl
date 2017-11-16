@@ -44,7 +44,6 @@
         </script>
         <div id="grid-academic_class-footer" class="col-xs-12"></div>
         <script>
-          //mojo.data.academic_agency_unlock = JSON.parse('<?php echo json_encode($academic_agency_unlock); ?>');
           mojo.data.academic_agency_class_status = JSON.parse('<?php echo json_encode($academic_agency_class_status); ?>');
           var academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
           var academic_class = JSON.parse('<?php echo json_encode($academic_class); ?>');
