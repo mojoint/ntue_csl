@@ -940,7 +940,6 @@ class AjaxModel extends Model {
 
             $sql .= ' GROUP BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
             $sql .= ' ORDER BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
-$str = $sql;
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
@@ -966,7 +965,6 @@ $str = $sql;
                 }
             }
 
-$res['sql'] = $str;
             return $res;
             // get data from country
 
