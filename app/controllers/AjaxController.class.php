@@ -845,8 +845,6 @@ class AjaxController extends Controller {
 
                     //$res = (new AjaxModel)->dbQuery('agent_academic_agency_report_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
                     $res = (new AjaxModel)->dbQuery('agent_academic_agency_report_era_summary', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
-print_r ($res);
-exit;
                     $knt = 1;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code'] . '-'. $target['institution_cname'] . $target['cname'] );
                     $knt++;
