@@ -478,9 +478,22 @@ class AjaxModel extends Model {
                 $common = intval($era[0]['common']) - 1;
                 $sql = 'SELECT * FROM `academic_era` WHERE `common` = :common';
                 $era_last = $this->dbSelect($sql, array(':common'=>$common));
-                $sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+
+                $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`';
+                $sql .= '  FROM `academic_agency_class` t1';
+                $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                $sql .= ' WHERE t1.`agency_id` = :agency_id';
+                $sql .= '   AND t1.`era_id` = :era_id';
+
+                //$sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
                 $cur = $this->dbSelect($sql, array(':era_id'=>$data['era_id'])); 
-                $sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+
+                $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`';
+                $sql .= '  FROM `academic_agency_class` t1';
+                $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
+                $sql .= ' WHERE t1.`agency_id` = :agency_id';
+                $sql .= '   AND t1.`era_id` = :era_id';
+                //$sql = 'SELECT SUM(`new_people`) `new_people` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
                 $last = $this->dbSelect($sql, array(':era_id'=>$era_last['id'])); 
             }
             return array('cur'=>$cur[0]['new_people'], 'last'=>$last[0]['new_people'], 'agency_id'=>$data['agency_id']);
