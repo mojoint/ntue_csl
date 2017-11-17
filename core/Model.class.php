@@ -39,7 +39,7 @@ class Model
     }  
 
     public function dbLogger($path, $key, $val, $data) {
-        $sql = 'INSERT INTO `logger` (`id`, `uid`, `path`, `key`, `val`, `data`) VALUES (0, :uid, :path, :key, :val, :data)';
+        $sql = 'INSERT INTO `logger` (`id`, `uid`, `path`, `key`, `val`, `data`, `timestamp`) VALUES (0, :uid, :path, :key, :val, :data, now())';
         if (isset($_SESSION['admin'])) {
             $uid = $_SESSION['admin']['id'];
         } else if (isset($_SESSION['agent'])) {
