@@ -69,12 +69,27 @@ class AgentModel extends Model {
 */
             break;
         case 'academic_agency_class':
-            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
+            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, 0 `new_people`, 0 `people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
             $sql .= ' INNER JOIN `minor_list` t3 ON t1.`minor_code` = t3.`code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            if (sizeof($res)) {
+                foreach( $res as $key=>$val ) {
+                    $sql  = 'SELECT SUM(t1.`new_male` + t1.`new_female`) `new_people`, SUM(t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`';
+                    $sql .= '  FROM `academic_agency_class_country` t1';
+                    $sql .= ' WHERE t1.`class_id` = :class_id';
+                    $sql .= ' GROUP BY t1.`class_id`';
+                    $rs = $this->dbSelect($sql, array(':class_id'=>$val['id']));
+$res[$key]['rs'] = $rs;
+                    if (sizeof($rs)) {
+                        $res[$key]['people'] = $rs[0]['people'];
+                        $res[$key]['new_people'] = $rs[0]['new_people'];
+                    }
+                }
+            }
+            return $res;
             break;
         case 'academic_agency_class_last':
             $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';

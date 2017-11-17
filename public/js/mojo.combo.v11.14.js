@@ -7,6 +7,7 @@
     mojo.dialog = $('#dialog');
     mojo.errcode = $('body').attr('data-error');
     mojo.quarters = {1: '第1季', 2: '第2季', 3: '第3季', 4: '第4季'};
+    mojo.if_ajax = false;
 
     if (mojo.mojo != "") {
         mojo.mojoint = parseInt(mojo.mojo.substr(0,1));
@@ -24,12 +25,16 @@
       mojo.ajaxurl = '/ajax/' + key + '/' + val + '/' + params + '/';
 console.log( mojo.ajaxurl );
 console.log( data );
+      if (mojo.if_ajax)
+        return false;
+      mojo.if_ajax = true;
       $.ajax({
         url: mojo.ajaxurl,
         type: 'post',
         dataType: 'json',
         data: data,
         success: function(res) {
+          mojo.if_ajax = false;
           if (1 == parseInt(res.code)) {
 console.log( res );
             switch(key)
@@ -1132,6 +1137,16 @@ console.log( res );
     });
     /* =========================================== */
     /* ------------------- admin ------------------- */
+    /* dashboard */
+    mojo.watch_admin_dashboard = function() {
+      $('#btn-dashboard').on('click', function(e) {
+        e.preventDefault();
+        mojo.ajax('admin', 'dashboard', 'update', {'dashboard': Base64.encode( tinymce.get('dashboard').getContent() )});
+      });
+    };
+
+    if (mojo.mojo_if('sec-admin_dashboard'))
+      mojo.watch_admin_dashboard();
     /* status */
 
     mojo.watch_status = function() {
