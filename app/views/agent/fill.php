@@ -6,6 +6,11 @@
         mojo.data.academic_agency_fill = JSON.parse('<?php echo json_encode($academic_agency_fill); ?>');
       <?php endif; ?>
       <?php if (isset($academic_agency_class)) : ?>
+      <?php
+        foreach( $academic_agency_class as $key=>$val ) {
+            $academic_agency_class[$key]['cname'] = base64_encode( $val['cname'] );
+        }
+      ?>
         mojo.data.academic_agency_class = JSON.parse('<?php echo json_encode($academic_agency_class); ?>');
       <?php endif; ?>
     </script>
