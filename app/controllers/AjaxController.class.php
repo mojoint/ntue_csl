@@ -273,6 +273,7 @@ class AjaxController extends Controller {
             {                                                                             
             case 'emailSend':
                if (isset($_SESSION['admin'])) {
+                    mb_internal_encoding('UTF-8');
                     $receverCnt = 0;
                     switch($_POST['emailRcptTo'])
                     {
@@ -282,11 +283,11 @@ class AjaxController extends Controller {
                             foreach($receverList as $recever){
                                 $receverCnt++;
                                 $email = $recever;
-                                $subject = $_POST['emailSubject'];
+                                $subject = mb_encode_mimeheader($_POST['emailSubject'], 'UTF-8');
                                 $message = $_POST['emailBody']."\n";
                                 $from = 'enjouli82029@tea.ntue.edu.tw';
                                 $headers = "Content-type: text/html; charset=UTF-8\r\n";
-                                $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                                $headers .= 'From: '. mb_encode_mimeheader('李恩柔', 'UTF-8') .'<' . $from . "> \r\n".
                                 'Reply-To: ' . $from . " \r\n".
                                 'X-Mailer: PHP/'. phpversion();
                                 mail( $email, $subject, $message, $headers );
@@ -305,11 +306,12 @@ class AjaxController extends Controller {
                             $emailName = $recever['cname'];
                             debugger('postman_mhho',date('Y-m-d H:i:s',time())."\t". $receverCnt."\t".$_POST['emailSubject']."\t".$email."\t".$emailName);
                             // $email = 'thucop@gmail.com'; 
-                            $subject = $_POST['emailSubject'];
+                            //$subject = $_POST['emailSubject'];
+                            $subject = mb_encode_mimeheader($_POST['emailSubject'], 'UTF-8');
                             $message = $_POST['emailBody']."\n";
                             $from = 'enjouli82029@tea.ntue.edu.tw';
                             $headers = "Content-type: text/html; charset=UTF-8\r\n";
-                            $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                            $headers .= 'From: 李恩柔<' . $from . "> \r\n".
                             'Reply-To: ' . $from . " \r\n".
                             'X-Mailer: PHP/'. phpversion();
                             mail( $email, $subject, $message, $headers );
@@ -325,7 +327,8 @@ class AjaxController extends Controller {
                                 $message = $_POST['emailBody']."\n";
                                 $from = 'enjouli82029@tea.ntue.edu.tw';
                                 $headers = "Content-type: text/html; charset=UTF-8\r\n";
-                                $headers = 'From: 李恩柔<' . $from . "> \r\n".
+                                //$headers = 'From: 李恩柔<' . $from . "> \r\n".
+                                $headers .= 'From: '. mb_encode_mimeheader('李恩柔', 'UTF-8') .'<' . $from . "> \r\n".
                                 'Reply-To: ' . $from . " \r\n".
                                 'X-Mailer: PHP/'. phpversion();
                                 mail( $email, $subject, $message, $headers );

@@ -82,7 +82,6 @@ class AgentModel extends Model {
                     $sql .= ' WHERE t1.`class_id` = :class_id';
                     $sql .= ' GROUP BY t1.`class_id`';
                     $rs = $this->dbSelect($sql, array(':class_id'=>$val['id']));
-$res[$key]['rs'] = $rs;
                     if (sizeof($rs)) {
                         $res[$key]['people'] = $rs[0]['people'];
                         $res[$key]['new_people'] = $rs[0]['new_people'];
