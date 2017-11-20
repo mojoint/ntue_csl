@@ -138,28 +138,43 @@
             mojo.if_unlock = false;
             var now = new Date();
             for (var i=0; i<mojo.data.academic_agency_class_status.length; i++) {
-              if ((mojo.data.academic_agency_class_status[i]['unlock'] == 1) && (mojo.data.academic_agency_class_status[i]['state'] == 0)) {
-                if (/-/.test(mojo.data.academic_agency_class_status[i]['offline'])) {
-                  var offs = mojo.data.academic_agency_class_status[i]['offline'].split('-');
-                  var offline = new Date(offs[0], parseInt(offs[1]) -1, offs[2], '23', '59', '59');
-                  if (now <= offline) {
+              //if ((mojo.data.academic_agency_class_status[i]['unlock'] == 1) && (mojo.data.academic_agency_class_status[i]['state'] == 0)) {
+              if (mojo.data.academic_agency_class_status[i]['unlock'] == 1) {
+                if (mojo.data.academic_agency_class_status[i]['state'] == 0) {
+                  if (/-/.test(mojo.data.academic_agency_class_status[i]['offline'])) {
+                    var offs = mojo.data.academic_agency_class_status[i]['offline'].split('-');
+                    var offline = new Date(offs[0], parseInt(offs[1]) -1, offs[2], '23', '59', '59');
+                    if (now <= offline) {
+                      $('#grid-academic_class-footer').kendoGrid({
+                        pageable: false,
+                        height: 0,
+                        toolbar: kendo.template($('#template-academic_class_exists-footer').html())
+                      });
+                      mojo.if_unlock = true;
+                      mojo.is_unlock = mojo.data.academic_agency_class_status[i];
+                      $('#editor-academic_class-status').html( mojo.data.academic_agency_class_status[i]['online'] + ' ~ ' + mojo.data.academic_agency_class_status[i]['offline'] + ' 開放填報');
+                      break;
+                    }
+                  } else if (mojo.data.academic_agency_class_status[i]['work_days']) {
                     $('#grid-academic_class-footer').kendoGrid({
                       pageable: false,
                       height: 0,
                       toolbar: kendo.template($('#template-academic_class_exists-footer').html())
                     });
-                    $('#editor-academic_class-status').html( mojo.data.academic_agency_class_status[i]['online'] + ' ~ ' + mojo.data.academic_agency_class_status[i]['offline'] + ' 開放填報');
-                    mojo.is_unlock = mojo.data.academic_agency_class_status[i];
+                    $('#editor-academic_class-status').html('待審核');
+                  }
+                } else if (mojo.data.academic_agency_class_status[i]['state'] == 1) {
+                  if (mojo.data.academic_agency_class_status[i]['offline'] == "") {
+                    $('#grid-academic_class-footer').kendoGrid({
+                      pageable: false,
+                      height: 0,
+                      toolbar: kendo.template($('#template-academic_class_exists-footer').html())
+                    });
                     mojo.if_unlock = true;
+                    mojo.is_unlock = mojo.data.academic_agency_class_status[i];
+                    $('#editor-academic_class-status').html('待審核');
                     break;
                   }
-                } else if (mojo.data.academic_agency_class_status[i]['work_days']) {
-                  $('#grid-academic_class-footer').kendoGrid({
-                    pageable: false,
-                    height: 0,
-                    toolbar: kendo.template($('#template-academic_class_exists-footer').html())
-                  });
-                  $('#editor-academic_class-status').html('待審核');
                 }
               }
             }
