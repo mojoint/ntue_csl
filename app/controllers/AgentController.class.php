@@ -26,12 +26,15 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
                 $_SESSION['agent']['quarter_id'] = $academic_agency_fill[0]['id'];
+                $academic_agency_class_status = (new AgentModel)->dbQuery('academic_agency_class_status_query', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$academic_agency_fill[0]['era_id'], 'quarter'=>$academic_agency_fill[0]['quarter']));
                 $this->assign('academic_agency_fill', $academic_agency_fill);
                 $this->assign('academic_era_quarter', $academic_agency_fill[0]['cname']);
                 $this->assign('era_id', $academic_agency_fill[0]['era_id']);
                 $this->assign('quarter', $academic_agency_fill[0]['quarter']);
                 $this->assign('quarter_id', $academic_agency_fill[0]['id']);
+                $this->assign('classes', $academic_agency_class_status[0]['classes']);
                 $this->assign('academic_agency_class', (new AgentModel)->dbQuery('academic_agency_class', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$academic_agency_fill[0]['era_id'], 'quarter'=>$academic_agency_fill[0]['quarter'])));
+                
             } else { 
                 $this->assign('quarter_id', $quarter_id);
             }

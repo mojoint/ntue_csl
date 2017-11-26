@@ -562,6 +562,10 @@ class AjaxModel extends Model {
             return ['cnt'=>$cnt];
             break;
         case 'admin_postman_receverlist':
+            $sql = 'SELECT * FROM `academic_era` WHERE `common` = :common';
+            $era = $this->dbSelect($sql, array(':common'=>date('Y')));
+            $era_id = $era[0]['id'];
+            $quarter = 0;
             $sql  = 'SELECT cname,email ';
             $sql .= '  FROM `academic_agency_contact` ';
             $sql .= ' WHERE "NTUE" = :ntue ';
@@ -570,16 +574,20 @@ class AjaxModel extends Model {
             switch($data['rcpttotype']){
                 /* 所有單位人員 */
                 case '1':
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix));
                     break;
                 /* 所有單位主管 */
                 case '2':
-                    $sql .= 'and `manager` = "1"';
+                    $sql .= 'and `manager` = :manager';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':manager'=>1));
                     break;
                 /* 所有單位職員 */
                 case '3':
-                    $sql .= 'and `staff` = "1"';
+                    $sql .= 'and `staff` = :staff';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':staff'=>1));
                     break;
                 /* 所有未填報單位聯絡人 */
+                /*
                 case '4':
                     $sql .= 'AND `agency_id` IN ( ';
 					$sql .= 'SELECT DISTINCT t6.`id` ';
@@ -600,8 +608,28 @@ class AjaxModel extends Model {
 					$sql .= '     ) ';   
                     $sql .= ')' ;
                     break;
+                */
+                case 5:
+                    $quarter = 1;
+                    $sql .= '   AND `agency_id` IN (SELECT t1.`agency_id` FROM `academic_agency_class_status` t1 WHERE t1.`classes` = 0 AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter)';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':era_id'=>$era_id, ':quarter'=>$quarter));
+                    break;
+                case 6:
+                    $quarter = 2;
+                    $sql .= '   AND `agency_id` IN (SELECT t1.`agency_id` FROM `academic_agency_class_status` t1 WHERE t1.`classes` = 0 AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter)';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':era_id'=>$era_id, ':quarter'=>$quarter));
+                    break;
+                case 7:
+                    $quarter = 3;
+                    $sql .= '   AND `agency_id` IN (SELECT t1.`agency_id` FROM `academic_agency_class_status` t1 WHERE t1.`classes` = 0 AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter)';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':era_id'=>$era_id, ':quarter'=>$quarter));
+                    break;
+                case 8:
+                    $quarter = 4;
+                    $sql .= '   AND `agency_id` IN (SELECT t1.`agency_id` FROM `academic_agency_class_status` t1 WHERE t1.`classes` = 0 AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter)';
+                    return $this->dbSelect($sql,array(':ntue'=>MD5Prefix, ':era_id'=>$era_id, ':quarter'=>$quarter));
+                    break;
             }
-            return $this->dbSelect($sql,array(':ntue'=>MD5Prefix));
             break;
         /* agent */
         case 'agent_academic_agency':

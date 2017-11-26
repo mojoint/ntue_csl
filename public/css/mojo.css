@@ -202,3 +202,8 @@ label.warning {
 #btn-academic_agency_class-send.btn-primary {
   background-color: #3343A7;
 }
+
+.btn-disabled {
+  margin: 0.16em;
+  color: #ccc;
+}

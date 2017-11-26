@@ -2,14 +2,18 @@
 <script src="/public/js/postman.adm.js"></script>
 <section id="sec-postman">
   <div class="container">
-    <?php if ($_SESSION['admin']) : ?>
+    <?php if ($_SESSION['admin']) : $year = date("Y"); ?>
       <div class="container">
         <div style="width:95%;">
           致：<select id="email-rcptto">
                 <option value="1">所有單位人員</option>
                 <option value="2">所有單位主管</option>
                 <option value="3">所有單位職員</option>
-                <option value="4">所有未填報單位聯絡人</option>
+                <!--<option value="4">所有未填報單位聯絡人</option>-->
+                <option value="5"><?php echo $year ;?> 第一季未填報單位聯絡人</option>
+                <option value="6"><?php echo $year ;?> 第二季未填報單位聯絡人</option>
+                <option value="7"><?php echo $year ;?> 第三季未填報單位聯絡人</option>
+                <option value="8"><?php echo $year ;?> 第四季未填報單位聯絡人</option>
                 <option value="9">只寄副本(測試收發用)</option>
               </select>
         </div>

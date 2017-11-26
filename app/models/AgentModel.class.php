@@ -119,6 +119,10 @@ class AgentModel extends Model {
             $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
+        case 'academic_agency_class_status_query':
+            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            break;
         case 'academic_agency_contact':
             $sql = 'SELECT * FROM `academic_agency_contact` WHERE `agency_id` = :agency_id ORDER by `id` DESC';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
