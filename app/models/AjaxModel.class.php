@@ -818,7 +818,7 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'agent_academic_agency_hr_add':
-            $sql = 'SELECT `era_id` FROM `academic_agency_hr` WHERE agency_id = :agency_id ORDER by `id` DESC LIMIT 1';
+            $sql = 'SELECT `era_id` FROM `academic_agency_hr` WHERE agency_id = :agency_id ORDER by `agency_id` DESC LIMIT 1';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             if (1 == sizeof($res)) {
                 $sql = 'SELECT * FROM `academic_era` WHERE `id` > :id ORDER BY `id` ASC LIMIT 1';
