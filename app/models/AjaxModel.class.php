@@ -672,19 +672,25 @@ class AjaxModel extends Model {
             } 
 
             // update academic_ageny_status
+            $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter ORDER BY `id` DESC';
+            $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+            $classes = sizeof($res);
             $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             if (sizeof($res)) {
-                $sql = 'UPDATE `academic_agency_class_status` t1 SET t1.`classes` = (SELECT COUNT(*) FROM `academic_agency_class` t2 WHERE t1.`agency_id` = t2.`agency_id` AND t1.`era_id` = t2.`era_id` AND t1.`quarter` = t2.`quarter`) WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
-                $cnt = $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
+                $sql = 'UPDATE `academic_agency_class_status` t1 SET t1.`classes` = :classes WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
+                $cnt = $this->dbUpdate($sql, array(':classes'=>$classes, ':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             } else {
                 $sql = 'SELECT * FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `quarter` = :quarter';
                 $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
                 $unlock = 0;
                 if (sizeof($res)) {
                     $unlock = $res[0]['unlock'];
-                    $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, 1, :unlock, :minors, :work_days, :online, :offline, :note, 0)';
-                    $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':unlock'=>$unlock, ':minors'=>$res[0]['minors'], ':work_days'=>$res[0]['work_days'], ':online'=>$res[0]['online'], ':offline'=>$res[0]['offline'], ':note'=>$res[0]['note']));
+                    $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :classes, :unlock, :minors, :work_days, :online, :offline, :note, 0)';
+                    $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':classes'=>$classes, ':unlock'=>$unlock, ':minors'=>$res[0]['minors'], ':work_days'=>$res[0]['work_days'], ':online'=>$res[0]['online'], ':offline'=>$res[0]['offline'], ':note'=>$res[0]['note']));
+                } else {
+                    $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :classes, 0, "", 0, "", "", "", 0)';
+                    $id = $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':classes'=>$classes));
                 }
             }
 
@@ -1033,6 +1039,8 @@ class AjaxModel extends Model {
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
                     $res[$key]['avg_weekly'] = number_format(floatval($val['weekly']/$val['classes']), 2);
+                    $res[$key]['new_people'] = 0;
+                    $res[$key]['people'] = 0;
                     // country
                     $sql  = 'SELECT IFNULL(SUM(t2.`new_male` + t2.`new_female`), 0) `new_people`, IFNULL(SUM(t2.`male` + t2.`female` + t2.`new_male` + t2.`new_female`), 0) `people`';
                     $sql .= '  FROM `academic_agency_class` t1';
@@ -1040,8 +1048,10 @@ class AjaxModel extends Model {
                     $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`minor_code` = :minor_code';
                     $sql .= ' GROUP BY t1.`minor_code`';
                     $r = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':minor_code'=>$val['minor_code']));
-                    $res[$key]['new_people'] = $r[0]['new_people'];
-                    $res[$key]['people'] = $r[0]['people'];
+                    if (sizeof($r)) {
+                        $res[$key]['new_people'] = $r[0]['new_people'];
+                        $res[$key]['people'] = $r[0]['people'];
+                    }
                     // info 
                     $str  = 'SELECT GROUP_CONCAT(CONCAT(t1.`cname`, "-", t2.`cname`, "-", t3.`cname`) SEPARATOR " ") `cname`';
                     $str .= '  FROM `academic_agency_class` t1';

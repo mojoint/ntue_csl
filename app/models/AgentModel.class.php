@@ -18,10 +18,11 @@ class AgentModel extends Model {
         case 'academic_agency_fill':
             $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
             $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
-
+            $quarter = array();
             $unlock = false;
             if (sizeof($status)) {
                 foreach($status as $state) {
+                    $quarter['quarter' . $state['quarter']] = $state['state'];
                     if (!$state['state']) {
                         $now = time();
                         if (($now > strtotime($state['online'] . ' 00:00:00')) && ($now < strtotime($state['offline'] . ' 23:59:59'))) {
@@ -38,35 +39,13 @@ class AgentModel extends Model {
                 $sql .= '  FROM `academic_era_quarter` t1';
                 $sql .= ' WHERE NOW() BETWEEN CONCAT(t1.`online`, " 00:00:00") AND CONCAT(t1.`offline`, " 23:59:59") AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
                 $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
+                if (sizeof($res)) {
+                    if ($quarter['quarter' . $res[0]['quarter']]) {
+                        $res = array();
+                    }
+                }       
             }
             return $res;
-/*
-            $sql = 'SELECT `era_id`, `quarter` FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `state` = 1 AND NOW() BETWEEN CONCAT(`online`, " 00:00:00")  AND CONCAT(`offline`, " 23:59:59")';
-            $unlock = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
-            $sql = 'SELECT COUNT(*) `cnt` FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
-            $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$unlock[0]['era_id'], ':quarter'=>$unlock[0]['quarter']));
-            if (sizeof($unlock) && ($status[0]['cnt'] == 0)) {
-                $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
-                $era_quarter = $this->dbSelect($sql, array(':era_id'=>$res[0]['era_id'], 'quarter'=>$res[0]['quarter']));
-                return $era_quarter;
-            } else {
-                $sql  = 'SELECT t1.* ';
-                $sql .= '  FROM `academic_era_quarter` t1';
-                $sql .= ' WHERE CURDATE() BETWEEN t1.`online` AND t1.`offline` AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
-                $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
-                if (sizeof($res)) {
-                    $sql = 'SELECT * FROM `academic_agency_class` WHERE `agency_id` = :agency_id AND `state` = 1 AND `era_id` = :era_id AND `quarter` = :quarter';
-                    $result = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
-                    if (sizeof($result)) {
-                        return array();
-                    } else {
-                        return $res;
-                    }
-                } else {
-                    return $res;
-                }
-            }
-*/
             break;
         case 'academic_agency_class':
             $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, 0 `new_people`, 0 `people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';

@@ -4,6 +4,7 @@
     <script>
       <?php if (isset($academic_agency_fill)) : ?>
         mojo.data.academic_agency_fill = JSON.parse('<?php echo json_encode($academic_agency_fill); ?>');
+console.log( mojo.data.academic_agency_fill );
       <?php endif; ?>
       <?php if (isset($academic_agency_class)) : ?>
       <?php
