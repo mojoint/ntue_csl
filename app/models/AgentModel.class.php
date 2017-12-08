@@ -25,7 +25,7 @@ class AgentModel extends Model {
                     $quarter['quarter' . $state['quarter']] = $state['state'];
                     if (!$state['state']) {
                         $now = time();
-                        if (($now > strtotime($state['online'] . ' 00:00:00')) && ($now < strtotime($state['offline'] . ' 23:59:59'))) {
+                        if ((preg_match('/(\d){4}-(\d){2}-(\d){2}/', $state['online'])) && (preg_match('/(\d){4}-(\d){2}-(\d){2}/', $state['offline'])) && ($now > strtotime($state['online'] . ' 00:00:00')) && ($now < strtotime($state['offline'] . ' 23:59:59'))) {
                             $unlock = true;
                             $sql = 'SELECT * FROM `academic_era_quarter` WHERE `era_id` = :era_id AND `quarter` = :quarter';
                             $res = $this->dbSelect($sql, array(':era_id'=>$state['era_id'], ':quarter'=>$state['quarter']));
