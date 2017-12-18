@@ -3515,7 +3515,8 @@ class AjaxController extends Controller {
                 $message = str_ireplace("@@@url@@@", $url, str_ireplace("@@@username@@@", $username, $official['message_agent_mod']));
                 break;
             }
-            $headers = 'From: '. $official['cname'] . '<' . $official['email_from'] . "> \r\n".
+            $headers = "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= 'From: '. $official['cname'] . '<' . $official['email_from'] . "> \r\n".
                        'Reply-To: '. $official['email_reply'] . "\r\n".
                        'X-Mailer: PHP/' . phpversion();
         } else {
@@ -3523,7 +3524,8 @@ class AjaxController extends Controller {
             $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
             $from = 'enjouli82029@tea.ntue.edu.tw';
 
-            $headers = 'From: 李恩柔<' . $from . "> \r\n".
+            $headers = "Content-type: text/html; charset=UTF-8\r\n";
+            $headers .= 'From: 李恩柔<' . $from . "> \r\n".
             'Reply-To: ' . $from . " \r\n".
             'X-Mailer: PHP/'. phpversion();
         }
