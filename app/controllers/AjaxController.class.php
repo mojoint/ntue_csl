@@ -2823,8 +2823,12 @@ class AjaxController extends Controller {
                             $cache_code = $target['institution_code'];
                         }
                     }
+//print_r( $res );
+//print_r('<hr>');
+//print_r( sizeof($res) );
+//print_r('<hr>');
                 }
-
+//exit;
                 $knt++;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '合計');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
