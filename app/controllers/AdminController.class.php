@@ -66,7 +66,9 @@ class AdminController extends Controller {
             $this->assign('title', '華語文-管理者');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('unlock'));
-            $this->assign('academic_agency_unlock', (new AdminModel)->dbQuery('academic_agency_unlock'));
+            
+            $academic_agency_unlock = (new AdminModel)->dbQuery('academic_agency_unlock');
+            $this->assign('academic_agency_unlock', $academic_agency_unlock);
             $this->render();
         } else {
             $this->redirect();

@@ -2,6 +2,11 @@
     <div class="container">
       <div class="div-admin_unlock">
     <?php if (isset($_SESSION['admin'])) : ?>
+        <?php
+            foreach( $academic_agency_unlock as $key=>$val ) {
+                $academic_agency_unlock[$key]['note'] = base64_encode( $val['note'] );
+            }   
+        ?>
 
         <div id="dialog-academic_agency_unlock"></div>
         <div id="grid-academic_agency_unlock"></div>
@@ -40,6 +45,11 @@
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(1);
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(6)
           $('#grid-academic_agency_unlock').data('kendoGrid').hideColumn(10);
+
+          for (var i=0; i < mojo.data.academic_agency_unlock.length; i++ ) {
+            mojo.data.academic_agency_unlock[i].note = Base64.decode(mojo.data.academic_agency_unlock[i].note);
+          }
+
           $('#grid-academic_agency_unlock').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency_unlock }));  
         </script>
     <?php endif; ?>
