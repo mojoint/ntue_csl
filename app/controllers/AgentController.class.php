@@ -21,7 +21,9 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('title', '華語文-機構');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('fill'));
+
             $academic_agency_fill = (new AgentModel)->dbQuery('academic_agency_fill', array('agency_id'=>$_SESSION['agent']['agency_id']));
+
             if (sizeof($academic_agency_fill)) {
                 $_SESSION['agent']['era_id'] = $academic_agency_fill[0]['era_id'];
                 $_SESSION['agent']['quarter'] = $academic_agency_fill[0]['quarter'];
