@@ -64,7 +64,7 @@ class EmailController extends Controller {
                 </div>
                 <div class="form-group col-xs-12">
                     <div class="col-xs-6">
-                        <a href="/email/activate" class="btn btn-lg btn-block btn-primary" id="btn-activate-agent" >重設密碼</a>
+                        <a href="/index/activate" class="btn btn-lg btn-block btn-primary" id="btn-activate-agent" >重設密碼</a>
                     </div>
                 </div>
             </form>
