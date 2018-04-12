@@ -79,10 +79,9 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':major_code'=>$data['major_code']));
             break;
         case 'academic_agency_class_query':
-            $sql  = 'SELECT t1.*, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
+            $sql  = 'SELECT t1.*, t2.`cname` `major_cname`, t1.`cname`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
-            $sql .= ' INNER JOIN `minor_list` t3 ON t1.`minor_code` = t3.`code`';
             $sql .= ' WHERE t1.id = :id ';
             return $this->dbSelect($sql, array(':id'=>$data['class_id']));
             break;
