@@ -72,10 +72,9 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_class_last':
-            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
+            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t1.`cname` ';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
-            $sql .= ' INNER JOIN `minor_list` t3 ON t1.`minor_code` = t3.`code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`major_code` = :major_code';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':major_code'=>$data['major_code']));
             break;
