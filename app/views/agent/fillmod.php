@@ -126,7 +126,7 @@
         mojo.data.minor_list = JSON.parse('<?php echo json_encode($minor_list); ?>');
         mojo.refs.minor_list = {};
         for (var i=0; i<mojo.data.minor_list.length; i++)
-          mojo.refs.minor_list[mojo.data.minor_list[i]['code']] = mojo.data.minor_list[i];
+          mojo.refs.minor_list[mojo.data.minor_list[i]['minor_code']] = mojo.data.minor_list[i];
 
         mojo.data.target_list = JSON.parse('<?php echo json_encode($target_list); ?>');
         mojo.refs.target_list = {};

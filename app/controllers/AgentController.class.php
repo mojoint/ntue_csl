@@ -58,7 +58,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
             $this->assign('content_list', (new AgentModel)->dbQuery('refs_content_list'));
             $this->assign('major_list', (new AgentModel)->dbQuery('refs_major_list'));
-            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list'));
+            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list_current', array('era_id'=>$_SESSION['agent']['era_id'])));
             $this->assign('target_list', (new AgentModel)->dbQuery('refs_target_list'));
             if ($_SESSION['agent']['quarter'] != 1) {
                 $this->assign('academic_agency_class_last', (new AgentModel)->dbQuery('academic_agency_class_last', array('agency_id'=>$_SESSION['agent']['agency_id'], 'era_id'=>$_SESSION['agent']['era_id'], 'quarter'=>($_SESSION['agent']['quarter'] -1), 'major_code'=>$mojo)));
@@ -91,7 +91,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('country_list', (new AgentModel)->dbQuery('refs_country_list'));
             $this->assign('content_list', (new AgentModel)->dbQuery('refs_content_list'));
             $this->assign('major_list', (new AgentModel)->dbQuery('refs_major_list'));
-            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list'));
+            $this->assign('minor_list', (new AgentModel)->dbQuery('refs_minor_list_current', array('era_id'=>$_SESSION['agent']['era_id'])));
             $this->assign('target_list', (new AgentModel)->dbQuery('refs_target_list'));
             $this->render();
         } else {
@@ -134,7 +134,6 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('sidebar', $this->sidebars('unlock'));
             $this->assign('academic_era', (new AgentModel)->dbQuery('academic_era_unlock'));
             $this->assign('academic_class', (new AgentModel)->dbQuery('academic_class'));
-            //$this->assign('academic_agency_unlock', (new AgentModel)->dbQuery('academic_agency_unlock', array('agency_id'=> $_SESSION['agent']['agency_id'])));
             $this->assign('academic_agency_class_status', (new AgentModel)->dbQuery('academic_agency_class_status', array('agency_id'=> $_SESSION['agent']['agency_id'])));
             $this->render();
         } else {

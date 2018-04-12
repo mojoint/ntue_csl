@@ -53,7 +53,7 @@ class AgentModel extends Model {
             $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, 0 `new_people`, 0 `people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
-            $sql .= ' INNER JOIN `minor_list` t3 ON t1.`minor_code` = t3.`code`';
+            $sql .= ' INNER JOIN `academic_class` t3 ON t1.`era_id` = t3.`era_id` AND t1.`minor_code` = t3.`minor_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter']));
             if (sizeof($res)) {
@@ -72,16 +72,18 @@ class AgentModel extends Model {
             return $res;
             break;
         case 'academic_agency_class_last':
-            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t1.`cname` ';
+            $sql  = 'SELECT t1.`id`, t1.`agency_id`, t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t1.`cname`, t1.`new_people`, t1.`people`, t1.`total_hours`, t1.`turnover`, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
+            $sql .= ' INNER JOIN `academic_class` t3 ON t1.`era_id` = t3.`era_id` AND t1.`minor_code` = t3.`minor_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter AND t1.`major_code` = :major_code';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':major_code'=>$data['major_code']));
             break;
         case 'academic_agency_class_query':
-            $sql  = 'SELECT t1.*, t2.`cname` `major_cname`, t1.`cname`';
+            $sql  = 'SELECT t1.*, t2.`cname` `major_cname`, t3.`cname` `minor_cname`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `major_list` t2 ON t1.`major_code` = t2.`code`';
+            $sql .= ' INNER JOIN `academic_class` t3 ON t1.`era_id` = t3.`era_id` AND t1.`minor_code` = t3.`minor_code`';
             $sql .= ' WHERE t1.id = :id ';
             return $this->dbSelect($sql, array(':id'=>$data['class_id']));
             break;
@@ -167,6 +169,10 @@ class AgentModel extends Model {
         case 'refs_minor_list':
             $sql = 'SELECT * FROM `minor_list` WHERE "NTUE" = :ntue ORDER BY `code`';
             return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
+            break;
+        case 'refs_minor_list_current':
+            $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id ORDER BY `minor_code`';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'refs_target_list':
             $sql = 'SELECT * FROM `target_list` WHERE "NTUE" = :ntue ORDER BY `code`';
