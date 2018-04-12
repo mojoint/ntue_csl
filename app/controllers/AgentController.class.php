@@ -132,7 +132,7 @@ debugger('mhho','agent contact count:'.$agent_contract_count );
             $this->assign('title', '華語文-機構');
             $this->assign('header', $this->headers());
             $this->assign('sidebar', $this->sidebars('unlock'));
-            $this->assign('academic_era', (new AgentModel)->dbQuery('academic_era'));
+            $this->assign('academic_era', (new AgentModel)->dbQuery('academic_era_unlock'));
             $this->assign('academic_class', (new AgentModel)->dbQuery('academic_class'));
             //$this->assign('academic_agency_unlock', (new AgentModel)->dbQuery('academic_agency_unlock', array('agency_id'=> $_SESSION['agent']['agency_id'])));
             $this->assign('academic_agency_class_status', (new AgentModel)->dbQuery('academic_agency_class_status', array('agency_id'=> $_SESSION['agent']['agency_id'])));

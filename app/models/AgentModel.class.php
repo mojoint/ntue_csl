@@ -38,7 +38,7 @@ class AgentModel extends Model {
             if (!$unlock) {
                 $sql  = 'SELECT t1.* ';
                 $sql .= '  FROM `academic_era_quarter` t1';
-                $sql .= ' WHERE NOW() BETWEEN CONCAT(t1.`online`, " 00:00:00") AND CONCAT(t1.`offline`, " 23:59:59") AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
+                $sql .= ' WHERE state > 0 AND NOW() BETWEEN CONCAT(t1.`online`, " 00:00:00") AND CONCAT(t1.`offline`, " 23:59:59") AND "NTUE" = :ntue ORDER BY t1.`id` ASC LIMIT 1';
                 $res = $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
                 if (sizeof($res)) {
                     if ($quarter['quarter' . $res[0]['quarter']]) {
@@ -88,7 +88,6 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':id'=>$data['class_id']));
             break;
         case 'academic_agency_class_country_query':
-            //$sql  = 'SELECT t1.*, SUM(t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`, t3.`cname` `country_cname`';
             $sql  = 'SELECT t1.*, (t1.`male` + t1.`female` + t1.`new_male` + t1.`new_female`) `people`, t3.`cname` `country_cname`';
             $sql .= '  FROM `academic_agency_class_country` t1';
             $sql .= ' INNER JOIN `academic_agency_class` t2 ON t2.`id` = t1.`class_id`';
@@ -109,6 +108,10 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_era':
+            $sql = 'SELECT * FROM `academic_era` WHERE state > :state';
+            return $this->dbSelect($sql, array(':state'=>0));
+            break;
+        case 'academic_era_unlock':
             $sql = 'SELECT * FROM `academic_era` WHERE state = :state';
             return $this->dbSelect($sql, array(':state'=>1));
             break;
