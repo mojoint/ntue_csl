@@ -31,7 +31,7 @@ class AjaxController extends Controller {
                 break;
             case 'mod':
                 //$res = (new AjaxModel)->dbQuery('admin_academic_agency_mod', array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']));
-                $data = array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname']);
+                $data = array('id'=>$_POST['id'], 'institution_code'=>$_POST['institution_code'], 'cname'=>$_POST['cname'], 'agency_state'=>$_POST['agency_state']);
                 $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_mod', $data);
                 $json = array("code"=>1, "data"=>$res);

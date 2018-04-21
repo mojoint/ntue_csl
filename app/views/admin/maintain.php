@@ -26,6 +26,7 @@
                 { title: '專任教師', field: 'academic_agency_hr_subject' },
                 { title: '兼任教師', field: 'academic_agency_hr_adjunct' },
                 { title: '儲備教師', field: 'academic_agency_hr_reserve' },  
+                { title: '&nbsp;', field: 'academic_agency_state' },  
                 { title: '&nbsp;', width: '200px', 
                   command: [
                     {   
@@ -42,6 +43,7 @@
               toolbar: kendo.template($('#template-academic_agency').html())
             });
             $('#grid-academic_agency').data('kendoGrid').hideColumn(0);
+            $('#grid-academic_agency').data('kendoGrid').hideColumn(9);
             mojo.data.academic_agency = JSON.parse('<?php echo json_encode($academic_agency); ?>');
             $('#grid-academic_agency').data('kendoGrid').setDataSource(new kendo.data.DataSource({ data: mojo.data.academic_agency }));
           </script>

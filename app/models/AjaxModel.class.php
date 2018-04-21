@@ -31,10 +31,11 @@ class AjaxModel extends Model {
             break;
         case 'admin_academic_agency_mod':
             $sql  = 'UPDATE `academic_agency`';
-            $sql .= '   SET `cname` = :cname,';
-            $sql .= '       `institution_code` = :institution_code';
+            $sql .= '   SET `cname` = :cname';
+            $sql .= '      ,`institution_code` = :institution_code';
+            $sql .= '      ,`state` = :state';
             $sql .= ' WHERE `id` = :id';
-            $cnt = $this->dbUpdate($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname'], ':id'=>$data['id']));
+            $cnt = $this->dbUpdate($sql, array(':institution_code'=>$data['institution_code'], ':cname'=>$data['cname'], ':state'=>$data['agency_state'], ':id'=>$data['id']));
             return $this->dbQuery('admin_academic_agency_get');
             break;
         case 'admin_academic_agency_agent_add':
