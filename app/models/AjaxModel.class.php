@@ -441,13 +441,18 @@ class AjaxModel extends Model {
 
                 $cur = $this->dbSelect($sql, array(':era_id'=>$data['era_id'])); 
 
+                $curr_new_people = (sizeof($cur) > 0)? $cur[0]['new_people'] : 0;
+
                 $sql  = 'SELECT SUM(IFNULL(t2.`new_male`, 0) `new_male` + IFNULL(t2.`new_female`, 0) `new_female`) `new_people`';
                 $sql .= '  FROM `academic_agency_class` t1';
                 $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
                 $sql .= ' WHERE t1.`agency_id` = :agency_id';
                 $sql .= '   AND t1.`era_id` = :era_id';
                 $last = $this->dbSelect($sql, array(':era_id'=>$era_last['id'])); 
-                return array('cur'=>$cur[0]['new_people'], 'last'=>$last[0]['new_people'], 'agency_id'=>$data['agency_id']);
+
+                $last_new_people = (sizeof($last) > 0)? $last[0]['new_people'] : 0;
+
+                return array('cur'=>$cur_new_people, $last_new_people, 'agency_id'=>$data['agency_id']);
             }
             break;
         case 'admin_academic_agency_report_major_b':
