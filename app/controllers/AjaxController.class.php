@@ -2899,11 +2899,11 @@ class AjaxController extends Controller {
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $target['institution_code']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_cname'] . $target['cname']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $res['cur']);
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $res['curr']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $res['last']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, ($res['cur'] - $res['last']));
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, ($res['curr'] - $res['last']));
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":E" . $knt);
-                        $sum_curr += intval($res['cur']);
+                        $sum_curr += intval($res['curr']);
                         $sum_last += intval($res['last']);
                     }
                 }
@@ -2911,7 +2911,6 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '合計');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_curr);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $sum_last);
-                //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, ($sum_curr - $sum_last));
                 $filename = '統計處報表';
                 break;
             case 'major_b':

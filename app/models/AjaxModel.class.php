@@ -419,14 +419,14 @@ class AjaxModel extends Model {
                 $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
                 $sql .= ' WHERE t1.`agency_id` = :agency_id';
                 $sql .= '   AND t1.`era_id` = :era_id';
-                $cur = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'])); 
-                $sql = 'SELECT IFNULL(`new_people`, 0) `new_people` FROM `academic_agency_class_y105` WHERE `agency_id` = :agency_id';
+                $curr = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'])); 
+                $sql  = 'SELECT IFNULL(`new_people`, 0) `new_people` FROM `academic_agency_class_y105` WHERE `agency_id` = :agency_id';
                 $last = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
 
                 if (!sizeof($last)) {
-                    return array('cur'=>$cur[0]['new_people'], 'last'=>0, 'agency_id'=>$data['agency_id']);
+                    return array('curr'=>$curr[0]['new_people'], 'last'=>0, 'agency_id'=>$data['agency_id']);
                 }
-                return array('cur'=>$cur[0]['new_people'], 'last'=>$last[0]['new_people'], 'agency_id'=>$data['agency_id']);
+                return array('curr'=>$curr[0]['new_people'], 'last'=>$last[0]['new_people'], 'agency_id'=>$data['agency_id']);
             } else {
                 $era = $this->dbQuery('admin_academic_era', array('era_id'=>$data['era_id']));
                 $common = intval($era[0]['common']) - 1;
@@ -439,20 +439,20 @@ class AjaxModel extends Model {
                 $sql .= ' WHERE t1.`agency_id` = :agency_id';
                 $sql .= '   AND t1.`era_id` = :era_id';
 
-                $cur = $this->dbSelect($sql, array(':era_id'=>$data['era_id'])); 
+                $curr = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'])); 
 
-                $curr_new_people = (sizeof($cur) > 0)? $cur[0]['new_people'] : 0;
+                $curr_new_people = (sizeof($curr) > 0)? $curr[0]['new_people'] : 0;
 
-                $sql  = 'SELECT SUM(IFNULL(t2.`new_male`, 0) `new_male` + IFNULL(t2.`new_female`, 0) `new_female`) `new_people`';
+                $sql  = 'SELECT SUM(IFNULL(t2.`new_male`, 0) + IFNULL(t2.`new_female`, 0)) `new_people`';
                 $sql .= '  FROM `academic_agency_class` t1';
                 $sql .= '  LEFT JOIN `academic_agency_class_country` t2 ON t2.`class_id` = t1.`id`';
                 $sql .= ' WHERE t1.`agency_id` = :agency_id';
                 $sql .= '   AND t1.`era_id` = :era_id';
-                $last = $this->dbSelect($sql, array(':era_id'=>$era_last['id'])); 
+                $last = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era_last[0]['id'])); 
 
                 $last_new_people = (sizeof($last) > 0)? $last[0]['new_people'] : 0;
 
-                return array('cur'=>$cur_new_people, $last_new_people, 'agency_id'=>$data['agency_id']);
+                return array('curr'=>$curr_new_people, 'last'=>$last_new_people, 'agency_id'=>$data['agency_id']);
             }
             break;
         case 'admin_academic_agency_report_major_b':
