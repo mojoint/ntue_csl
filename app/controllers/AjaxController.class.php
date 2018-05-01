@@ -1276,7 +1276,7 @@ class AjaxController extends Controller {
                 break;
             case 'manager':
                 $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
-                $academic_class = (new AjaxModel)->dbQuery('academic_class', array('era_id'=>$era_id));
+                $academic_class = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 /* summary */
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
@@ -2823,12 +2823,7 @@ class AjaxController extends Controller {
                             $cache_code = $target['institution_code'];
                         }
                     }
-//print_r( $res );
-//print_r('<hr>');
-//print_r( sizeof($res) );
-//print_r('<hr>');
                 }
-//exit;
                 $knt++;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '合計');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
