@@ -99,6 +99,48 @@
         </table>
       </div>
 
+      <div id="grid-academic_admin_report_states">
+        <table role="grid">
+          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <td><select id="academic_admin_report_states-era" class="academic_admin_report-era"></select></td>
+              <td></td>
+              <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_admin_report_states-export"><span class="fa fa-file-excel-o"></span>&nbsp;國籍人數排序報表</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="grid-academic_admin_report_classes">
+        <table role="grid">
+          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <td><select id="academic_admin_report_classes-era" class="academic_admin_report-era"></select></td>
+              <td><select id="academic_admin_report_classes-class" class="academic_admin_report-class"></select></td>
+              <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_admin_report_classes-export"><span class="fa fa-file-excel-o"></span>&nbsp;五大洲國家及課程報表</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="grid-academic_admin_report_people">
+        <table role="grid">
+          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <td><select id="academic_admin_report_people-era" class="academic_admin_report-era"></select></td>
+              <td></td>
+              <td><a href="#" class="btn btn-lg btn-primary" id="btn-academic_admin_report_people-export"><span class="fa fa-file-excel-o"></span>&nbsp;五大洲課程人數統計報表</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <script>
         mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
         mojo.data.academic_era_quarter = [

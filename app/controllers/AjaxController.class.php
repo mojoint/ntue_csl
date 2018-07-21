@@ -213,6 +213,11 @@ class AjaxController extends Controller {
                 break;
             }
             break;
+        case 'academic_classes':
+            $data = array('era_id'=>$val);
+            $res = (new AjaxModel)->dbQuery('admin_academic_classes', $data);
+            $json = array("code"=>1, "data"=>$res);
+            break;
         case 'dashboard':
             switch( $val )
             {
@@ -2982,9 +2987,258 @@ class AjaxController extends Controller {
                     $cnt++;
                 }
 
-
                 $filename = 'B類年度總表';
                 break;
+            case 'states':
+                $states = (new AjaxModel)->dbQuery('admin_academic_agency_report_states', array('era_id'=>$era_id));
+                $cnt = 0;
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex($cnt);
+                $knt = 0;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":L" . $knt);
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '排序');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '洲別');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '國別');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, 'A類');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '課程');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, 'B類');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '課程');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, 'C類');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '課程');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '男生人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '女生人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, '總計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "D". $knt .":I" . $knt);
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '(地區)');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '男');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '女');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '男');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '女');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, '男');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '女');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":L" . $knt);
+
+                $sn = 0;
+                $country_code = "";
+                $male_a = 0;
+                $male_b = 0;
+                $male_c = 0;
+                $female_a = 0;
+                $female_b = 0;
+                $female_c = 0;
+                $male = 0;
+                $female = 0;
+                foreach ($states as $s) {
+                    $sn++;
+                    $knt++;
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $sn);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $s['state_name']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $s['country_name']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $s['male_a']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $s['female_a']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $s['male_b']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $s['female_b']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $s['male_c']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $s['female_c']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $s['male']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $s['female']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $s['people']);
+                    $male_a += $s['male_a'];
+                    $male_b += $s['male_b'];
+                    $male_c += $s['male_c'];
+                    $female_a += $s['female_a'];
+                    $female_b += $s['female_b'];
+                    $female_c += $s['female_c'];
+                    $male += $s['male'];
+                    $female += $s['female'];
+                }
+                $knt++;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總和');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $male_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $male_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $female_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $male_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $female_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $male);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female);
+
+                $filename = '國籍人數排序報表';
+                break;
+
+            case 'classes':
+                // pass minor_code as quarter in param
+                $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_classes', array('era_id'=>$era_id, 'minor_code'=>$quarter));
+                $class_name = '';
+                if (sizeof($classes)) {
+                    $class_name = $classes[0]['class_name'];
+                }
+                $cnt = 0;
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex($cnt);
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":F" . $knt);
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '洲別');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '排序');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '國家名稱');
+                $objPHPExcel->getActiveSheet()->mergeCells('D'. $knt .':E'. $knt);
+                $objPHPExcel->getActiveSheet()->setCellValue('D'. $knt, $class_name);
+
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '合計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":F" . $knt);
+                
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, '男性');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '女性');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":F" . $knt);
+
+                $state_code = '';
+                $state_name = '';
+                $male = 0;
+                $female = 0;
+                $people = 0;
+                $sum_male = 0;
+                $sum_female = 0;
+                $sum_people = 0;
+                foreach ($classes as $c) {
+                    $knt++;
+                    if ($state_code != $c['code']) {
+                        $sn = 0;
+                        if ($state_code != "") {
+                            $objPHPExcel->getActiveSheet()->mergeCells('B'. $knt .':C'. $knt);
+                            $objPHPExcel->getActiveSheet()->setCellValue('B'. $knt, $state_name . '地區合計');
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $male);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female);
+                            $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $people);
+                            $sum_male += $male;  
+                            $sum_female += $female;  
+                            $sum_people += $people;  
+                            $male = 0;
+                            $female = 0;
+                            $people = 0;
+                            $knt++;
+                        }
+                        $sn++;
+                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $c['state_name']);
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $sn);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $c['country_name']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $c['male']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $c['female']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $c['people']);
+
+                    $male += $c['male'];
+                    $female += $c['female'];
+                    $people += $c['people'];
+
+                    $state_code = $c['code']; 
+                    $state_name = $c['state_name']; 
+                }
+
+                $knt++;
+                $objPHPExcel->getActiveSheet()->mergeCells('B'. $knt .':C'. $knt);
+                $objPHPExcel->getActiveSheet()->setCellValue('B'. $knt, $state_name . '地區合計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $male);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $people);
+
+                $knt++;
+                $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':E'. $knt);
+                $objPHPExcel->getActiveSheet()->setCellValue('A'. $knt, '人數合計');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum_people);
+                $filename = '五大洲及課程呈現報表';
+                break;
+
+            case 'people':
+                $persons = (new AjaxModel)->dbQuery('admin_academic_agency_report_people', array('era_id'=>$era_id));
+                $cnt = 0;
+                $objPHPExcel->createSheet();
+                $objPHPExcel->setActiveSheetIndex($cnt);
+                $knt = 0;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
+                $knt = 1;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '洲別');
+                $knt = 2;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '國家數');
+                $knt = 3;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '男性');
+                $knt = 4;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '女性');
+                $knt = 5;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '人數合計');
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '比例');
+                $countries = 0;
+                $male = 0;
+                $female = 0;
+                $people = 0;
+                $AC = 0;
+                $AF = 0;
+                $AS = 0;
+                $EU = 0;
+                $OA = 0;
+                foreach ($persons as $p) {
+                    $countries += $p['countries'];
+                    $male += $p['male'];
+                    $female += $p['female'];
+                    $people += $p['people'];
+                    switch($p['state_code'])
+                    {
+                    case 'AC':
+                        $c = 'C';
+                        $AC = $p['people'];
+                        break;
+                    case 'AF':
+                        $c = 'E';
+                        $AF = $p['people'];
+                        break;
+                    case 'AS':
+                        $c = 'B';
+                        $AS = $p['people'];
+                        break;
+                    case 'EU':
+                        $c = 'D';
+                        $EU = $p['people'];
+                        break;
+                    case 'OA':
+                        $c = 'F';
+                        $OA = $p['people'];
+                        break;
+                    }    
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '1', $p['state_name']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '2', $p['countries']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '3', $p['male']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '4', $p['female']);
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '5', $p['people']);
+                }
+
+                $knt = 6;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, number_format($AS*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, number_format($AC*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, number_format($AF*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($EU*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, number_format($OA*100/$people, 2) . '%');
+                
+
+                $filename = '五大洲課程人數統計報表';
+                break;
+
             }
 
             $objPHPExcel->setActiveSheetIndex(0);

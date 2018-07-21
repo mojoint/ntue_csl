@@ -239,6 +239,10 @@ class AjaxModel extends Model {
             $sql = 'UPDATE `academic_era` SET `taken` = :taken WHERE `id` = :era_id';
             return $this->dbUpdate($sql, array(':taken'=>$data['taken'], ':era_id'=>$data['era_id']));
             break;
+        case 'admin_academic_classes':
+            $sql = 'SELECT * FROM `academic_class` WHERE `era_id` = :era_id';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+            break;
         case 'admin_check_new_user_add':
             $sql = 'SELECT count(*) `cnt` FROM `academic_agency_agent` where `username` = :username ';
             return $this->dbSelect($sql, array(':username'=>$data['username']));
@@ -491,6 +495,76 @@ class AjaxModel extends Model {
             }
 
             return $res;
+            break;
+        case 'admin_academic_agency_report_states':
+            $sql  = 'SELECT aacc.`country_code`, cl.`cname` country_name, sl.`cname` state_name,';
+            $sql .= ' SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people, ';
+            $sql .= ' SUM(0) male_a, SUM(0) female_a, SUM(0) male_b, SUM(0) female_b, SUM(0) male_c, SUM(0) female_c';
+            $sql .= '  FROM `academic_agency_class` aac';
+            $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
+            $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
+            $sql .= ' INNER JOIN state_list sl on cl.state_code = sl.code';
+            $sql .= ' WHERE aac.`era_id` = :era_id';
+            $sql .= ' GROUP BY aacc.country_code';
+            $sql .= ' ORDER BY people DESC';
+            $states =  $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
+
+
+            foreach($states as $key=>$val) {
+                $sql = 'SELECT aac.`major_code`, SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people';
+                $sql .= '  FROM `academic_agency_class` aac';
+                $sql .= ' INNER JOIN `academic_agency_class_country` aacc on aac.id = aacc.class_id';
+                $sql .= ' WHERE aacc.`country_code` = :country_code';
+                $sql .= ' GROUP BY aac.major_code';
+                $res = $this->dbSelect($sql, array(':country_code'=>$states[$key]['country_code']));
+                if (sizeof($res)) {
+                    foreach($res as $r) {
+                        switch($r['major_code'])
+                        {
+                        case 'A':
+                            $states[$key]['male_a'] = $r['male'];
+                            $states[$key]['female_a'] = $r['female'];
+                            break;
+                        case 'B':
+                            $states[$key]['male_b'] = $r['male'];
+                            $states[$key]['female_b'] = $r['female'];
+                            break;
+                        case 'C':
+                            $states[$key]['male_c'] = $r['male'];
+                            $states[$key]['female_c'] = $r['female'];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return $states;
+
+            break;
+        case 'admin_academic_agency_report_classes':
+            $sql  = 'SELECT ac.cname class_name, aac.minor_code, aacc.country_code, cl.cname country_name, sl.sno, sl.code, sl.cname state_name, ';
+            $sql .= ' SUM(aacc.male + aacc.new_male) male, SUM(aacc.female + aacc.new_female) female, SUM(aacc.male + aacc.new_male + aacc.female + aacc.new_female) people';
+            $sql .= '  FROM academic_agency_class aac';
+            $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
+            $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
+            $sql .= ' INNER JOIN state_list sl on cl.state_code = sl.code';
+            $sql .= ' INNER JOIN academic_class ac on ac.era_id = aac.era_id AND ac.minor_code = aac.minor_code';
+            $sql .= ' WHERE aac.era_id = :era_id';
+            $sql .= '   AND aac.minor_code = :minor_code';
+            $sql .= ' GROUP BY sl.code, aacc.country_code';
+            $sql .= ' ORDER BY sl.sno, people DESC';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
+            break;
+        case 'admin_academic_agency_report_people':
+            $sql  = 'SELECT cl.state_code, sl.cname state_name, Count(Distinct(aacc.country_code)) countries, SUM(aacc.male + aacc.new_male) male, SUM(aacc.female + aacc.new_female) female, SUM(aacc.male + aacc.new_male + aacc.female + aacc.new_female) people';
+            $sql .= '  FROM academic_agency_class aac';
+            $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
+            $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
+            $sql .= ' INNER JOIN state_list sl on cl.state_code = sl.code';
+            $sql .= ' WHERE aac.era_id = :era_id';
+            $sql .= ' GROUP BY cl.state_code';
+            $sql .= ' ORDER BY people DESC';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
         case 'admin_board_unreply_query_bk':
             $sql  = 'SELECT t.* ';

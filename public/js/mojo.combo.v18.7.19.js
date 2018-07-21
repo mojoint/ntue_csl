@@ -120,6 +120,17 @@ console.log( res.data );
                   break;
                 }
                 break;
+              case 'academic_classes':
+                $('#academic_admin_report_classes-class').empty();
+                for (var x in res.data) {
+                    $('#academic_admin_report_classes-class').append('<option value="' + res.data[x]['minor_code'] + '">' + res.data[x].cname + '</option>');
+                }
+                
+                $('#btn-academic_admin_report_classes-export').on('click', function(e) {
+                    e.preventDefault();
+                    window.open('/ajax/reporter/academic_admin_report/classes/' + $('#academic_admin_report_classes-era').val() + '/' + $('#academic_admin_report_classes-class').val());
+                });
+                break;
               case 'academic_era':
                 switch(params)
                 {
@@ -948,8 +959,8 @@ console.log( res.data );
                   break;
                 }
                 break; 
-            }
-            break;
+              }
+              break;
             case 'profile':
                 switch(val) 
                 {
@@ -1682,6 +1693,26 @@ console.log( res.data );
       $('#btn-academic_admin_report_major_b-export').on('click', function(e) {
         e.preventDefault();
         window.open('/ajax/reporter/academic_admin_report/major_b/' + $('#academic_admin_report_major_b-era').val());
+      });
+
+      $('#btn-academic_admin_report_states-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/states/' + $('#academic_admin_report_states-era').val());
+      });
+
+      $('#academic_admin_report_classes-era').on('change', function(e) {
+        mojo.ajax('admin', 'academic_classes', $(this).val());
+      });
+      mojo.ajax('admin', 'academic_classes', $('#academic_admin_report_classes-era').val());
+
+      $('#btn-academic_admin_report_classes-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/classes/' + $('#academic_admin_report_classes-era').val() + '/' + $('#academic_admin_report_classes-class').val());
+      });
+
+      $('#btn-academic_admin_report_people-export').on('click', function(e) {
+        e.preventDefault();
+        window.open('/ajax/reporter/academic_admin_report/people/' + $('#academic_admin_report_people-era').val());
       });
 
     };
