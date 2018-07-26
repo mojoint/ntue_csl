@@ -3074,7 +3074,6 @@ class AjaxController extends Controller {
 
                 $filename = '國籍人數排序報表';
                 break;
-
             case 'classes':
                 // pass minor_code as quarter in param
                 $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_classes', array('era_id'=>$era_id, 'minor_code'=>$quarter));
@@ -3150,6 +3149,10 @@ class AjaxController extends Controller {
                     $state_name = $c['state_name']; 
                 }
 
+                $sum_male += $male;  
+                $sum_female += $female;  
+                $sum_people += $people;  
+
                 $knt++;
                 $objPHPExcel->getActiveSheet()->mergeCells('B'. $knt .':C'. $knt);
                 $objPHPExcel->getActiveSheet()->setCellValue('B'. $knt, $state_name . '地區合計');
@@ -3163,7 +3166,6 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum_people);
                 $filename = '五大洲及課程呈現報表';
                 break;
-
             case 'people':
                 $persons = (new AjaxModel)->dbQuery('admin_academic_agency_report_people', array('era_id'=>$era_id));
                 $cnt = 0;

@@ -509,14 +509,14 @@ class AjaxModel extends Model {
             $sql .= ' ORDER BY people DESC';
             $states =  $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
 
-
             foreach($states as $key=>$val) {
                 $sql = 'SELECT aac.`major_code`, SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people';
                 $sql .= '  FROM `academic_agency_class` aac';
                 $sql .= ' INNER JOIN `academic_agency_class_country` aacc on aac.id = aacc.class_id';
-                $sql .= ' WHERE aacc.`country_code` = :country_code';
+                $sql .= ' WHERE aac.`era_id` = :era_id';
+                $sql .= '   AND aacc.`country_code` = :country_code';
                 $sql .= ' GROUP BY aac.major_code';
-                $res = $this->dbSelect($sql, array(':country_code'=>$states[$key]['country_code']));
+                $res = $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':country_code'=>$states[$key]['country_code']));
                 if (sizeof($res)) {
                     foreach($res as $r) {
                         switch($r['major_code'])
@@ -537,9 +537,7 @@ class AjaxModel extends Model {
                     }
                 }
             }
-
             return $states;
-
             break;
         case 'admin_academic_agency_report_classes':
             $sql  = 'SELECT ac.cname class_name, aac.minor_code, aacc.country_code, cl.cname country_name, sl.sno, sl.code, sl.cname state_name, ';
