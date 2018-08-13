@@ -1349,6 +1349,14 @@ class AjaxModel extends Model {
             $sql = 'INSERT INTO `academic_agency_unlock` (`id`, `agency_id`, `era_id`, `quarter`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :minors, :work_days, "", "", :note, 0)';
             return $this->dbInsert($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], ':quarter'=>$data['quarter'], ':minors'=>$data['minors'], ':work_days'=>$data['work_days'], ':note'=>$data['note']));
             break;
+        case 'agent_academic_agency_unlock_who':
+            $sql  = 'SELECT ai.`cname` academic_institution_cname, ae.`cname` academic_era_cname';
+            $sql .= '  FROM `academic_agency` aa ';
+            $sql .= ' INNER JOIN `academic_institution` ai ON aa.`institution_code` = ai.`code`';
+            $sql .= ' INNER JOIN `academic_era` ae ON ae.`era_id` = :era_id';
+            $sql .= ' WHERE aa.`id` = :agency_id';
+            return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>$data['agency_id']));
+            break;
         case 'agent_academic_institution_aka':
             $sql = 'SELECT `aka` FROM `academic_institution` WHERE `code` = :code';
             return $this->dbSelect($sql, array(':code'=>$data['code']));
@@ -1379,6 +1387,14 @@ class AjaxModel extends Model {
             $res = $this->dbSelect($sql, array(':agent_id'=>$data['agent_id']));
             echo json_encode($res);
             */
+            return $this->dbSelect($sql, array(':agent_id'=>$data['agent_id']));
+            break;
+        case 'agent_board_question_who':
+            $sql  = 'SELECT ai.`cname` academic_institution_cname';
+            $sql .= '  FROM `academic_agency_agent` aaa ';
+            $sql .= ' INNER JOIN `academic_agency` aa ON aa.`id` = aaa.`agency_id`';
+            $sql .= ' INNER JOIN `academic_institution` ai ON aa.`institution_code` = ai.`code`';
+            $sql .= ' WHERE aaa.`id` = :agent_id';
             return $this->dbSelect($sql, array(':agent_id'=>$data['agent_id']));
             break;
         /* mailer */

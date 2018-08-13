@@ -550,6 +550,8 @@ class AjaxController extends Controller {
                 $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
                 $res = (new AjaxModel)->dbQuery('agent_academic_agency_unlock', $data);
                 $json = array("code"=>1, "data"=>$res);
+                $who = (new AjaxModel)->dbQuery('agent_academic_agency_unlock_who', $data);
+                $this->mailer('unlock', $who[0]['academic_institution_cname'], $who[0]['academic_era_cname'], $_POST['quarter']);
                 break;
             }
             break;
@@ -597,6 +599,8 @@ class AjaxController extends Controller {
                     $id = (new AjaxModel)->dbLogger('agent', $key, $val, implode('@@@', $data));
                     $res = (new AjaxModel)->dbQuery('agent_board_question_add', $data);
                     $json = array("code"=>1, "data"=>$res);
+                    $who = (new AjaxModel)->dbQuery('agent_board_question_who', $data);
+                    $this->mailer('message', $who[0]['academic_institution_cname'], '', '');
                 }
     
                 break;
@@ -3759,7 +3763,7 @@ class AjaxController extends Controller {
         }
     }
 
-    public function mailer($key, $username, $email, $url) {
+    public function mailer($key, $username, $email, $msg) {
         if (!isset($_SESSION)) { exit; }
         $official = (new AjaxModel)->dbQuery('mailer_official_get')[0];
 
@@ -3768,11 +3772,21 @@ class AjaxController extends Controller {
             {
             case 'add':
                 $subject = $official['subject_agent_add'];
-                $message = str_ireplace("@@@url@@@", $url, str_ireplace("@@@username@@@", $username, $official['message_agent_add']));
+                $message = str_ireplace("@@@url@@@", $msg, str_ireplace("@@@username@@@", $username, $official['message_agent_add']));
                 break;
             case 'mod':
                 $subject = $official['subject_agent_mod'];
-                $message = str_ireplace("@@@url@@@", $url, str_ireplace("@@@username@@@", $username, $official['message_agent_mod']));
+                $message = str_ireplace("@@@url@@@", $msg, str_ireplace("@@@username@@@", $username, $official['message_agent_mod']));
+                break;
+            case 'message':
+                $subject = str_ireplace("@@@academic_institution@@@", $username, $official['subject_agent_board']);
+                $message = str_ireplace("@@@academic_institution@@@", $username, $official['message_agent_board']);
+                $email = $official['email_from'];
+                break;
+            case 'unlock':
+                $subject = str_ireplace("@@@academic_institution@@@", $username, str_ireplace("@@@academic_era@@@", $email, str_ireplace("@@@academic_quarter@@@", $msg, $official['subject_agent_unlock'])));
+                $message = str_ireplace("@@@academic_institution@@@", $username, str_ireplace("@@@academic_era@@@", $email, str_ireplace("@@@academic_quarter@@@", $msg, $official['message_agent_unlock'])));
+                $email = $official['email_from'];
                 break;
             }
             $headers = "Content-type: text/html; charset=UTF-8\r\n";
@@ -3781,7 +3795,7 @@ class AjaxController extends Controller {
                        'X-Mailer: PHP/' . phpversion();
         } else {
             $subject = '華語文教育機構績效系統通知信';
-            $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $url .']';
+            $message = '您好，您在華語文教育機構招生填報系統的使用者帳號為['. $username .']，請透過以下連結網址設定登入密碼：['. $msg .']';
             $from = 'enjouli82029@tea.ntue.edu.tw';
 
             $headers = "Content-type: text/html; charset=UTF-8\r\n";

@@ -2289,11 +2289,11 @@ console.log( res.data );
         case 'add':
           mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
           if (!((1 == parseInt(mojo.quarter)) && (0 == parseInt(mojo.mojos[3])))) {
-            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
-            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" class="input-int" /></div>';
+            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" class="input-int" /></div>';
           }
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" class="input-int" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" class="input-int" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
           $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
           break;
@@ -2310,11 +2310,11 @@ console.log( res.data );
         case 'mod':
           mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
           if (!((1 == parseInt(mojo.quarter)) && (0 == parseInt(mojo.mojos[3])))) {
-            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
-            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" class="input-int" /></div>';
+            mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" class="input-int" /></div>';
           }
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" class="input-int" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" class="input-int" /></div>';
           mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
           $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
           $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
@@ -2709,11 +2709,11 @@ console.log( res.data );
       case 'add':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
         if (!((1 == parseInt(mojo.quarter)) && (0 == parseInt(mojo.mojos[3])))) {
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" class="input-int" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" class="input-int" /></div>';
         }
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" class="input-int" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" class="input-int" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         break;
@@ -2730,11 +2730,11 @@ console.log( res.data );
       case 'mod':
         mojo.html  = '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-country_code">國別</label><select id="dialog-country_code"></select></div>';
         //if (!((1 == parseInt(mojo.quarter)) && (0 == parseInt(mojo.mojos[3])))) {
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" /></div>';
-          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-male">男舊生</label><input type="text" id="dialog-male" class="input-int" /></div>';
+          mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-female">女舊生</label><input type="text" id="dialog-female" class="input-int" /></div>';
         //}
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" /></div>';
-        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_male">男新生</label><input type="text" id="dialog-new_male" class="input-int" /></div>';
+        mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-new_female">女新生</label><input type="text" id="dialog-new_female" class="input-int" /></div>';
         mojo.html += '<div class="k-textbox k-textbox-full k-space-right"><label for="dialog-note">其他</label><input type="text" id="dialog-note" /></div>';
         $('#dialog-academic_agency_class_country').data('kendoDialog').content(mojo.html).open().center();
         $('#dialog-country_code').append('<option value="' + params.country_code + '">' + mojo.refs.country_list[params.country_code]['code'] + ' ' + mojo.refs.country_list[params.country_code]['cname'] + ' ' + mojo.refs.country_list[params.country_code]['ename'] + '</option>');
