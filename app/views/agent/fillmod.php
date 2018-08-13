@@ -24,8 +24,8 @@
             </tr>
             <tr>
               <td><span class="required_field">*</span>教學時數</td>
-              <td><input type="text" id="editor-weekly" placeholder="" required />&nbsp;小時/週</td>
-              <td>週數&nbsp;<input type="text" id="editor-weeks" placeholder=""  required /></td>
+              <td><input type="text" id="editor-weekly" placeholder="" required class="input-float" />&nbsp;小時/週</td>
+              <td>週數&nbsp;<input type="text" id="editor-weeks" placeholder=""  required class="input-float" /></td>
             </tr>
             <tr>
               <td><span class="required_field">*</span>招生對象</td>
@@ -65,9 +65,9 @@
               <td>總人時數</td>
             </tr>
             <tr>
-              <td><input type="text" id="editor-hours" required ></p></td>
+              <td><input type="text" id="editor-hours" required class="input-float" ></p></td>
               <td><p id="summary-people"></p></td>
-              <td><input type="text" id="editor-adjust" size="4" /></td>
+              <td><input type="text" id="editor-adjust" size="4" class="input-float" /></td>
               <td><p id="summary-total_hours"></p></td>
             </tr>
             <tr>
@@ -79,8 +79,8 @@
               <td colspan="2">營收額度(元)</td>
             </tr>
             <tr>
-              <td><input type="text" id="editor-revenue" placeholder="" required /></td>
-              <td><input type="text" id="editor-subsidy" placeholder="" required /></td>
+              <td><input type="text" id="editor-revenue" placeholder="" required class="input-int" /></td>
+              <td><input type="text" id="editor-subsidy" placeholder="" required class="input-int" /></td>
               <td colspan="2"><p id="summary-turnover"></p></td>
             </tr>
             <tr>
