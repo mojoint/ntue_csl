@@ -127,6 +127,7 @@
         </table>
       </div>
 
+      <!--
       <div id="grid-academic_admin_report_people">
         <table role="grid">
           <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
@@ -140,7 +141,7 @@
           </tbody>
         </table>
       </div>
-
+      -->
       <script>
         mojo.data.academic_era = JSON.parse('<?php echo json_encode($academic_era); ?>');
         mojo.data.academic_era_quarter = [
