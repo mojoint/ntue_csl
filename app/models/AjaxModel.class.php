@@ -468,6 +468,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT 0 `new_people`, 0 `people`, SUM(`hours`) `hours`, SUM(`total_hours`) `total_hours`, SUM(`turnover`) `turnover`, "" `info`, GROUP_CONCAT(`note` SEPARATOR " ") `note`'; 
             $sql .= '  FROM `academic_agency_class` ';
             $sql .= ' WHERE `agency_id` = :agency_id AND `era_id` = :era_id AND `minor_code` = :minor_code'; 
+            $sql .= '   AND `agency_id` != 999';
             $sql .= ' GROUP BY `minor_code`';
 
             $res =  $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id'], 'minor_code'=>$data['minor_code']));
@@ -505,6 +506,7 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
             $sql .= ' INNER JOIN state_list sl on cl.state_code = sl.code';
             $sql .= ' WHERE aac.`era_id` = :era_id';
+            $sql .= '   AND aac.`agency_id` != 999';
             $sql .= ' GROUP BY aacc.country_code';
             $sql .= ' ORDER BY people DESC';
             $states =  $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
@@ -560,6 +562,7 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
             $sql .= ' INNER JOIN state_list sl on cl.state_code = sl.code';
             $sql .= ' WHERE aac.era_id = :era_id';
+            $sql .= '   AND aac.`agency_id` != 999';
             $sql .= ' GROUP BY cl.state_code';
             $sql .= ' ORDER BY people DESC';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));

@@ -3789,8 +3789,10 @@ class AjaxController extends Controller {
                 $email = $official['email_from'];
                 break;
             }
+
+
             $headers = "Content-type: text/html; charset=UTF-8\r\n";
-            $headers .= 'From: '. $official['cname'] . '<' . $official['email_from'] . "> \r\n".
+            $headers .= 'From: 華語文教育機構績效系統 <' . $official['email_from'] . "> \r\n".
                        'Reply-To: '. $official['email_reply'] . "\r\n".
                        'X-Mailer: PHP/' . phpversion();
         } else {
