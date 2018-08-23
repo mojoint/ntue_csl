@@ -74,6 +74,21 @@
     width: 98%;
 }
 
+/* table */
+
+.k-grid-content {
+  color: #000;
+}
+
+.k-grid-header .k-header, .k-grid-footer .k-footer-template {
+  background-color: transparent;
+  color: blue;
+}
+.k-grid-footer .k-footer-template td {
+  background-color: transparent;
+  color: blue;
+}
+
 /* <<< kendo + bootstrap hack */
 /* select2 hack >>> */
 .select2-container {

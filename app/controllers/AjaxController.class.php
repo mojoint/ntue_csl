@@ -772,9 +772,8 @@ class AjaxController extends Controller {
                                 $knt++;
                                 $kountry = (new AjaxModel)->dbQuery('agent_academic_agency_report_countries', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarter'=>$quarter));
                                 $major_sum[ $major_cache ][ 'countries' ] = intval($kountry[0]['countries']);
+                                $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                                //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ $major_cache ]['countries']);
-                                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['new_male']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['new_female']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
@@ -845,8 +844,8 @@ class AjaxController extends Controller {
                         }
 
                         $knt++;
+                        $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ $major_cache ]);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ $major_cache ]['new_male']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ $major_cache ]['new_female']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ $major_cache ]['new_people']);
@@ -858,9 +857,8 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                         $knt++;
+                        $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
-                        //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $major_sum[ 'S' ]['countries']);
-                        $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '');
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $major_sum[ 'S' ]['new_male']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $major_sum[ 'S' ]['new_female']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $major_sum[ 'S' ]['new_people']);
@@ -3040,7 +3038,37 @@ class AjaxController extends Controller {
                 $female_c = 0;
                 $male = 0;
                 $female = 0;
+                $people = 0;
+
+                $roc = array( 
+                    'state_name' => '',
+                    'country_name' => '',
+                    'male_a' => 0,
+                    'male_b' => 0,
+                    'male_c' => 0,
+                    'female_a' => 0,
+                    'female_b' => 0,
+                    'female_c' => 0,
+                    'male' => 0,
+                    'female' => 0,
+                    'people' => 0
+                );
+
                 foreach ($states as $s) {
+                    if ('000' == $s['country_code']) {
+                        $roc['state_name'] = $s['state_name'];
+                        $roc['country_name'] = $s['country_name'];
+                        $roc['male_a'] = $s['male_a'];
+                        $roc['male_b'] = $s['male_b'];
+                        $roc['male_c'] = $s['male_c'];
+                        $roc['female_a'] = $s['female_a'];
+                        $roc['female_b'] = $s['female_b'];
+                        $roc['female_c'] = $s['female_c'];
+                        $roc['male'] = $s['male'];
+                        $roc['female'] = $s['female'];
+                        $roc['people'] = $s['people'];
+                        continue;
+                    }
                     $sn++;
                     $knt++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $sn);
@@ -3063,9 +3091,11 @@ class AjaxController extends Controller {
                     $female_c += $s['female_c'];
                     $male += $s['male'];
                     $female += $s['female'];
+                    $people += $s['people'];
                 }
                 $knt++;
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '人數');
+                $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '不含中華民國人數');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總和');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $male_a);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female_a);
@@ -3075,6 +3105,35 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $female_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $male);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people);
+
+                $knt++;
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '*');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $roc['state_name']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $roc['country_name']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $roc['male_a']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $roc['female_a']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $roc['male_b']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $roc['female_b']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $roc['male_c']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $roc['female_c']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $roc['male']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $roc['female']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $roc['people']);
+
+                $knt++;
+                $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '含中華民國人數');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '總和');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $male_a + $roc['male_a']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female_a + $roc['female_a']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $male_b + $roc['male_b']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $female_b + $roc['female_b']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $male_c + $roc['male_c']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $female_c + $roc['female_c']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $male + $roc['male']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female + $roc['female']);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people);
 
                 $filename = '國籍人數排序報表';
                 break;

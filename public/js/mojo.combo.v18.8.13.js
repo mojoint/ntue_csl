@@ -663,6 +663,9 @@ console.log( res.data );
                            
                     html_a += '<tr class="active">';
                     html_a += '<th >第一研習類別小計</th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
+                    html_a += '<th></th>';
                     html_a += '<th>' + mojo.summary.a.new_people + '</th>';
                     html_a += '<th>' + mojo.summary.a.people + '</th>';
                     html_a += '<th>' + mojo.summary.a.weekly + '</th>';
@@ -673,12 +676,12 @@ console.log( res.data );
                     html_a += '<th></th>';
                     html_a += '<th></th>';
                     html_a += '<th></th>';
-                    html_a += '<th></th>';
-                    html_a += '<th></th>';
-                    html_a += '<th></th>';
                     html_a += '</tr>';
                     html_b += '<tr class="active">';
                     html_b += '<th >第二研習類別小計</th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
+                    html_b += '<th></th>';
                     html_b += '<th>' + mojo.summary.b.new_people + '</th>';
                     html_b += '<th>' + mojo.summary.b.people + '</th>';
                     html_b += '<th>' + mojo.summary.b.weekly + '</th>';
@@ -689,12 +692,12 @@ console.log( res.data );
                     html_b += '<th></th>';
                     html_b += '<th></th>';
                     html_b += '<th></th>';
-                    html_b += '<th></th>';
-                    html_b += '<th></th>';
-                    html_b += '<th></th>';
                     html_b += '</tr>';
                     html_c += '<tr class="active">';
                     html_c += '<th >第三研習類別小計</th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
+                    html_c += '<th></th>';
                     html_c += '<th>' + mojo.summary.c.new_people + '</th>';
                     html_c += '<th>' + mojo.summary.c.people + '</th>';
                     html_c += '<th>' + mojo.summary.c.weekly + '</th>';
@@ -702,9 +705,6 @@ console.log( res.data );
                     html_c += '<th>' + mojo.summary.c.hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.total_hours + '</th>';
                     html_c += '<th>' + mojo.summary.c.turnover + '</th>';
-                    html_c += '<th></th>';
-                    html_c += '<th></th>';
-                    html_c += '<th></th>';
                     html_c += '<th></th>';
                     html_c += '<th></th>';
                     html_c += '<th></th>';
@@ -1899,7 +1899,8 @@ console.log( isNaN(parseInt( curr )) );
           { field: "people", title: "總人次", width: "80px" },
           { field: "total_hours", title: "總人時數", width: "100px" },
           { field: "turnover", title: "營收額度", width: "100px" },
-          { title: "&nbsp;" }
+          { title: "動作", width: "180px" },
+          { title: "課程名稱" }
         ],
         toolbar: kendo.template($('#template-academic_agency_class').html())
       });
@@ -1951,7 +1952,8 @@ console.log( isNaN(parseInt( curr )) );
                 template: '<a class="k-button k-blank k-grid-delete btn-academic_agency_class-a-del" title="刪除"><i class="fa fa-trash"></i></a>'
               }   
             ]
-          }
+          },
+          { field: "cname", title: "&nbsp;", template: function(dataItem) { return Base64.decode(dataItem.cname); } }
         ]
       });
       mojo.grid.academic_agency_class_a.data('kendoGrid').hideColumn(0);
@@ -2003,7 +2005,8 @@ console.log( isNaN(parseInt( curr )) );
                 template: '<a class="k-button k-blank k-grid-delete btn-academic_agency_class-b-del" title="刪除"><i class="fa fa-trash"></i></a>'
               }   
             ]
-          }
+          },
+          { field: "cname", title: "&nbsp;", template: function(dataItem) { return Base64.decode(dataItem.cname); } }
         ]
       });
       mojo.grid.academic_agency_class_b.data('kendoGrid').hideColumn(0);
@@ -2055,7 +2058,8 @@ console.log( isNaN(parseInt( curr )) );
                 template: '<a class="k-button k-blank k-grid-delete btn-academic_agency_class-c-del" title="刪除"><i class="fa fa-trash"></i></a>'
               }   
             ]
-          }
+          },
+          { field: "cname", title: "&nbsp;", template: function(dataItem) { return Base64.decode(dataItem.cname); } }
         ]
       });
       mojo.grid.academic_agency_class_c.data('kendoGrid').hideColumn(0);
