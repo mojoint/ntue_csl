@@ -166,6 +166,9 @@ class AjaxController extends Controller {
                 $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_yes', $data);
                 $json = array("code"=>1, "data"=>$res);
+                $mailer = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_who', array('agency_id'=> $_POST['agency_id']));
+                if (sizeof($mailer))
+                    $this->mailer('unlocker', $mailer, 'unlock', 'yes');
                 break;
             case 'no':
                 //$res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', array('agency_id'=> $_POST['agency_id'], 'id'=> $_POST['id']));
@@ -173,6 +176,9 @@ class AjaxController extends Controller {
                 $id = (new AjaxModel)->dbLogger('admin', $key, $val, implode('@@@', $data));
                 $res = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_no', $data);
                 $json = array("code"=>1, "data"=>$res);
+                $mailer = (new AjaxModel)->dbQuery('admin_academic_agency_unlock_who', array('agency_id'=> $_POST['agency_id']));
+                if (sizeof($mailer))
+                    $this->mailer('unlocker', $mailer, 'unlock', 'yes');
                 break;
             } 
             break;
@@ -3847,11 +3853,31 @@ class AjaxController extends Controller {
                 $message = str_ireplace("@@@academic_institution@@@", $username, str_ireplace("@@@academic_era@@@", $email, str_ireplace("@@@academic_quarter@@@", $msg, $official['message_agent_unlock'])));
                 $email = $official['email_from'];
                 break;
+            case 'unlocker':
+                $subject = '資料修改申請';
+                $message = '資料修改申請';
+                switch( $msg )
+                {
+                case 'yes':
+                    $subject .= ' 同意'; 
+                    $message .= ' 同意'; 
+                    break;
+                case 'no':
+                    $subject .= ' 不同意';
+                    $message .= ' 不同意';
+                    break;
+                }
+                $email = $mailer[0]['email'];
+                $cc = '';
+                if ((isset($mailer[1])) && (!empty($mailer[1]['email']))) {
+                    $cc = 'Cc: '. $mailer[1]['email'] . "\r\n";
+                }
+                break;
             }
-
 
             $headers = "Content-type: text/html; charset=UTF-8\r\n";
             $headers .= 'From: 華語文教育機構績效系統 <' . $official['email_from'] . "> \r\n".
+                       $cc .
                        'Reply-To: '. $official['email_reply'] . "\r\n".
                        'X-Mailer: PHP/' . phpversion();
         } else {

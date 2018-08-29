@@ -147,6 +147,13 @@ class AjaxModel extends Model {
             $sql = 'DELETE FROM `academic_agency_unlock` WHERE `agency_id` = :agency_id AND `id` = :id';
             return $this->dbUpdate($sql, array(':agency_id'=>$data['agency_id'], ':id'=>$data['id']));
             break;
+        case 'admin_academic_agency_unlock_who':
+            $sql  = 'SELECT aaa.`username`, aaa.`email`';
+            $sql .= '  FROM `academic_agency_agent` aaa';
+            $sql .= ' WHERE aaa.`agency_id` = :agency_id';
+            $sql .= '   AND aaa.`email` is not null';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            break;
         case 'admin_academic_era':
             $sql = 'SELECT * FROM `academic_era` WHERE `id` = :era_id';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
