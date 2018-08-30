@@ -3009,12 +3009,12 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '排序');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, '洲別');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, '國別');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, 'A類');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, '課程');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, 'B類');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, '課程');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, 'C類');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, '課程');
+                $objPHPExcel->getActiveSheet()->mergeCells('D'. $knt .':E'. $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, 'A類課程');
+                $objPHPExcel->getActiveSheet()->mergeCells('F'. $knt .':G'. $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, 'B類課程');
+                $objPHPExcel->getActiveSheet()->mergeCells('H'. $knt .':I'. $knt);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, 'C類課程');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, '男生人數');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, '女生人數');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, '總計');

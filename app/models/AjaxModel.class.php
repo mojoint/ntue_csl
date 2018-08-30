@@ -507,7 +507,7 @@ class AjaxModel extends Model {
         case 'admin_academic_agency_report_states':
             $sql  = 'SELECT aacc.`country_code`, cl.`cname` country_name, sl.`cname` state_name,';
             $sql .= ' SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people, ';
-            $sql .= ' SUM(0) male_a, SUM(0) female_a, SUM(0) male_b, SUM(0) female_b, SUM(0) male_c, SUM(0) female_c';
+            $sql .= ' 0 male_a, 0 female_a, 0 male_b, 0 female_b, 0 male_c, 0 female_c';
             $sql .= '  FROM `academic_agency_class` aac';
             $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
             $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
@@ -527,6 +527,8 @@ class AjaxModel extends Model {
                 $sql .= ' GROUP BY aac.major_code';
                 $res = $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':country_code'=>$states[$key]['country_code']));
                 if (sizeof($res)) {
+                    $male = 0;
+                    $female = 0;
                     foreach($res as $r) {
                         switch($r['major_code'])
                         {
@@ -543,9 +545,15 @@ class AjaxModel extends Model {
                             $states[$key]['female_c'] = $r['female'];
                             break;
                         }
+                        $male += $r['male'];
+                        $female += $r['female'];
                     }
+                    $states[$key]['male'] = $male;
+                    $states[$key]['female'] = $female;
+                    $states[$key]['people'] = $male + $female;
                 }
             }
+
             return $states;
             break;
         case 'admin_academic_agency_report_classes':
