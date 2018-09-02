@@ -3139,7 +3139,7 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $female_c + $roc['female_c']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $male + $roc['male']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female + $roc['female']);
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people + $roc['people']);
 
                 $filename = '國籍人數排序報表';
                 break;

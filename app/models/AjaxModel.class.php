@@ -406,11 +406,13 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
         case 'admin_academic_agency_report_statistics_detail':
-            $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
+            #$sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(t2.`new_male` + t2.`new_female`) `new_people`, SUM(t2.`new_male`) `new_male`, SUM(t2.`new_female`) `new_female`';
+            $sql  = 'SELECT t2.`country_code`, t3.`cname` `country_cname`, SUM(IFNULL(t2.`new_male`, 0) + IFNULL(t2.`new_female`, 0)) `new_people`, SUM(IFNULL(t2.`new_male`, 0)) `new_male`, SUM(IFNULL(t2.`new_female`, 0)) `new_female`';
             $sql .= '  FROM `academic_agency_class` t1';
             $sql .= ' INNER JOIN `academic_agency_class_country` t2 ON t1.`id` = t2.`class_id`';
             $sql .= ' INNER JOIN `country_list` t3 ON t3.`code` = t2.`country_code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id';
+            $sql .= '   AND t1.`agency_id` != 999';
             $sql .= ' GROUP BY t2.`country_code`';
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
             break;
@@ -506,7 +508,9 @@ class AjaxModel extends Model {
             break;
         case 'admin_academic_agency_report_states':
             $sql  = 'SELECT aacc.`country_code`, cl.`cname` country_name, sl.`cname` state_name,';
-            $sql .= ' SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people, ';
+            #$sql .= ' SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people, ';
+            $sql .= ' SUM(aacc.`new_male`) male, SUM(aacc.`new_female`) female, SUM(aacc.`new_male` + aacc.`new_female`) people, ';
+            #$sql .= ' 0 male, 0 female, 0 people, ';
             $sql .= ' 0 male_a, 0 female_a, 0 male_b, 0 female_b, 0 male_c, 0 female_c';
             $sql .= '  FROM `academic_agency_class` aac';
             $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
@@ -519,11 +523,13 @@ class AjaxModel extends Model {
             $states =  $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
 
             foreach($states as $key=>$val) {
-                $sql = 'SELECT aac.`major_code`, SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people';
+                #$sql = 'SELECT aac.`major_code`, SUM(aacc.`male` + aacc.`new_male`) male, SUM(aacc.`female` + aacc.`new_female`) female, SUM(aacc.`male` + aacc.`new_male` + aacc.`female` + aacc.`new_female`) people';
+                $sql = 'SELECT aac.`major_code`, SUM(IFNULL(aacc.`new_male`, 0)) male, SUM(IFNULL(aacc.`new_female`, 0)) female, SUM(IFNULL(aacc.`new_male`, 0) + IFNULL(aacc.`new_female`, 0)) people';
                 $sql .= '  FROM `academic_agency_class` aac';
                 $sql .= ' INNER JOIN `academic_agency_class_country` aacc on aac.id = aacc.class_id';
                 $sql .= ' WHERE aac.`era_id` = :era_id';
                 $sql .= '   AND aacc.`country_code` = :country_code';
+                $sql .= '   AND aac.`agency_id` != 999';
                 $sql .= ' GROUP BY aac.major_code';
                 $res = $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':country_code'=>$states[$key]['country_code']));
                 if (sizeof($res)) {
@@ -548,9 +554,9 @@ class AjaxModel extends Model {
                         $male += $r['male'];
                         $female += $r['female'];
                     }
-                    $states[$key]['male'] = $male;
-                    $states[$key]['female'] = $female;
-                    $states[$key]['people'] = $male + $female;
+                    #$states[$key]['male'] = $male;
+                    #$states[$key]['female'] = $female;
+                    #$states[$key]['people'] = $male + $female;
                 }
             }
 
