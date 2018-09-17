@@ -3183,6 +3183,7 @@ class AjaxController extends Controller {
                 $sum_male = 0;
                 $sum_female = 0;
                 $sum_people = 0;
+                $sn = 0;
                 foreach ($classes as $c) {
                     $knt++;
                     if ($state_code != $c['code']) {
@@ -3201,9 +3202,9 @@ class AjaxController extends Controller {
                             $people = 0;
                             $knt++;
                         }
-                        $sn++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $c['state_name']);
                     }
+                    $sn++;
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $sn);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $c['country_name']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $c['male']);

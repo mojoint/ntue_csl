@@ -572,6 +572,7 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN academic_class ac on ac.era_id = aac.era_id AND ac.minor_code = aac.minor_code';
             $sql .= ' WHERE aac.era_id = :era_id';
             $sql .= '   AND aac.minor_code = :minor_code';
+            $sql .= '   AND aac.agency_id != 999';
             $sql .= ' GROUP BY sl.code, aacc.country_code';
             $sql .= ' ORDER BY sl.sno, people DESC';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));

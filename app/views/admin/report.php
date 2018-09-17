@@ -3,7 +3,7 @@
     <?php if ($_SESSION['admin']) : ?>
       <div id="grid-academic_admin_report_era_detail">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -17,7 +17,7 @@
 
       <div id="grid-academic_admin_report_era_summary">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -31,7 +31,7 @@
 
       <div id="grid-academic_admin_report_quarter_detail">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -45,7 +45,7 @@
 
       <div id="grid-academic_admin_report_quarter_summary">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -59,7 +59,7 @@
 
       <div id="grid-academic_admin_report_manager">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -73,7 +73,7 @@
 
       <div id="grid-academic_admin_report_statistics">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -87,7 +87,7 @@
 
       <div id="grid-academic_admin_report_major_b">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -101,7 +101,7 @@
 
       <div id="grid-academic_admin_report_states">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
@@ -115,7 +115,7 @@
 
       <div id="grid-academic_admin_report_classes">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
