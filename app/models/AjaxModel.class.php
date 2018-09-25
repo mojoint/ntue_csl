@@ -1378,7 +1378,7 @@ class AjaxModel extends Model {
             $sql  = 'SELECT ai.`cname` academic_institution_cname, ae.`cname` academic_era_cname';
             $sql .= '  FROM `academic_agency` aa ';
             $sql .= ' INNER JOIN `academic_institution` ai ON aa.`institution_code` = ai.`code`';
-            $sql .= ' INNER JOIN `academic_era` ae ON ae.`era_id` = :era_id';
+            $sql .= ' INNER JOIN `academic_era` ae ON ae.`id` = :era_id';
             $sql .= ' WHERE aa.`id` = :agency_id';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':agency_id'=>$data['agency_id']));
             break;
