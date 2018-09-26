@@ -129,7 +129,7 @@
 
       <div id="grid-academic_admin_report_people">
         <table role="grid">
-          <colgroup><col style="width: 15%"/><col style="width: 15%;" /><col /></colgroup>
+          <colgroup><col style="width: 15%"/><col style="width: 35%;" /><col /></colgroup>
           <thead></thead>
           <tbody>
             <tr>
