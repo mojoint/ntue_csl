@@ -564,7 +564,8 @@ class AjaxModel extends Model {
             break;
         case 'admin_academic_agency_report_classes':
             $sql  = 'SELECT ac.cname class_name, aac.minor_code, aacc.country_code, cl.cname country_name, sl.sno, sl.code, sl.cname state_name, ';
-            $sql .= ' SUM(aacc.male + aacc.new_male) male, SUM(aacc.female + aacc.new_female) female, SUM(aacc.male + aacc.new_male + aacc.female + aacc.new_female) people';
+            #$sql .= ' SUM(aacc.male + aacc.new_male) male, SUM(aacc.female + aacc.new_female) female, SUM(aacc.male + aacc.new_male + aacc.female + aacc.new_female) people';
+            $sql .= ' SUM(aacc.new_male) male, SUM(aacc.new_female) female, SUM(aacc.new_male + aacc.new_female) people';
             $sql .= '  FROM academic_agency_class aac';
             $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
             $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
@@ -578,7 +579,7 @@ class AjaxModel extends Model {
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id'], ':minor_code'=>$data['minor_code']));
             break;
         case 'admin_academic_agency_report_people':
-            $sql  = 'SELECT cl.state_code, sl.cname state_name, Count(Distinct(aacc.country_code)) countries, SUM(aacc.male + aacc.new_male) male, SUM(aacc.female + aacc.new_female) female, SUM(aacc.male + aacc.new_male + aacc.female + aacc.new_female) people';
+            $sql  = 'SELECT cl.state_code, sl.cname state_name, Count(Distinct(aacc.country_code)) countries, SUM(aacc.new_male) male, SUM(aacc.new_female) female, SUM(aacc.new_male + aacc.new_female) people';
             $sql .= '  FROM academic_agency_class aac';
             $sql .= ' INNER JOIN academic_agency_class_country aacc on aacc.class_id = aac.id';
             $sql .= ' INNER JOIN country_list cl on aacc.country_code = cl.code';
