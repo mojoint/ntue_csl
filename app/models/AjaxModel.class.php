@@ -786,16 +786,16 @@ class AjaxModel extends Model {
             break;
         case 'agent_academic_agency_class_import':
             // classes
-            $sql  = 'INSERT INTO `academic_agency_class` ';
-            $sql .= 'SELECT 0 `id`, `agency_id`, `era_id`, (`quarter` + 1) `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `new_people`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, now() `latest`, 0 `state`';
+            $sql  = 'INSERT INTO `academic_agency_class` (`agency_id`, `era_id`, `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `new_people`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, `latest`, `state`)';
+            $sql .= 'SELECT `agency_id`, `era_id`, (`quarter` + 1) `quarter`, `major_code`, `minor_code`, `cname`, `content_code`, `target_code`, `new_people`, `people`, `weekly`, `weeks`, `hours`, `adjust`, `total_hours`, `revenue`, `subsidy`, `turnover`, `note`, now() `latest`, 0 `state`';
             $sql .= '  FROM `academic_agency_class` ';
             $sql .= ' WHERE `id` = :id';
 
             $id = $this->dbInsert($sql, array(':id'=>$data['id']));
 
             // country 
-            $sql  = 'INSERT INTO `academic_agency_class_country`';
-            $sql .= 'SELECT 0 `id`, :class_id `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`';
+            $sql  = 'INSERT INTO `academic_agency_class_country` (`class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`)';
+            $sql .= 'SELECT :class_id `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`';
             $sql .= '  FROM `academic_agency_class_country`';
             $sql .= ' WHERE `class_id` = :id';
             $cnt = $this->dbInsert($sql, array(':class_id'=>$id, ':id'=>$data['id']));
