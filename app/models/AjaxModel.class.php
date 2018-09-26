@@ -814,7 +814,7 @@ class AjaxModel extends Model {
                 $sql = 'UPDATE `academic_agency_class_status` t1 SET t1.`classes` = :classes WHERE t1.`agency_id` = :agency_id AND t1.`era_id` = :era_id AND t1.`quarter` = :quarter';
                 $cnt = $this->dbUpdate($sql, array(':classes'=>$classes, ':agency_id'=>$res[0]['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter']));
             } else {
-                $sql = 'INSERT INTO `academic_agency_class_status` (`id`, `agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (0, :agency_id, :era_id, :quarter, :classes, 0, "", 0, "", "", "", 0)';
+                $sql = 'INSERT INTO `academic_agency_class_status` (`agency_id`, `era_id`, `quarter`, `classes`, `unlock`, `minors`, `work_days`, `online`, `offline`, `note`, `state`) VALUES (:agency_id, :era_id, :quarter, :classes, 0, "", 0, "", "", "", 0)';
                 $sid = $this->dbInsert($sql, array(':agency_id'=>$res[0]['agency_id'], ':era_id'=>$res[0]['era_id'], ':quarter'=>$res[0]['quarter'], ':classes'=>$classes));
             }
 
@@ -826,7 +826,7 @@ class AjaxModel extends Model {
             $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
             $cnt = $this->dbUpdate($sql, array(':class_id'=>$data['class_id']));
             for ($i=0; $i<sizeof($data['country']); $i++) {
-                $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
+                $sql = 'INSERT INTO `academic_agency_class_country` (`class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (:class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
                     $id = $this->dbInsert($sql, array(':class_id'=>$data['class_id'], ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>base64_decode($data['country'][$i]['note'])));
             } 
             return $this->dbQuery('agent_academic_agency_class', array('agency_id'=>$data['agency_id'], 'era_id'=>$data['era_id'], 'quarter'=>$data['quarter']));
