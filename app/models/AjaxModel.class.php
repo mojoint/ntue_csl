@@ -722,7 +722,7 @@ class AjaxModel extends Model {
                 $sql = 'DELETE FROM `academic_agency_class_country` WHERE `class_id` = :class_id';
                 $cnt = $this->dbUpdate($sql, array(':class_id'=>$class_id));
                 for ($i=0; $i<sizeof($data['country']); $i++) {
-                    $sql = 'INSERT INTO `academic_agency_class_country` (`id`, `class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (0, :class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
+                    $sql = 'INSERT INTO `academic_agency_class_country` (`class_id`, `country_code`, `male`, `female`, `new_male`, `new_female`, `note`, `state`) VALUES (:class_id, :country_code, :male, :female, :new_male, :new_female, :note, 0)';
                     $id = $this->dbInsert($sql, array(':class_id'=>$class_id, ':country_code'=>$data['country'][$i]['country_code'], ':male'=>$data['country'][$i]['male'], ':new_male'=>$data['country'][$i]['new_male'], ':female'=>$data['country'][$i]['female'], ':new_female'=>$data['country'][$i]['new_female'], ':note'=>base64_decode($data['country'][$i]['note'])));
                 } 
             } 
