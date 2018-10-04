@@ -52,7 +52,7 @@ class EmailController extends Controller {
                     <input type="hidden" id="session" name="session" class="form-control" value="'. $session .'"/>
                 </div>
                 <div class="form-group col-xs-12">
-                    <input type="text" id="userpass" name="userpass" placeholder="請輸入您的密碼" class="form-control" />
+                    <input type="text" id="userpass" name="userpass" placeholder="密碼規則: 長度3~80 的 大小寫英數字或`~!@#$%^&*-_=+" class="form-control" />
                     <i id="icon-userpass" class="btn fa fa-eye"></i>
                 </div>
                 <div class="form-group col-xs-12">
