@@ -132,7 +132,7 @@
       }
     };
   </script>
-  <script src="/public/js/mojo.combo.v18.10.5.js"></script>
+  <script src="/public/js/mojo.combo.v18.10.22.js"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body data-mojo="<?php echo (isset($_SESSION['admin'])? $_SESSION['admin']['session'] : (isset($_SESSION['agent'])? $_SESSION['agent']['session'] : ''));?>" data-error="<?php echo (isset($error_code)? $error_code : '') ;?>">

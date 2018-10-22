@@ -1295,13 +1295,40 @@ class AjaxController extends Controller {
                 break;
             case 'manager':
                 $era = (new AjaxModel)->dbQuery('admin_academic_era', array('era_id'=>$era_id));
-                $academic_class = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                $quarters = '';
+/*
+                switch($quarter)
+                {
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                    $quarters = '-Q' . ($quarter-1);
+                    break;
+                case '6':
+                    $quarters = '-Q1,2';
+                    break;
+                case '7':
+                    $quarters = '-Q2,3';
+                    break;
+                case '8':
+                    $quarters = '-Q3,4';
+                    break;
+                case '9':
+                    $quarters = '-Q1,2,3';
+                    break;
+                case '10':
+                    $quarters = '-Q2,3,4';
+                    break;
+                }
+*/
                 /* summary */
                 $cnt = 0;
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '人時數營收總簡表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '人時數營收總簡表' . $quarters );
 
-                $turnover_summary = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_summary', array('era_id'=>$era_id));
+                $turnover_summary = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_summary', array('era_id'=>$era_id, 'quarters'=>$quarter));
                 $counter = array('new_people'=>0, 'people'=>0, 'total_hours'=>0, 'turnover'=>0);
 
                 $knt = 1;
@@ -1348,7 +1375,7 @@ class AjaxController extends Controller {
                 $cnt = 1;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人數詳表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人數詳表' . $quarters);
 
                 $knt = 1;
                 $qnt = 0;
@@ -1368,7 +1395,7 @@ class AjaxController extends Controller {
                 $sum_t = 0;
 
                 // academic_class array
-                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                //$academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 $acs = array();
                 $acn = array();
                 $cols_a = array();
@@ -1463,7 +1490,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarters'=>$quarter));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1555,7 +1582,7 @@ class AjaxController extends Controller {
                 $cnt = 2;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人次詳表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人次詳表' . $quarters);
 
                 $knt = 1;
                 $qnt = 0;
@@ -1575,7 +1602,7 @@ class AjaxController extends Controller {
                 $sum_t = 0;
 
                 // academic_class array
-                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                //$academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 $acs = array();
                 $acn = array();
                 $cols_a = array();
@@ -1666,7 +1693,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarters'=>$quarter));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1757,7 +1784,7 @@ class AjaxController extends Controller {
                 $cnt = 3;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人時數詳表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總人時數詳表' . $quarters);
 
                 $knt = 1;
                 $qnt = 0;
@@ -1777,7 +1804,7 @@ class AjaxController extends Controller {
                 $sum_t = 0;
 
                 // academic_class array
-                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                //$academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 $acs = array();
                 $acn = array();
                 $cols_a = array();
@@ -1869,7 +1896,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarters'=>$quarter));
 
                     $cs = array();
                     $sum_a = 0;
@@ -1962,7 +1989,7 @@ class AjaxController extends Controller {
                 $cnt = 4;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總營收詳表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '各類研習總營收詳表' .$quarters);
 
                 $knt = 1;
                 $qnt = 0;
@@ -1982,7 +2009,7 @@ class AjaxController extends Controller {
                 $sum_t = 0;
 
                 // academic_class array
-                $academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
+                //$academic_classes = (new AjaxModel)->dbQuery('admin_academic_class', array('era_id'=>$era_id));
                 $acs = array();
                 $acn = array();
                 $cols_a = array();
@@ -2074,7 +2101,7 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $qnt);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $target['institution_code']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $target['institution_cname'] . $target['cname']);
-                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id));
+                    $classes = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_detail', array('agency_id'=>$target['id'], 'era_id'=>$era_id, 'quarters'=>$quarter));
 
                     $cs = array();
                     $sum_a = 0;
@@ -2165,13 +2192,17 @@ class AjaxController extends Controller {
                 $cnt = 5;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人數簡表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人數簡表' . $quarters);
 
-                $new_peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('era_id'=>$era_id));
+                $new_peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_new_people_summary', array('era_id'=>$era_id, 'quarters'=>$quarter));
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
                 $sum_t = 0;
+                $ratio_a = 0;
+                $ratio_b = 0;
+                $ratio_c = 0;
+                $ratio_t = 0;
 
                 $minor_a = array();
                 $minor_b = array();
@@ -2214,11 +2245,19 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, number_format($sum_t));
 
                 $knt = 4;
+
+                if ($sum_t > 0) {
+                    $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
+                    $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
+                    $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
+                    $ratio_a = round((($sum_t/$sum_t) * 100), 2) . '%';
+                }
+
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2250,10 +2289,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_a as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_a) * 100, 2) . '%');
+                    $ratio_a = 0;
+                    if ($sum_a > 0) {
+                        $ratio_a = round(($minor['new_people']/$sum_a) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+                $ratio_a = 0;
+                if ($sum_a > 0) {
+                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 /* B */
                 $knt = 11;
@@ -2278,10 +2325,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_b as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_b) * 100, 2) . '%');
+                    $ratio_b = 0;
+                    if ($sum_b > 0) {
+                        $ratio_b = round(($minor['new_people']/$sum_b) * 100, 2) .'%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+                $ratio_b = 0;
+                if ($sum_b > 0) {
+                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
 
                 /* C */
                 $knt = 15;
@@ -2306,23 +2361,35 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_c as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['new_people']/$sum_c) * 100, 2) . '%');
+                    $ratio_c = 0;
+                    if ($sum_c > 0) {
+                        $ratio_c = round(($minor['new_people']/$sum_c) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+                $ratio_c = 0;
+                if ($sum_c > 0) {
+                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) .'%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
 
                 /* people summary */
                 $cnt = 6;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人次簡表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人次簡表' . $quarters);
 
-                $peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_summary', array('era_id'=>$era_id));
+                $peoples = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_people_summary', array('era_id'=>$era_id, 'quarters'=>$quarter));
 
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
                 $sum_t = 0;
+                $ratio_a = 0;
+                $ratio_b = 0;
+                $ratio_c = 0;
+                $ratio_t = 0;
 
                 $minor_a = array();
                 $minor_b = array();
@@ -2365,11 +2432,17 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, number_format($sum_t));
 
                 $knt = 4;
+                if ($sum_t > 0) {
+                    $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
+                    $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
+                    $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
+                    $ratio_a = round((($sum_t/$sum_t) * 100), 2) . '%';
+                }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2401,10 +2474,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_a as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_a) * 100, 2) . '%');
+                    $ratio_a = 0;
+                    if ($sum_a > 0) {
+                        $ratio_a = round(($minor['people']/$sum_a) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+                $ratio_a = 0;
+                if ($sum_a > 0) {
+                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 /* B */
                 $knt = 11;
@@ -2429,10 +2510,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_b as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_b) * 100, 2) . '%');
+                    $ratio_b = 0;
+                    if ($sum_b > 0) {
+                        $ratio_b = round(($minor['people']/$sum_b) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+                $ratio_b = 0;
+                if ($sum_b > 0) {
+                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
 
                 /* C */
                 $knt = 15;
@@ -2457,22 +2546,34 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_c as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['people']/$sum_c) * 100, 2) . '%');
+                    $ratio_c = 0;
+                    if ($sum_c > 0) {
+                        $ratio_c = round(($minor['people']/$sum_c) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+                $ratio_c = 0;
+                if ($sum_c > 0) {
+                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
 
                 /* total hours summary */
                 $cnt = 7;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人時數簡表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總人時數簡表' . $quarters);
 
-                $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_summary', array('era_id'=>$era_id));
+                $total_hours = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_total_hours_summary', array('era_id'=>$era_id, 'quarters'=>$quarter));
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
                 $sum_t = 0;
+                $ratio_a = 0;
+                $ratio_b = 0;
+                $ratio_c = 0;
+                $ratio_t = 0;
 
                 $minor_a = array();
                 $minor_b = array();
@@ -2514,11 +2615,17 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, number_format($sum_t));
 
                 $knt = 4;
+                if ($sum_t > 0) {
+                    $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
+                    $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
+                    $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
+                    $ratio_a = round((($sum_t/$sum_t) * 100), 2) . '%';
+                }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2550,10 +2657,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_a as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_a) * 100, 2) . '%');
+                    $ratio_a = 0;
+                    if ($sum_a > 0) {
+                        $ratio_a = round(($minor['total_hours']/$sum_a) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+                $ratio_a = 0;
+                if ($sum_a > 0) {
+                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 // B 
                 $knt = 11;
@@ -2578,10 +2693,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_b as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_b) * 100, 2) . '%');
+                    $ratio_b = 0;
+                    if ($sum_b > 0) {
+                        $ratio_b = round(($minor['total_hours']/$sum_b) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+                $ratio_b = 0;
+                if ($sum_b > 0) {
+                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 // C 
                 $knt = 15;
@@ -2606,23 +2729,35 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_c as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['total_hours']/$sum_c) * 100, 2) . '%');
+                    $ratio_c = 0;
+                    if ($sum_c > 0) {
+                        $ratio_c = round(($minor['total_hours']/$sum_c) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+                $ratio_c = 0;
+                if ($sum_c > 0) {
+                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 /* turnover summary */
                 $cnt = 8;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總營收簡表' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '華語中心各類研習總營收簡表' . $quarters);
 
-                $turnovers = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_summary', array('era_id'=>$era_id));
+                $turnovers = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_turnover_summary', array('era_id'=>$era_id, 'quarters'=>$quarter));
 
                 $sum_a = 0;
                 $sum_b = 0;
                 $sum_c = 0;
                 $sum_t = 0;
+                $ratio_a = 0;
+                $ratio_b = 0;
+                $ratio_c = 0;
+                $ratio_t = 0;
 
                 $minor_a = array();
                 $minor_b = array();
@@ -2666,10 +2801,16 @@ class AjaxController extends Controller {
 
                 $knt = 4;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, round((($sum_a/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, round((($sum_b/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, round((($sum_c/$sum_t) * 100), 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, round((($sum_t/$sum_t) * 100), 2) . '%');
+                if ($sum_t > 0) {
+                    $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
+                    $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
+                    $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
+                    $ratio_a = round((($sum_t/$sum_t) * 100), 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2701,10 +2842,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_a as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_a) * 100, 2) . '%');
+                    $ratio_a = 0;
+                    if ($sum_a > 0) {
+                        $ratio_a = round(($minor['turnover']/$sum_a) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_a/$sum_a) * 100, 2) . '%');
+                $ratio_a = 0;
+                if ($sum_a > 0) {
+                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
 
                 // B 
                 $knt = 11;
@@ -2729,10 +2878,18 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_b as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_b) * 100, 2) . '%');
+                    $ratio_b = 0;
+                    if ($sum_b > 0) {
+                        $ratio_b = round(($minor['turnover']/$sum_b) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_b/$sum_b) * 100, 2) . '%');
+                $ratio_b = 0;
+                if ($sum_b > 0) {
+                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
 
                 // C 
                 $knt = 15;
@@ -2757,18 +2914,26 @@ class AjaxController extends Controller {
                 $col_idx = $col_ini;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '各類佔百分比');
                 foreach( $minor_c as $minor ) {
-                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($minor['turnover']/$sum_c) * 100, 2) . '%');
+                    $ratio_c = 0;
+                    if ($sum_c > 0) {
+                        $ratio_c = round(($minor['turnover']/$sum_c) * 100, 2) . '%';
+                    }
+                    $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
                     $col_idx++;
                 }
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, round(($sum_c/$sum_c) * 100, 2) . '%');
+                $ratio_c = 0;
+                if ($sum_c > 0) {
+                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                }
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
 
                 /* */
                 $cnt = 9;
                 $objPHPExcel->createSheet();
                 $objPHPExcel->setActiveSheetIndex($cnt);
-                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '大學附設華語中心人數(次)一覽表(交叉總表)' );
+                $objPHPExcel->getActiveSheet()->setTitle( $era[0]['cname'] . '大學附設華語中心人數(次)一覽表(交叉總表)' . $quarters);
 
-                $details = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_detail', array('era_id'=>$era_id));
+                $details = (new AjaxModel)->dbQuery('admin_academic_agency_report_manager_detail', array('era_id'=>$era_id, 'quarters'=>$quarter));
 
                 $new_people = 0;
                 $people = 0;

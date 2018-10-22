@@ -16,8 +16,10 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
             break;
         case 'academic_agency_fill':
-            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id';
-            $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            $era = $this->dbQuery('academic_era_unlock');
+            $era_id = $era[0]['id'];
+            $sql = 'SELECT * FROM `academic_agency_class_status` WHERE `agency_id` = :agency_id AND `era_id` = :era_id';
+            $status = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era_id));
             $quarter = array();
             $unlock = false;
             if (sizeof($status)) {
@@ -120,11 +122,14 @@ class AgentModel extends Model {
             return $this->dbSelect($sql, array(':ntue'=>MD5Prefix));
             break;
         case 'academic_agency_unlock':
+            $era = $this->dbQuery('academic_era_unlock');
+            $era_id = $era[0]['id'];
             $sql  = 'SELECT t1.*, (now() between concat(t1.`online`, " 00:00:00") and concat(t1.`offline`, " 23:59:59") ) `status`, t2.`classes`, t2.`unlock`, t2.`state` `status_state`';
             $sql .= '  FROM `academic_agency_unlock` t1';
             $sql .= ' INNER JOIN `academic_agency_class_status` t2 ON t1.`agency_id` = t2.`agency_id` AND t1.`era_id` = t2.`era_id` AND t1.`quarter` = t2.`quarter`';
-            $sql .= '  WHERE t1.`agency_id` = :agency_id';
-            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id']));
+            $sql .= ' WHERE t1.`agency_id` = :agency_id';
+            $sql .= '   AND t1.`era_id` = :era_id';
+            return $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$era_id));
             break;
         case 'academic_agency_hr':
             $sql  = 'SELECT t1.*, t2.`code` `academic_era_code`';
