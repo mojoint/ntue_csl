@@ -3468,8 +3468,8 @@ class AjaxController extends Controller {
                 $knt = 6;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, number_format($AS*100/$people, 2) . '%');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, number_format($AC*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, number_format($AF*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($EU*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, number_format($EU*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($AF*100/$people, 2) . '%');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, number_format($OA*100/$people, 2) . '%');
                 
 
