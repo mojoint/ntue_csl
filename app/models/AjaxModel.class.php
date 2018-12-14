@@ -956,6 +956,11 @@ class AjaxModel extends Model {
             $sql .= ' ORDER BY people DESC';
             return $this->dbSelect($sql, array(':era_id'=>$data['era_id']));
             break;
+        case 'admin_academic_agency_report_special':
+            $sql = $data['sql'] . ' AND "NTUE" = :ntue';
+
+            return $this->dbSelect($sql, array(':ntue'=>'NTUE'));
+            break;
         case 'admin_board_unreply_query_bk':
             $sql  = 'SELECT t.* ';
             $sql .= '  FROM `academic_board` t';
@@ -1307,7 +1312,7 @@ class AjaxModel extends Model {
 
         // stand alone agency report start
         case 'agent_academic_agency_report_era_detail':
-            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, 0 `new_people`, 0 `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`,';
+            $sql  = 'SELECT t1.`era_id`, t1.`quarter`, t1.`major_code`, t1.`minor_code`, t2.`cname` `minor_code_cname`, t3.`cname` `major_code_cname`, 0 `new_people`, 0 `people`, SUM(t1.`weekly`) `weekly`, SUM(t1.`hours`) `hours`, "" `country`, ';
             //$sql .= 'TRUNCATE(SUM(t1.`weekly`)/(SELECT COUNT(*) FROM `academic_agency_class` t5 WHERE t5.`agency_id` = t1.`agency_id` AND t5.`era_id` = t1.`era_id` AND t5.`quarter` = t1.`quarter` AND t5.`minor_code` = t1.`minor_code`), 2) `avg_weekly`, ';
             $sql .= '0 `avg_weekly`, ';
             $sql .= 'SUM(t1.`hours`) `hours`, SUM(t1.`total_hours`) `total_hours`, SUM(t1.`turnover`) `turnover`, ';
@@ -1320,6 +1325,7 @@ class AjaxModel extends Model {
             $sql .= ' INNER JOIN `major_list` t3 ON t1.`major_code` = t3.`code`';
             $sql .= ' WHERE t1.`agency_id` = :agency_id';
             $sql .= '   AND t1.`era_id` = :era_id';
+
 
             switch($data['quarter'])
             {
@@ -1353,10 +1359,12 @@ class AjaxModel extends Model {
                 $quarters = $data['quarter'];
                 $sql .= '   AND t1.`quarter` = '. $quarters ;
             }
+
             $sql .= ' GROUP BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
             $sql .= ' ORDER BY t1.`major_code`, t1.`quarter`, t1.`minor_code`';
 
             $res = $this->dbSelect($sql, array(':agency_id'=>$data['agency_id'], ':era_id'=>$data['era_id']));
+
 
             if (sizeof($res)) {
                 foreach($res as $key=>$val) {
@@ -1389,6 +1397,7 @@ class AjaxModel extends Model {
                     $res[$key]['country'] = $r;
                 }
             }
+
             return $res;
             break;
         case 'agent_academic_agency_report_era_summary':
