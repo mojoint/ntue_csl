@@ -801,6 +801,16 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['weekly']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
 
+                                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                                 $knt++;
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_head[ $r['major_code'] ]);
@@ -830,6 +840,13 @@ class AjaxController extends Controller {
                                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
 
+                                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                        $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                        $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $r['info']);
                                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, $r['note']);
                                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, $r['latest']);
@@ -855,6 +872,9 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $country['new_male']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $country['new_female']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $country['people']);
+                                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                                     $major_sum[ $r['major_code'] ][ 'new_male' ] += intval( $country['new_male'] );
                                     $major_sum[ $r['major_code'] ][ 'new_female' ] += intval( $country['new_female'] );
@@ -904,6 +924,16 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+
 
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                         $knt++;
@@ -930,6 +960,16 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'S' ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'S' ]['turnover']);
+
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');                                                                            
 
                         $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                     }
@@ -1001,6 +1041,14 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ $major_cache ]['total_hours']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['turnover']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['classes']);
+                            $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                            $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                            $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                            $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                            $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                             $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
 
@@ -1029,6 +1077,15 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['turnover']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['classes']);
+
+                        $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['info']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['note']);
@@ -1075,6 +1132,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['turnover']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['classes']);
 
+                    $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                     $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
 
                     $knt++;
@@ -1098,6 +1164,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['total_hours']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['turnover']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['classes']);
+
+                    $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     $cnt++;
                 }
@@ -1200,6 +1275,16 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
 
+                                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
 
                                 $knt++;
@@ -1228,6 +1313,13 @@ class AjaxController extends Controller {
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['total_hours']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['turnover']);
 
+                                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                    $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                    $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $r['info']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('M' . $knt, $r['note']);
                                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('N' . $knt, $r['latest']);
@@ -1253,6 +1345,10 @@ class AjaxController extends Controller {
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $country['new_male']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $country['new_female']);
                                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $country['people']);
+
+                                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                                 $major_sum[ $r['major_code'] ][ 'new_male' ] += intval( $country['new_male'] );
                                 $major_sum[ $r['major_code'] ][ 'new_female' ] += intval( $country['new_female'] );
@@ -1300,6 +1396,16 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ $major_cache ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ $major_cache ]['turnover']);
 
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                         $knt++;
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, $major_foot[ 'S' ]);
@@ -1326,6 +1432,16 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['weekly']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $major_sum[ 'S' ]['total_hours']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $major_sum[ 'S' ]['turnover']);
+
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                         $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":N" . $knt);
                     }
@@ -1423,6 +1539,15 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $r['turnover']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $r['classes']);
 
+                        $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $r['info']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $r['note']);
 
@@ -1467,6 +1592,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ $major_cache ]['turnover']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ $major_cache ]['classes']);
 
+                    $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                     $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle, "A". $knt .":K" . $knt);
 
                     $knt++;
@@ -1489,6 +1623,15 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $major_sum[ 'S' ]['total_hours']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $major_sum[ 'S' ]['turnover']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $major_sum[ 'S' ]['classes']);
+
+                    $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     $cnt++;
                 }
@@ -1564,6 +1707,12 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $summary['total_hours']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $summary['turnover']);
 
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
+
                     $counter['new_people'] += intval($summary['new_people']);
                     $counter['people'] += intval($summary['people']);
                     $counter['total_hours'] += floatval($summary['total_hours']);
@@ -1584,6 +1733,11 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $counter['people']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $counter['total_hours']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $counter['turnover']);
+
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
 
@@ -1748,22 +1902,28 @@ class AjaxController extends Controller {
                         case 'ASUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_a));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_a);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                             break;
                         case 'BSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_b));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_b);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'CSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_c));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_c);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'TSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_t));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_t);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         default:
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $chr . $knt . $col_idx);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                         }
                         if ($col_max > $col_idx) {
                             $col_idx++;
@@ -1790,6 +1950,7 @@ class AjaxController extends Controller {
                     }
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($cs));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $cs);
+                    $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     if ($col_max > $col_idx) {
                         $col_idx++;
@@ -1956,22 +2117,27 @@ class AjaxController extends Controller {
                         case 'ASUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_a));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_a);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'BSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_b));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_b);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'CSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_c));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_c);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'TSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_t));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_t);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         default:
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $chr . $knt . $col_idx);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                         }
                         if ($col_max > $col_idx) {
                             $col_idx++;
@@ -2163,22 +2329,27 @@ class AjaxController extends Controller {
                         case 'ASUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_a));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_a);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'BSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_b));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_b);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'CSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_c));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_c);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'TSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_t));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_t);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         default:
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $chr . $knt . $col_idx);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                         }
                         if ($col_max > $col_idx) {
                             $col_idx++;
@@ -2372,22 +2543,27 @@ class AjaxController extends Controller {
                         case 'ASUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_a));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_a);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'BSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_b));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_b);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'CSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_c));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_c);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         case 'TSUM':
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($sum_t));
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $sum_t);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             break;
                         default:
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, (isset($cs[$col])? $cs[$col] : ""));
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $chr . $knt . $col_idx);
+                            $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
                         }
                         if ($col_max > $col_idx) {
                             $col_idx++;
@@ -2414,6 +2590,7 @@ class AjaxController extends Controller {
                     }
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, number_format($cs));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($chr . $knt, $cs);
+                    $objPHPExcel->getActiveSheet()->getStyle($chr . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     if ($col_max > $col_idx) {
                         $col_idx++;
@@ -2475,22 +2652,32 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '總人數');
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, number_format($sum_a));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_a);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 //$objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1); 
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($sum_b));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 //$objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1); 
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 //$objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1); 
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 //$objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1); 
 
                 $knt = 4;
 
                 if ($sum_t > 0) {
+/*
                     $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
                     $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
                     $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
                     $ratio_t = round((($sum_t/$sum_t) * 100), 2) . '%';
+*/
+                    $ratio_a = $sum_a/$sum_t;
+                    $ratio_b = $sum_b/$sum_t;
+                    $ratio_c = $sum_c/$sum_t;
+                    $ratio_t = $sum_t/$sum_t;
                 }
 
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
@@ -2498,6 +2685,10 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2522,10 +2713,12 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['new_people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_a));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 
                 $knt = 9;
                 $col_idx = $col_ini;
@@ -2533,16 +2726,20 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     $ratio_a = 0;
                     if ($sum_a > 0) {
-                        $ratio_a = round(($minor['new_people']/$sum_a) * 100, 2) . '%';
+                        //$ratio_a = round(($minor['new_people']/$sum_a) * 100, 2) . '%';
+                        $ratio_a = $minor['new_people']/$sum_a;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_a = 0;
                 if ($sum_a > 0) {
-                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    //$ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    $ratio_a = $sum_a/$sum_a;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* B */
                 $knt = 11;
@@ -2560,10 +2757,12 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['new_people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_b));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 13;
                 $col_idx = $col_ini;
@@ -2571,16 +2770,20 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     $ratio_b = 0;
                     if ($sum_b > 0) {
-                        $ratio_b = round(($minor['new_people']/$sum_b) * 100, 2) .'%';
+                        //$ratio_b = round(($minor['new_people']/$sum_b) * 100, 2) .'%';
+                        $ratio_b = $minor['new_people']/$sum_b;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_b = 0;
                 if ($sum_b > 0) {
-                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    //$ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    $ratio_b = $sum_b/$sum_b;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* C */
                 $knt = 15;
@@ -2598,10 +2801,12 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['new_people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['new_people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_c));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 17;
                 $col_idx = $col_ini;
@@ -2609,16 +2814,20 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     $ratio_c = 0;
                     if ($sum_c > 0) {
-                        $ratio_c = round(($minor['new_people']/$sum_c) * 100, 2) . '%';
+                        //$ratio_c = round(($minor['new_people']/$sum_c) * 100, 2) . '%';
+                        $ratio_c = $minor['new_people']/$sum_c;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_c = 0;
                 if ($sum_c > 0) {
-                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) .'%';
+                    //$ratio_c = round(($sum_c/$sum_c) * 100, 2) .'%';
+                    $ratio_c = $sum_c/$sum_c;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* people summary */
                 $cnt = 6;
@@ -2683,19 +2892,36 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 4;
                 if ($sum_t > 0) {
+/*
                     $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
                     $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
                     $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
                     $ratio_t = round((($sum_t/$sum_t) * 100), 2) . '%';
+*/
+                    $ratio_a = $sum_a/$sum_t;
+                    $ratio_b = $sum_b/$sum_t;
+                    $ratio_c = $sum_c/$sum_t;
+                    $ratio_t = $sum_t/$sum_t;
                 }
+
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
+
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
+
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2720,10 +2946,12 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExce_->setActiveSheetIndex($cnt)->setCellValue(chr($cml_idx) . $knt, number_format($sum_a));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 
                 $knt = 9;
                 $col_idx = $col_ini;
@@ -2731,16 +2959,20 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     $ratio_a = 0;
                     if ($sum_a > 0) {
-                        $ratio_a = round(($minor['people']/$sum_a) * 100, 2) . '%';
+                        //$ratio_a = round(($minor['people']/$sum_a) * 100, 2) . '%';
+                        $ratio_a = $minor['people']/$sum_a;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_a = 0;
                 if ($sum_a > 0) {
-                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    //$ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    $ratio_a = $sum_a/$sum_a;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* B */
                 $knt = 11;
@@ -2758,10 +2990,12 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_b));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 13;
                 $col_idx = $col_ini;
@@ -2769,9 +3003,11 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     $ratio_b = 0;
                     if ($sum_b > 0) {
-                        $ratio_b = round(($minor['people']/$sum_b) * 100, 2) . '%';
+                        //$ratio_b = round(($minor['people']/$sum_b) * 100, 2) . '%';
+                        $ratio_b = $minor['people']/$sum_b;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_b = 0;
@@ -2779,6 +3015,7 @@ class AjaxController extends Controller {
                     $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* C */
                 $knt = 15;
@@ -2796,10 +3033,12 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['people']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['people']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_c));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 17;
                 $col_idx = $col_ini;
@@ -2807,16 +3046,20 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     $ratio_c = 0;
                     if ($sum_c > 0) {
-                        $ratio_c = round(($minor['people']/$sum_c) * 100, 2) . '%';
+                        //$ratio_c = round(($minor['people']/$sum_c) * 100, 2) . '%';
+                        $ratio_c = $minor['people']/$sum_c;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_c = 0;
                 if ($sum_c > 0) {
-                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    //$ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    $ratio_c = $sum_c/$sum_c;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* total hours summary */
                 $cnt = 7;
@@ -2880,18 +3123,34 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
 
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                 $knt = 4;
                 if ($sum_t > 0) {
+/*
                     $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
                     $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
                     $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
                     $ratio_t = round((($sum_t/$sum_t) * 100), 2) . '%';
+*/
+                    $ratio_a = $sum_a/$sum_t;
+                    $ratio_b = $sum_b/$sum_t;
+                    $ratio_c = $sum_c/$sum_t;
+                    $ratio_t = $sum_t/$sum_t;
                 }
+
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -2916,10 +3175,13 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['total_hours']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_a));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 
                 $knt = 9;
                 $col_idx = $col_ini;
@@ -2927,16 +3189,21 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     $ratio_a = 0;
                     if ($sum_a > 0) {
-                        $ratio_a = round(($minor['total_hours']/$sum_a) * 100, 2) . '%';
+                        //$ratio_a = round(($minor['total_hours']/$sum_a) * 100, 2) . '%';
+                        $ratio_a = $minor['total_hours']/$sum_a;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
                     $col_idx++;
                 }
                 $ratio_a = 0;
                 if ($sum_a > 0) {
-                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    //$ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    $ratio_a = $sum_a/$sum_a;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
                 // B 
                 $knt = 11;
@@ -2954,10 +3221,12 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['total_hours'], 2));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_b, 2));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 13;
                 $col_idx = $col_ini;
@@ -2965,16 +3234,20 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     $ratio_b = 0;
                     if ($sum_b > 0) {
-                        $ratio_b = round(($minor['total_hours']/$sum_b) * 100, 2) . '%';
+                        //$ratio_b = round(($minor['total_hours']/$sum_b) * 100, 2) . '%';
+                        $ratio_b = $minor['total_hours']/$sum_b;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                     $col_idx++;
                 }
                 $ratio_b = 0;
                 if ($sum_b > 0) {
-                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    //$ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    $ratio_b = $sum_b/$sum_b;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
                 // C 
                 $knt = 15;
@@ -2992,10 +3265,13 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['total_hours'], 2));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['total_hours']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_c, 2));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 17;
                 $col_idx = $col_ini;
@@ -3003,16 +3279,20 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     $ratio_c = 0;
                     if ($sum_c > 0) {
-                        $ratio_c = round(($minor['total_hours']/$sum_c) * 100, 2) . '%';
+                        //$ratio_c = round(($minor['total_hours']/$sum_c) * 100, 2) . '%';
+                        $ratio_c = $minor['total_hours']/$sum_c;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                     $col_idx++;
                 }
                 $ratio_c = 0;
                 if ($sum_c > 0) {
-                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    //$ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    $ratio_c = $sum_c/$sum_c;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
                 /* turnover summary */
                 $cnt = 8;
@@ -3077,19 +3357,40 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $sum_t);
+                //$objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                //$objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                //$objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                //$objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
 
                 $knt = 4;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '佔全部百分比');
                 if ($sum_t > 0) {
+/*
                     $ratio_a = round((($sum_a/$sum_t) * 100), 2) . '%';
                     $ratio_b = round((($sum_b/$sum_t) * 100), 2) . '%';
                     $ratio_c = round((($sum_c/$sum_t) * 100), 2) . '%';
                     $ratio_t = round((($sum_t/$sum_t) * 100), 2) . '%';
+*/
+
+                    $ratio_a = $sum_a/$sum_t;
+                    $ratio_b = $sum_b/$sum_t;
+                    $ratio_c = $sum_c/$sum_t;
+                    $ratio_t = $sum_t/$sum_t;
                 }
+
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $ratio_a);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $ratio_b);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $ratio_c);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('I' . $knt, $ratio_t);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 $col_ini = 66;
                 $col_min = 65;
@@ -3114,10 +3415,12 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['turnover']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_a));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 
                 $knt = 9;
                 $col_idx = $col_ini;
@@ -3125,16 +3428,20 @@ class AjaxController extends Controller {
                 foreach( $minor_a as $minor ) {
                     $ratio_a = 0;
                     if ($sum_a > 0) {
-                        $ratio_a = round(($minor['turnover']/$sum_a) * 100, 2) . '%';
+                        //$ratio_a = round(($minor['turnover']/$sum_a) * 100, 2) . '%';
+                        $ratio_a = $minor['turnover']/$sum_a;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_a = 0;
                 if ($sum_a > 0) {
-                    $ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    //$ratio_a = round(($sum_a/$sum_a) * 100, 2) . '%';
+                    $ratio_a = $sum_a/$sum_a;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_a);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 // B 
                 $knt = 11;
@@ -3152,10 +3459,12 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['turnover']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_b));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 13;
                 $col_idx = $col_ini;
@@ -3163,16 +3472,20 @@ class AjaxController extends Controller {
                 foreach( $minor_b as $minor ) {
                     $ratio_b = 0;
                     if ($sum_b > 0) {
-                        $ratio_b = round(($minor['turnover']/$sum_b) * 100, 2) . '%';
+                        //$ratio_b = round(($minor['turnover']/$sum_b) * 100, 2) . '%';
+                        $ratio_b = $minor['turnover']/$sum_b;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_b = 0;
                 if ($sum_b > 0) {
-                    $ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    //$ratio_b = round(($sum_b/$sum_b) * 100, 2) . '%';
+                    $ratio_b = $sum_b/$sum_b;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_b);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 // C 
                 $knt = 15;
@@ -3190,10 +3503,12 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($minor['turnover']));
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $minor['turnover']);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $col_idx++;
                 }
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, number_format($sum_c));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $sum_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt = 17;
                 $col_idx = $col_ini;
@@ -3201,16 +3516,20 @@ class AjaxController extends Controller {
                 foreach( $minor_c as $minor ) {
                     $ratio_c = 0;
                     if ($sum_c > 0) {
-                        $ratio_c = round(($minor['turnover']/$sum_c) * 100, 2) . '%';
+                        //$ratio_c = round(($minor['turnover']/$sum_c) * 100, 2) . '%';
+                        $ratio_c = $minor['turnover']/$sum_c;
                     }
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                    $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
                     $col_idx++;
                 }
                 $ratio_c = 0;
                 if ($sum_c > 0) {
-                    $ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    //$ratio_c = round(($sum_c/$sum_c) * 100, 2) . '%';
+                    $ratio_c = $sum_c/$sum_c;
                 }
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue(chr($col_idx) . $knt, $ratio_c);
+                $objPHPExcel->getActiveSheet()->getStyle(chr($col_idx) . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 
                 /* */
                 $cnt = 9;
@@ -3242,6 +3561,8 @@ class AjaxController extends Controller {
 */
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $detail['new_people']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $detail['people']);
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                     $new_people += $detail['new_people'];
                     $people += $detail['people'];
                 }
@@ -3254,6 +3575,8 @@ class AjaxController extends Controller {
 
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $new_people);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $people);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $filename = '管理報表';
                 break;
@@ -3299,6 +3622,9 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_people']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $r['new_male']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['new_female']);
+                            $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                             //$objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":G" . $knt);
                             $sum_n += $r['new_people'];
                             $sum_m += $r['new_male'];
@@ -3320,6 +3646,9 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $sum_n);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum_m);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $sum_f);
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyleT, "A". $knt .":G" . $knt);
                 // contact
                 $cnt++;
@@ -3356,6 +3685,9 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $r['new_people']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $r['new_male']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $r['new_female']);
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $r['manager_cname']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $r['manager_title']);
@@ -3396,6 +3728,9 @@ class AjaxController extends Controller {
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $res['curr']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $res['last']);
                         $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, ($res['curr'] - $res['last']));
+                        $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                        $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                         $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":E" . $knt);
                         $sum_curr += intval($res['curr']);
@@ -3410,6 +3745,8 @@ class AjaxController extends Controller {
 */
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $sum_curr);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $sum_last);
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 $filename = '統計處報表';
                 $filename = '統計處報表';
                 break;
@@ -3464,6 +3801,11 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $minor['total_hours']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $minor['turnover']);
 
+                            $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                            $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $minor['info']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $minor['note']);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setSharedStyle($sharedStyle, "A". $knt .":H" . $knt);
@@ -3488,6 +3830,11 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $people);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $total_hours);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $turnover);
+
+                    $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('G' . $knt, $info);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('H' . $knt, $note);
@@ -3601,6 +3948,16 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $s['female']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $s['people']);
 
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('L' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                     $male_a += $s['male_a'];
                     $male_b += $s['male_b'];
                     $male_c += $s['male_c'];
@@ -3636,6 +3993,16 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people);
 
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('L' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                 $knt++;
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('A' . $knt, '*');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $roc['state_name']);
@@ -3662,6 +4029,15 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $roc['female']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $roc['people']);
 
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('L' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $knt++;
                 $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':B'. $knt);
@@ -3687,6 +4063,16 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('J' . $knt, $male + $roc['male']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('K' . $knt, $female + $roc['female']);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('L' . $knt, $people + $roc['people']);
+
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('G' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('H' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('I' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('J' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('K' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('L' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                 $filename = '國籍人數排序報表';
                 break;
@@ -3747,6 +4133,10 @@ class AjaxController extends Controller {
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female);
                             $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $people);
 
+                            $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                            $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                             $sum_male += $male;  
                             $sum_female += $female;  
                             $sum_people += $people;  
@@ -3768,6 +4158,10 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $c['male']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $c['female']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $c['people']);
+
+                    $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
 
                     $male += $c['male'];
                     $female += $c['female'];
@@ -3793,11 +4187,16 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $female);
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $people);
 
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
+
                 $knt++;
                 $objPHPExcel->getActiveSheet()->mergeCells('A'. $knt .':E'. $knt);
                 $objPHPExcel->getActiveSheet()->setCellValue('A'. $knt, '人數合計');
                 //$objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, number_format($sum_people));
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $sum_people);
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->setFormatCode('#,##0');
                 $filename = '五大洲及課程呈現報表';
                 break;
             case 'people':
@@ -3868,6 +4267,10 @@ class AjaxController extends Controller {
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '3', $p['male']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '4', $p['female']);
                     $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue($c . '5', $p['people']);
+                    $objPHPExcel->getActiveSheet()->getStyle($c . '2')->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle($c . '3')->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle($c . '4')->getNumberFormat()->setFormatCode('#,##0');
+                    $objPHPExcel->getActiveSheet()->getStyle($c . '5')->getNumberFormat()->setFormatCode('#,##0');
                 }
 
                 $knt = 6;
@@ -3878,11 +4281,17 @@ class AjaxController extends Controller {
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($AF*100/$people, 2) . '%');
                 $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, number_format($OA*100/$people, 2) . '%');
 */                
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, number_format($AS*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, number_format($AC*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, number_format($EU*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, number_format($AF*100/$people, 2) . '%');
-                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, number_format($OA*100/$people, 2) . '%');
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('B' . $knt, $AS*100/$people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('C' . $knt, $AC*100/$people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('D' . $knt, $EU*100/$people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('E' . $knt, $AF*100/$people);
+                $objPHPExcel->setActiveSheetIndex($cnt)->setCellValue('F' . $knt, $OA*100/$people);
+
+                $objPHPExcel->getActiveSheet()->getStyle('B' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                $objPHPExcel->getActiveSheet()->getStyle('C' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                $objPHPExcel->getActiveSheet()->getStyle('D' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                $objPHPExcel->getActiveSheet()->getStyle('E' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
+                $objPHPExcel->getActiveSheet()->getStyle('F' . $knt)->getNumberFormat()->applyFromArray( array( 'code' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1));
 
                 $filename = '五大洲課程人數統計報表';
                 break;
